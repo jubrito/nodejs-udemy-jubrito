@@ -27,6 +27,7 @@ const requestHandler = (request, response) => {
                 response.setHeader('Location', '/');
             });
             return response.end();
+            
         });
     }
     response.setHeader('Content-Type', 'text/html');
