@@ -8,6 +8,7 @@ const userRoutes = require('./routes/shop');
 
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public'))); // alowing to use the public folder
 
 app.use('/admin', adminRoutes); // importing admin routes as a middleware, needs to be before the '/' middleware
 app.use(userRoutes); 
