@@ -3,6 +3,12 @@ const path = require('path');
 
 const app = express();
 
+// Applications Settings (global variables and configurations)
+app.set('globalExpressValueICreated', 'value')
+app.get('globalExpressValueICreated'); // using it anywhere
+app.set('view engine', 'pug'); // telling express that we want to compile dynamic templates with the pug engine
+app.set('views', 'views'); // where to find the pug template engine templates.
+
 const adminData = require('./routes/admin');
 const userRoutes = require('./routes/shop');
 
@@ -15,7 +21,8 @@ app.use('/admin', adminData.routes);
 app.use(userRoutes); 
 
 app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', 'not-found.html'))
+    res.status(404).sendFile(path.join(__dirname, 'views', 'not-found.html'));
+    res.status(404).render('not-found', { pageTitle: 'Page not found'});
 });
 
 app.listen(8080); 

@@ -3,18 +3,31 @@
     max-width: 90%;
     margin: auto;
 }
-.form-control{
-    margin: 1rem 0;
+.product-form {
+    width: 20rem;
+    max-width: 90%;
+    margin: auto;
 }
-.form-control label,
-.form-control input {
-    display: block;
-    width: 100%;
+
+.product-item {
+    width: 20rem;
+    max-width: 95%;
+    margin: 15px 0;
 }
-.form-control input {
-    border: 1px solid  #002042;
-    font: inherit;
-    border-radius: 2px;
+
+.product__title {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.product__price {
+    text-align: center;
+    color: #4d4d4d;
+    margin-bottom: 0.5rem;
+}
+
+.product__description {
+    text-align: center;
 }
 button {
     font: inherit;
@@ -28,3 +41,4 @@ button {
 button:hover {
     color: yellow;
 }
+

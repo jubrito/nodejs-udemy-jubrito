@@ -1,0 +1,22 @@
+extends layouts/main-layout.pug
+
+block headStyles
+    link(rel="stylesheet", href="/css/product.css")
+
+block pageContent 
+    main
+        .grid
+            if products.length > 0
+                each product in products
+                    article.card.product-item
+                        header.card__header
+                            h1.product__title #{product.title}
+                        .card__image
+                            img(src="https://i.pinimg.com/originals/a3/6b/42/a36b422bb2bebcbd77bba846b83ddf5d.png", alt="Book")
+                        .card__content
+                            h2.product__price $12
+                            p.product__description Very Interesting 
+                        .card__actions
+                            button.btn Add to cart
+            else
+                h1 No Products
