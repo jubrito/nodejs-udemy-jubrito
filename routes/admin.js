@@ -3,6 +3,8 @@ const path = require('path');
 const router = express.Router(); // mini express app
 const rootDir = require('../util/path');
 
+const products = [];
+
 // /admin/add-product => GET
 router.get('/add-product', (req, resp, next) => {
     // resp.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
@@ -11,8 +13,10 @@ router.get('/add-product', (req, resp, next) => {
 
 // /admin/add-product => POST
 router.post('/add-product', (req, resp, next) => {
-    console.log(req.body);
-    return resp.redirect('/');
+    products.push('shop.js', { title: req.body.title });
+    resp.redirect('/');
+    
 });
 
-module.exports = router;
+exports.routes = router;
+exports.products = products;
