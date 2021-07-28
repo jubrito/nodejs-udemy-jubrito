@@ -7,19 +7,10 @@ const products = [];
 
 // /admin/add-product => GET
 router.get('/add-product', (req, resp, next) => {
-    /* Loading HTML files */
-    // resp.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
-    // resp.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-
-    /* Loading Pug files - Template Engines
-    resp.render('./pug/add-product', { pageTitle: 'Add Product', path: '/admin/add-product'});  */
-
-    /* Loading Express Handlebars files - Template Engines */
-    resp.render('./expressHandlebars/add-product', { 
+    /* Loading EJS files - Template Engines */
+    resp.render('./add-product', { 
         pageTitle: 'Add Product', 
         path: '/admin/add-product',
-        productCSS: true,
-        formsCSS: true,
     });
 });
 

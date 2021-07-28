@@ -1,0 +1,14 @@
+<!-- - Minus to output unescaped html code, that by the way means 
+By default with the equal sign syntax if you try t o render some variable that holds a string that 
+holds html code, it would not render that html code but render it as text to avoid cross-site scripting 
+attacks, with a minus you can avoid this and really render the html code.
+You also need include passing a string which holds the path to the file you want to include -->
+<%- include('../includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %> 
+    <main>
+        <h1>Page not found</h1>
+    </main>
+<%- include('../includes/end.ejs')  %> 
