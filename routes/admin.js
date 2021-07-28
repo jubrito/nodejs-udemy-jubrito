@@ -10,15 +10,23 @@ router.get('/add-product', (req, resp, next) => {
     /* Loading HTML files */
     // resp.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
     // resp.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-    /* Loading Pug files - Template Engines */
-    resp.render('add-product', { pageTitle: 'Add Product', path: '/admin/add-product'});
+
+    /* Loading Pug files - Template Engines
+    resp.render('./pug/add-product', { pageTitle: 'Add Product', path: '/admin/add-product'});  */
+
+    /* Loading Express Handlebars files - Template Engines */
+    resp.render('./expressHandlebars/add-product', { 
+        pageTitle: 'Add Product', 
+        path: '/admin/add-product',
+        productCSS: true,
+        formsCSS: true,
+    });
 });
 
 // /admin/add-product => POST
 router.post('/add-product', (req, resp, next) => {
     products.push({ title: req.body.title });
     resp.redirect('/');
-    
 });
 
 exports.routes = router;
