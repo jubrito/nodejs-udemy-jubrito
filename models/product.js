@@ -3,6 +3,7 @@
 // ARRAY-DATA: if you choose to save data in an array 
 // const products = []; // 1. Array-data
 const fs = require('fs');
+const { dirname } = require('path');
 const path = require('path');
 const rootDirectory = require('../util/path');
 
@@ -21,8 +22,11 @@ const getProductsFromFile = (callbackWhenFetchAllIsDone) => {
     })
 }
 module.exports = class Product {
-    constructor(title) {
+    constructor(title, imageURL, price, description) {
         this.title = title;
+        this.imageURL = imageURL;
+        this.price = price;
+        this.description = description;
     }
 
     //  this = object created based on the class

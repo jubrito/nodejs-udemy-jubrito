@@ -1,3 +1,5 @@
+const Product = require('../models/product');
+
 exports.getAddProduct = (req, resp, next) => {
     /* Loading EJS files - Template Engines */
     resp.render('admin/add-product', { 
@@ -7,11 +9,11 @@ exports.getAddProduct = (req, resp, next) => {
 };
 
 exports.postAddProduct = (req, resp, next) => {
-    const product = new Product(req.body.title);
+    const {title, imageURL, price, description} = req.body;
+    const product = new Product(title, imageURL, price, description);
     product.save();
     resp.redirect('/products');
 };
-
 
 exports.getAdminProducts = (req, res, next) => {
     const products = Product.fetchAll((products) => {
