@@ -1,4 +1,4 @@
-const products = [];
+const Product = require('../models/product');
 
 exports.getAddProduct = (req, resp, next) => {
     /* Loading EJS files - Template Engines */
@@ -9,11 +9,13 @@ exports.getAddProduct = (req, resp, next) => {
 };
 
 exports.postAddProduct = (req, resp, next) => {
-    products.push({ title: req.body.title });
+    const product = new Product(req.body.title);
+    product.save();
     resp.redirect('/');
 };
 
 exports.getProducts = (req, resp, next) => {
+    const products = Product.fetchAll();
     resp.render('./shop', {
         products: products, 
         pageTitle: 'Shop', 
