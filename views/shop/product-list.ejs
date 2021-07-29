@@ -15,20 +15,23 @@
                             </h1>
                         </header>
                         <div class="card__image">
-                            <img src="https://i.pinimg.com/originals/a3/6b/42/a36b422bb2bebcbd77bba846b83ddf5d.png" alt="Book">
+                            <img src="<%= product.imageURL %>" alt="<%= product.title %>">
+                            <!-- https://i.pinimg.com/originals/a3/6b/42/a36b422bb2bebcbd77bba846b83ddf5d.png -->
                         </div>
                         <div class="card__content">
                             <h2 class="product__price">
-                                1
+                                <%= product.price  %> 
                             </h2>
                             <p class="product__description">
-                                o
+                                <%= product.Description %> 
                             </p>
                         </div>
                         <div class="card__actions">
-                            <button class="btn">
-                                Add to cart
-                            </button>
+                            <form action="/add-to-card/1" method="POST">
+                                <button class="btn" type="submit">
+                                    Add to cart
+                                </button>
+                            </form>
                         </div>
                     </article>
                 <% } %> 

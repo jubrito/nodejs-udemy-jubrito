@@ -3,7 +3,6 @@
 // ARRAY-DATA: if you choose to save data in an array 
 // const products = []; // 1. Array-data
 const fs = require('fs');
-const { dirname } = require('path');
 const path = require('path');
 const rootDirectory = require('../util/path');
 
@@ -12,8 +11,8 @@ const filePath = path.join(
     'data', 
     'products.json'
 );
-const getProductsFromFile = (callbackWhenFetchAllIsDone) => {
-    fs.readFile(filePath, async (error, fileContentJSON) => {
+const getProductsFromFile = callbackWhenFetchAllIsDone => {
+    fs.readFile(filePath, (error, fileContentJSON) => {
         if (error) {
             return callbackWhenFetchAllIsDone([]);
         }
