@@ -1,10 +1,11 @@
-<%- include('../includes/head.ejs')%>
-    <link rel="stylesheet" href="/css/product.css">
+<%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
 </head>
 
 <body>
-    <%- include('../includes/navigation.ejs') %> 
+   <%- include('../includes/navigation.ejs') %>
+
     <main>
         <form class="product-form" action="/admin/add-product" method="POST">
             <div class="form-control">
@@ -12,18 +13,19 @@
                 <input type="text" name="title" id="title"/>
             </div>
             <div class="form-control">
-                <label for="title">Image URL</label>
-                <input type="text" name="imageURL" id="imageURL" value="https://i.pinimg.com/originals/a3/6b/42/a36b422bb2bebcbd77bba846b83ddf5d.png"/>
+                <label for="imageUrl">Image URL</label>
+                <input type="text" name="imageUrl" id="imageUrl"/>
             </div>
             <div class="form-control">
-                <label for="title">Price</label>
-                <input type="number" name="price" id="price"/>
+                <label for="price">Price</label>
+                <input type="number" name="price" id="price" step="0.01"/>
             </div>
             <div class="form-control">
-                <label for="title">Description</label>
-                <textarea name="description" id="description" rows="3"></textarea>
+                <label for="description">Description</label>
+                <textarea name="description" id="description" rows="5"></textarea>
             </div>
-            <button type="submit">Add Product</button>
+
+            <button class="btn" type="submit">Add Product</button>
         </form>
     </main>
-<% include('../includes/end.ejs') %> 
+<%- include('../includes/end.ejs') %>

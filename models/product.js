@@ -30,6 +30,7 @@ module.exports = class Product {
 
     //  this = object created based on the class
     save() {
+        this.id = Math.random().toString();
         getProductsFromFile(products => { // passing the callback function while writing the code that actually saves 
             products.push(this);
             fs.writeFile(filePath, JSON.stringify(products), (error) => { // from array to json

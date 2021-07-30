@@ -5,4 +5,7 @@ const productsController = require('../controllers/products');
 
 router.get('/products', productsController.getProducts);
 
+// Dynamic routes must always be at the end and after /delete etc
+router.get('/products/:productID', productsController.getProductById);
+
 module.exports = router;

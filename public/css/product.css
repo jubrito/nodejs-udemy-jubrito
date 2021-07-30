@@ -1,18 +1,14 @@
-.product-form{
-    width: 20rem;
-    max-width: 90%;
-    margin: auto;
-}
 .product-form {
     width: 20rem;
     max-width: 90%;
     margin: auto;
+    display: block;
 }
 
 .product-item {
     width: 20rem;
     max-width: 95%;
-    margin: 15px 0;
+    margin: 1rem;
 }
 
 .product__title {
@@ -29,16 +25,3 @@
 .product__description {
     text-align: center;
 }
-button {
-    font: inherit;
-    border: 2px solid yellow;
-    color: white;
-    background-color: #002b58;
-    border-radius: 3px;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-button:hover {
-    color: yellow;
-}
-

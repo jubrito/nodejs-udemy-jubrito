@@ -10,3 +10,7 @@ exports.getProducts = (req, resp, next) => {
     });
 }
 
+exports.getProductById = (req, res, next) => {
+    const productID = req.params.productID;
+    console.log(productID);
+}

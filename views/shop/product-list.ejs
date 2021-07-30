@@ -27,7 +27,8 @@
                             </p>
                         </div>
                         <div class="card__actions">
-                            <form action="/add-to-card/1" method="POST">
+                            <a href="/products/<%= product.id %> " class="btn">Details</a>
+                            <form action="/add-to-card" method="POST">
                                 <button class="btn" type="submit">
                                     Add to cart
                                 </button>
