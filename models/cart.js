@@ -44,7 +44,7 @@ module.exports = class Cart {
             }
             checkIfProjectAlreadyExistsOnCart(id, cart);
             
-            cart.totalPrice = Number(cart.totalPrice) + Number(newProductPrice);
+            cart.totalPrice = cart.totalPrice + +newProductPrice; // +newProductPrice is the same as Number(newProductPrice)
             fs.writeFile(filePath, JSON.stringify(cart), (error) => {
                 console.log(error);
             })
