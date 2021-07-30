@@ -21,21 +21,41 @@ const getProductsFromFile = callbackWhenFetchAllIsDone => {
     })
 }
 module.exports = class Product {
-    constructor(title, imageUrl, price, description) {
+    constructor(id, title, imageUrl, price, description) {
+        this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;
         this.price = price;
         this.description = description;
     }
-
+    // updateExistingProduct(products, thisProductAlreadyExists);
+    // function updateExistingProduct(products, productExistingId) {
+    //     const existingProductIndex = products.findIndex(product => product.id == productExistingId);
+    //     const updatedProducts = [...products];
+    //     updatedProducts[existingProductIndex] = this; // this = the object when instantiating the new Product, i.e the updated product
+    //     fs.writeFile(filePath, JSON.stringify(updatedProducts), (error) => { 
+    //         console.log(error);
+    //     })
+    // }
     //  this = object created based on the class
     save() {
-        this.id = Math.random().toString();
         getProductsFromFile(products => { // passing the callback function while writing the code that actually saves 
-            products.push(this);
-            fs.writeFile(filePath, JSON.stringify(products), (error) => { // from array to json
-                console.log(error);
-            })
+            const thisProductAlreadyExists = this.id;
+            if (thisProductAlreadyExists) { 
+                    // updateExistingProduct(products, thisProductAlreadyExists);
+                const existingProductIndex = products.findIndex(product => product.id == this.id);
+                const updatedProducts = [...products];
+                updatedProducts[existingProductIndex] = this; // this = the object when instantiating the new Product, i.e the updated product
+                fs.writeFile(filePath, JSON.stringify(updatedProducts), (error) => { 
+                    console.log(error);
+                })
+            } else {
+                this.id = Math.random().toString();
+                products.push(this);
+                fs.writeFile(filePath, JSON.stringify(products), (error) => { // stringfy from array to json
+                    console.log(error);
+                })
+            }
         });
         // products.push(this); // 2. Array-data
     }
