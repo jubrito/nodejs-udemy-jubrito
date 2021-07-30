@@ -4,7 +4,7 @@
 // const products = []; // 1. Array-data
 const fs = require('fs');
 const path = require('path');
-const rootDirectory = require('../util/path');
+const rootDirectory = require('../util/rootDirectory');
 
 const filePath = path.join(
     rootDirectory, 
@@ -44,7 +44,7 @@ module.exports = class Product {
        getProductsFromFile(callbackWhenFetchAllIsDone);
     }
 
-    static findByID(id, callbackWhenFetchAllIsDone) {
+    static findById(id, callbackWhenFetchAllIsDone) {
         getProductsFromFile(products => {
             const product = products.find(product => product.id === id);
             callbackWhenFetchAllIsDone(product);
