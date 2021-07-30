@@ -4,6 +4,7 @@ exports.getAddProduct = (req, resp, next) => {
     resp.render('admin/edit-product', { 
         pageTitle: 'Add Product', 
         path: '/admin/add-product',
+        editIsEnabled: false,
     });
 };
 
@@ -20,14 +21,22 @@ exports.postAddProduct = (req, resp, next) => {
 
 exports.getEditProduct = (req, res, next) => {
     const editIsEnabled = req.query.edit;
+    const productId = req.params.productId;
     console.log(editIsEnabled)
     if (!editIsEnabled) {
         return res.redirect('/');
     }
-    res.render('admin/edit-product', {
-        pageTitle: 'Edit product',
-        path: `/admin/edit-product`,
-        editing: editIsEnabled,
+    Product.findById(productId, product => {
+        if (!product) {
+            // TODO: display an error to the user that the product wasn't found 
+            return res.redirect('/');
+        }
+        res.render('admin/edit-product', {
+            pageTitle: 'Edit product',
+            path: `/admin/edit-product`,
+            product: product,
+            editIsEnabled: editIsEnabled,
+        })
     })
 }
 
