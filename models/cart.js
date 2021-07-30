@@ -8,8 +8,31 @@ const filePath = path.join(
     'cart.json'
 )
 
-function updateProductAndCartQuantityIfItAlreadyExistsOnCart (cart){
-  
+function updateProductAndCartQuantity(existingProduct, existingProductIndex, updatedProduct, cart) {
+    updatedProduct = { ...existingProduct};
+    updatedProduct.quantity = updatedProduct.quantity + 1;
+    cart.products = [...cart.products];
+    cart.products[existingProductIndex] = updatedProduct;
+}
+function addNewProductToTheCart(id, cart){
+    let updatedProduct = { id: id, quantity: 1};
+    cart.products = [...cart.products, updatedProduct];
+}
+function checkIfProjectAlreadyExistsOnCart (id, cart){
+    const existingProductIndex = cart.products.findIndex(
+        product => product.id === id
+    );
+    const existingProduct = cart.products[existingProductIndex];
+    let updatedProduct;
+    if (existingProduct) {
+        updateProductAndCartQuantity(
+            existingProduct, 
+            existingProductIndex, 
+            updatedProduct, 
+            cart);
+    } else {
+        addNewProductToTheCart(id, cart);
+    }
 }
 
 module.exports = class Cart {
@@ -19,22 +42,8 @@ module.exports = class Cart {
             if (!error) { // error = false => got an existing cart
                 cart = JSON.parse(fileContent);
             }
-            // updateProductAndCartQuantityIfItAlreadyExistsOnCart(cart);
-            const existingProductIndex = cart.products.findIndex(
-                product => product.id === id
-            );
-            const existingProduct = cart.products[existingProductIndex];
-            let updatedProduct;
-            if (existingProduct) {
-                updatedProduct = { ...existingProduct};
-                updatedProduct.quantity = updatedProduct.quantity + 1;
-                cart.products = [...cart.products];
-                cart.products[existingProductIndex] = updatedProduct;
-
-            } else {
-                updatedProduct = { id: id, quantity: 1};
-                cart.products = [...cart.products, updatedProduct];
-            }
+            checkIfProjectAlreadyExistsOnCart(id, cart);
+            
             cart.totalPrice = Number(cart.totalPrice) + Number(newProductPrice);
             fs.writeFile(filePath, JSON.stringify(cart), (error) => {
                 console.log(error);
