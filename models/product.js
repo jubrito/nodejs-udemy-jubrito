@@ -21,9 +21,9 @@ const getProductsFromFile = callbackWhenFetchAllIsDone => {
     })
 }
 module.exports = class Product {
-    constructor(title, imageURL, price, description) {
+    constructor(title, imageUrl, price, description) {
         this.title = title;
-        this.imageURL = imageURL;
+        this.imageUrl = imageUrl;
         this.price = price;
         this.description = description;
     }
@@ -42,5 +42,12 @@ module.exports = class Product {
 
     static fetchAll(callbackWhenFetchAllIsDone) {
        getProductsFromFile(callbackWhenFetchAllIsDone);
+    }
+
+    static findByID(id, callbackWhenFetchAllIsDone) {
+        getProductsFromFile(products => {
+            const product = products.find(product => product.id === id);
+            callbackWhenFetchAllIsDone(product);
+        })
     }
 }

@@ -11,6 +11,16 @@ exports.getProducts = (req, resp, next) => {
 }
 
 exports.getProductById = (req, res, next) => {
-    const productID = req.params.productID;
-    console.log(productID);
+    const productId = req.params.productId;
+    Product.findByID(productId, product => {
+        // You can't log asynchronous function but we use the callback to do it
+        res.render(
+            'shop/product-detail', {
+                pageTitle: `Product ${product.title}`,
+                product: product,
+                path: `/products/${product.productId}`
+            }
+        )
+        return product;
+    })
 }
