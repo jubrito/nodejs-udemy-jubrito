@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const rootDirectory = require('../util/rootDirectory');
 
-const filePath = path.dirname(
+const filePath = path.join(
     rootDirectory,
     'data',
     'cart.json'
@@ -25,7 +25,7 @@ module.exports = class Cart {
             );
             const existingProduct = cart.products[existingProductIndex];
             let updatedProduct;
-            if (existingProductIndex) {
+            if (existingProduct) {
                 updatedProduct = { ...existingProduct};
                 updatedProduct.quantity = updatedProduct.quantity + 1;
                 cart.products = [...cart.products];
@@ -35,8 +35,7 @@ module.exports = class Cart {
                 updatedProduct = { id: id, quantity: 1};
                 cart.products = [...cart.products, updatedProduct];
             }
-            cart.totalPrice = cart.totalPrice + newProductPrice;
-            console.log(cart);
+            cart.totalPrice = Number(cart.totalPrice) + Number(newProductPrice);
             fs.writeFile(filePath, JSON.stringify(cart), (error) => {
                 console.log(error);
             })
