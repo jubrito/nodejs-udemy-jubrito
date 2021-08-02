@@ -58,7 +58,6 @@ module.exports = class Product {
             const updatedProducts = products.filter(product => product.id !== id);
             fs.writeFile(filePath, JSON.stringify(updatedProducts), (error) => {
                 if (!error) {
-                    // removeProductFromCart();
                     Cart.deleteProduct(id, product.price);
                     console.log(error);
                 }

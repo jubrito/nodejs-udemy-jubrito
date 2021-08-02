@@ -29,11 +29,21 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
     const productId = req.body.productId;
     Product.findById(productId, product => {
+        console.log('product postCart');
+        console.log(product);
         Cart.addProduct(productId, product.price);
     })
     res.redirect('/cart');
-    console.log(productId);
 }
+exports.postCartDeleteItem = (req, res, next) => {
+    const productId = req.body.productId;
+    Product.findById(productId, product => {
+        console.log('product postCartDeleteItem');
+        Cart.deleteProduct(productId, product.price);
+        res.redirect('/cart');
+    })
+}
+
 exports.getOrders= (req, res, next) => {
     res.render('shop/orders', {
         pageTitle: 'Orders',
