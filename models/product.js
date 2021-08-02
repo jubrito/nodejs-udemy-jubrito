@@ -1,7 +1,5 @@
 
 // the data is the product itself, not the products
-// ARRAY-DATA: if you choose to save data in an array 
-// const products = []; // 1. Array-data
 const fs = require('fs');
 const path = require('path');
 const rootDirectory = require('../util/rootDirectory');
@@ -20,6 +18,14 @@ const getProductsFromFile = callbackWhenFetchAllIsDone => {
         callbackWhenFetchAllIsDone(fileArrayToBePassedThroughCallback); // parse returns an array
     })
 }
+const updateExistingProduct = (products, productExistingId, updatedProduct) => {
+    const existingProductIndex = products.findIndex(product => product.id == productExistingId);
+    const updatedProducts = [...products];
+    updatedProducts[existingProductIndex] = updatedProduct; 
+    fs.writeFile(filePath, JSON.stringify(updatedProducts), (error) => { 
+        console.log(error);
+    })
+}
 module.exports = class Product {
     constructor(id, title, imageUrl, price, description) {
         this.id = id;
@@ -28,27 +34,12 @@ module.exports = class Product {
         this.price = price;
         this.description = description;
     }
-    // updateExistingProduct(products, thisProductAlreadyExists);
-    // function updateExistingProduct(products, productExistingId) {
-    //     const existingProductIndex = products.findIndex(product => product.id == productExistingId);
-    //     const updatedProducts = [...products];
-    //     updatedProducts[existingProductIndex] = this; // this = the object when instantiating the new Product, i.e the updated product
-    //     fs.writeFile(filePath, JSON.stringify(updatedProducts), (error) => { 
-    //         console.log(error);
-    //     })
-    // }
     //  this = object created based on the class
     save() {
         getProductsFromFile(products => { // passing the callback function while writing the code that actually saves 
             const thisProductAlreadyExists = this.id;
             if (thisProductAlreadyExists) { 
-                    // updateExistingProduct(products, thisProductAlreadyExists);
-                const existingProductIndex = products.findIndex(product => product.id == this.id);
-                const updatedProducts = [...products];
-                updatedProducts[existingProductIndex] = this; // this = the object when instantiating the new Product, i.e the updated product
-                fs.writeFile(filePath, JSON.stringify(updatedProducts), (error) => { 
-                    console.log(error);
-                })
+                updateExistingProduct(products, thisProductAlreadyExists, this); // = this = the object when instantiating the new Product, i.e the updated product
             } else {
                 this.id = Math.random().toString();
                 products.push(this);
@@ -57,7 +48,6 @@ module.exports = class Product {
                 })
             }
         });
-        // products.push(this); // 2. Array-data
     }
 
     static fetchAll(callbackWhenFetchAllIsDone) {
