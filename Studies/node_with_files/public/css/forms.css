@@ -1,0 +1,18 @@
+.form-control{
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+}
+.form-control label,
+.form-control input, 
+.form-control textarea {
+    display: block;
+    width: 100%;
+}
+
+.form-control input,
+.form-control textarea {
+    border: 1px solid  #002042;
+    font: inherit;
+    border-radius: 2px;
+}
