@@ -2,10 +2,15 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 
 exports.getIndex = (req, res, next) => {
-    res.render('shop/index', {
-        pageTitle: 'Shop',
-        path: '/'
-    });
+    Product.fetchAll()
+        .then(([tableEntries, fieldMetadata]) => {
+            res.render('shop/index', {
+                products: tableEntries,
+                pageTitle: 'Shop',
+                path: '/'
+            });
+        })
+        .catch(error => console.log(error));
 }
 exports.getCart = (req, res, next) => {
     Cart.getCart(cart => {

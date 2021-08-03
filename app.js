@@ -14,7 +14,15 @@ const errorController = require('./controllers/error');
 const database = require('./util/database'); // connection pool
 
 // Get back promises when executing queries with execute
-database.execute('SELECT * FROM products').then();
+database.execute('SELECT * FROM products')
+        .then(result => {
+            const dataAddedToTheTable = result[0];
+            const tableMetadata = result[1];
+            console.log(result);
+        })
+        .catch(error => {
+            console.log(error);
+        });
 
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));

@@ -11,12 +11,6 @@ const productRoutes = require('./routes/product');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
 
-const database = require('./util/database'); // connection pool
-
-// How we would use the database but in this project we are using files
-// Get back promises when executing queries with execute
-// database.execute('SELECT * FROM products').then().catch();
-
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 

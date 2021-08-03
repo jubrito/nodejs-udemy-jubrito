@@ -1,13 +1,15 @@
 const Product = require('../models/product');
 
 exports.getProducts = (req, resp, next) => {
-    Product.fetchAll((products) => {
-        resp.render('shop/product-list', { 
-            products: products, 
-            pageTitle: 'All products', 
-            path: '/products', 
-        }); 
-    });
+    Product.fetchAll()
+        .then(([tableEntries, fieldMetadata]) => {
+            resp.render('shop/product-list', { 
+                products: tableEntries, 
+                pageTitle: 'All products', 
+                path: '/products', 
+            }); 
+        })
+        .catch(error => console.log(error));
 }
 
 exports.getProductById = (req, res, next) => {
