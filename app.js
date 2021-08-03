@@ -13,7 +13,8 @@ const errorController = require('./controllers/error');
 
 const database = require('./util/database'); // connection pool
 
-database.execute('SELECT * FROM products');
+// Get back promises when executing queries with execute
+database.execute('SELECT * FROM products').then();
 
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
