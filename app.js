@@ -11,6 +11,10 @@ const productRoutes = require('./routes/product');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
 
+const database = require('./util/database'); // connection pool
+
+database.execute('SELECT * FROM products');
+
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
