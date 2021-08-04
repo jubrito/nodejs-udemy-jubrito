@@ -32,18 +32,21 @@ exports.getEditProduct = (req, res, next) => {
     if (!editIsEnabled) {
         return res.redirect('/');
     }
-    Product.findById(productId, product => {
-        if (!product) {
-            // TODO: display an error to the user that the product wasn't found 
-            return res.redirect('/');
-        }
-        res.render('admin/edit-product', {
-            pageTitle: 'Edit product',
-            path: '/admin/edit-product',
-            product: product,
-            editIsEnabled: editIsEnabled
-        })
-    })
+    Product.findByPk(productId)
+        .then(product => {
+            if (!product) {
+                // TODO: display an error to the user that the product wasn't found 
+                return res.redirect('/');
+            }
+            res.render('admin/edit-product', {
+                pageTitle: 'Edit product',
+                path: '/admin/edit-product',
+                product: product,
+                editIsEnabled: editIsEnabled
+            })
+        }).catch(error => {
+            console.log(error);
+        });
 }
 
 exports.postEditProduct = (req, res, next) => {
@@ -53,15 +56,22 @@ exports.postEditProduct = (req, res, next) => {
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
     
-    const updatedProduct = new Product(
-        existingId, 
-        updatedTitle, 
-        updatedImageUrl, 
-        updatedPrice, 
-        updatedDescription
-    );
-    updatedProduct.save();
-    res.redirect('/admin/products')
+    Product.findByPk(existingId)
+        .then(product => {
+            product.title = updatedTitle;
+            product.price = updatedPrice;
+            product.imageUrl = updatedImageUrl;
+            product.description = updatedDescription;
+            return product.save(); // if it already exists it will update
+        })
+        // it will handle any successful responses for the promisse when it saves
+        .then(resultAfterSaving => {
+            console.log('updated product');
+            res.redirect('/admin/products')
+        })
+        .catch(error => { // catches errors for both promisses
+            console.log(error);
+        })
 }
 
 exports.getProducts = (req, res, next) => {
