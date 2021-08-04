@@ -20,7 +20,15 @@ module.exports = class Product {
     }
 
     save() {
-        
+        /*  Extra Security Layer
+                To safely insert values and not face the issue of SQL injection which is an attack pattern 
+            where users can insert special data into your input fields in your webpage that runs as SQL queries.
+                When we use  "?" as values and passing them as the second argument MySQL will safely escape the input 
+            values to basically parse it for hidden SQL commands and remove them */
+        return database.execute(
+            'INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)',
+            [this.title, this.price, this.imageUrl, this.description]
+        );
     }
 
     static delete(id) {
