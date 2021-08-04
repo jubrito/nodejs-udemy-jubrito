@@ -14,15 +14,15 @@ exports.getProducts = (req, resp, next) => {
 
 exports.getProductById = (req, res, next) => {
     const productId = req.params.productId;
-    Product.findById(productId, product => {
-        // You can't log asynchronous function but we use the callback to do it
-        res.render(
-            'shop/product-detail', {
-                pageTitle: `Product ${product.title}`,
-                product: product,
-                path: `/products/${product.productId}`
-            }
-        )
-        return product;
-    })
+    Product.findById(productId)
+        .then(([tableEntries, fieldMetadata]) => {
+            res.render(
+                'shop/product-detail', {
+                    pageTitle: product.title,
+                    product: tableEntries[0],
+                    path: `/products/`
+                }
+            )
+        })
+        .catch((error) => { console.log(error)});
 }
