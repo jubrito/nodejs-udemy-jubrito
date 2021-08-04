@@ -13,17 +13,30 @@ exports.postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    // Imediatlly saves in the database
+    // userId: req.user.id // after creating the relations, this column was created and it stores the foreign key for the user table (using the id) and the association between the two tables
+
+    /* How to imediatlly save in the database if we have no relations between tables 
     Product.create({
         title: title,
         price: price,
         imageUrl: imageUrl,
         description: description
-    }).then(result => {
-        res.redirect('/admin/products');
-    }).catch(error => {
-        console.log(error);
-    })
+    }) */
+
+    /* How to save in the database if we have relations 
+    Sequelize automatically adds a create product method to the user because of the belongsTo and hasMany associations we created on app.js */
+    req.user
+        .createProduct({
+            title: title,
+            price: price,
+            imageUrl: imageUrl,
+            description: description
+        })
+        .then(result => {
+            res.redirect('/admin/products');
+        }).catch(error => {
+            console.log(error);
+        })
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -66,7 +79,6 @@ exports.postEditProduct = (req, res, next) => {
         })
         // it will handle any successful responses for the promisse when it saves
         .then(resultAfterSaving => {
-            console.log('updated product');
             res.redirect('/admin/products')
         })
         .catch(error => { // catches errors for both promisses
