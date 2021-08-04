@@ -13,12 +13,17 @@ exports.postAddProduct = (req, resp, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product(null, title, imageUrl, price, description);
-    product.save()
-        .then(() => {
-            resp.redirect('/admin/products');
-        })
-        .catch();
+    // Imediatlly saves in the database
+    Product.create({
+        title: title,
+        price: price,
+        imageUrl: imageUrl,
+        description: description
+    }).then(result => {
+        console.log(result);
+    }).catch(error => {
+        console.log(error);
+    })
 };
 
 exports.getEditProduct = (req, res, next) => {
