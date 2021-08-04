@@ -8,7 +8,7 @@ exports.getAddProduct = (req, resp, next) => {
     });
 };
 
-exports.postAddProduct = (req, resp, next) => {
+exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
@@ -20,7 +20,7 @@ exports.postAddProduct = (req, resp, next) => {
         imageUrl: imageUrl,
         description: description
     }).then(result => {
-        console.log(result);
+        res.redirect('/admin/products');
     }).catch(error => {
         console.log(error);
     })
@@ -87,3 +87,15 @@ exports.getProducts = (req, res, next) => {
             console.log(error);
         })
 };
+
+exports.postDeleteProduct = (req, res, next) => {
+    const productId = req.body.productId;
+    Product.findByPk(productId)
+        .then(product => {
+           return product.destroy();
+        })
+        .then(resultAfterProductIsDestroyed => {
+            res.redirect('/admin/products');
+        })
+        .catch();
+}
