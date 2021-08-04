@@ -65,11 +65,15 @@ exports.postEditProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-    Product.fetchAll(products => {
-        res.render('admin/product-list', {
-            products: products,
-            pageTitle: 'Admin Product List',
-            path: '/admin/products'
-        });
-    });
+    Product.findAll()
+        .then(products => {
+            res.render('admin/product-list', {
+                products: products,
+                pageTitle: 'Admin Product List',
+                path: '/admin/products'
+            });
+        })
+        .catch(error => {
+            console.log(error);
+        })
 };

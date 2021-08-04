@@ -14,15 +14,27 @@ exports.getProducts = (req, resp, next) => {
 
 exports.getProductById = (req, res, next) => {
     const productId = req.params.productId;
-    Product.findById(productId)
-        .then(([tableEntries, fieldMetadata]) => {
+    Product.findByPk(productId)
+        .then(product => {
             res.render(
                 'shop/product-detail', {
                     pageTitle: product.title,
-                    product: tableEntries[0],
-                    path: `/products/`
+                    product: product,
+                    path: '/products/'
                 }
             )
         })
         .catch((error) => { console.log(error)});
+    /* //Alternative way
+    Product.findAll({ where: { id: productId }})
+        .then(products => {
+            res.render(
+                'shop/product-detail', {
+                    pageTitle: products[0].title,
+                    product: products[0],
+                    path: `/products/`
+                }
+            )
+        })
+    */
 }
