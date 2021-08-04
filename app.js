@@ -10,19 +10,8 @@ const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
+const sequelize = require('./util/database'); 
 
-const database = require('./util/database'); // connection pool
-
-// Get back promises when executing queries with execute
-database.execute('SELECT * FROM products')
-        .then(result => {
-            const dataAddedToTheTable = result[0];
-            const tableMetadata = result[1];
-            console.log(result);
-        })
-        .catch(error => {
-            console.log(error);
-        });
 
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
@@ -34,4 +23,14 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-app.listen(8080); 
+// Syncs the model you created to the database by creating the table and if you have them, relations
+sequelize
+    .sync()
+    .then(result => {
+        console.log(result);
+        app.listen(8080) 
+    })
+    .catch(error => {
+        console.log(error)
+    });
+
