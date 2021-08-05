@@ -13,7 +13,6 @@ exports.postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    // userId: req.user.id // after creating the relations, this column was created and it stores the foreign key for the user table (using the id) and the association between the two tables
 
     /* How to imediatlly save in the database if we have no relations between tables 
     Product.create({
@@ -46,7 +45,7 @@ exports.getEditProduct = (req, res, next) => {
         return res.redirect('/');
     }
     /* using the request we defined on app.js instead of repeating this Product findByPk.. */
-    req.user.getProducts({ where: {id: productId}}) 
+    req.user.getProducts({ where: {id: productId}})
         .then(products => {
             const product = products[0]; // always returns an array even if there is only one match
             if (!product) {
@@ -63,8 +62,8 @@ exports.getEditProduct = (req, res, next) => {
             console.log(error);
         });
     /* Alternative
-    Instead of Product.findByPk, it gets the product from the specific user
-    req.user.findByPk(productId) 
+    it gets the product but without considering the user
+    Product.findByPk(productId) 
         .then(product => {
             if (!product) {
                 return res.redirect('/');

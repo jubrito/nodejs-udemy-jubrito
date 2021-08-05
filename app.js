@@ -14,6 +14,8 @@ const errorController = require('./controllers/error');
 const sequelize = require('./util/database'); 
 const Product = require('./models/product'); 
 const User = require('./models/user'); 
+const Cart = require('./models/cart'); 
+const CartItem = require('./models/cart-item'); 
 
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
@@ -42,8 +44,20 @@ const howTheRelashionshipWillBeManaged = {
     constraints: true,
     onDelete: 'CASCADE' // if you delete an user any products related will also be deleted
 }
+
 Product.belongsTo(User, howTheRelashionshipWillBeManaged);
 User.hasMany(Product);
+/* Either of the two approaches below will add a key to the cart, the user id to which the cart belongs.*/
+User.hasOne(Cart);
+Cart.belongsTo(User);
+
+/* The two approaches only work with an intermediate table that connects them which basically stores a combination
+of product IDs and cart IDs (whereTheConnectionShouldBeStored = CartItem).*/
+const whereTheConnectionShouldBeStored = {
+    through: CartItem
+}
+Cart.belongsToMany(Product, whereTheConnectionShouldBeStored);
+Product.belongsToMany(Cart, whereTheConnectionShouldBeStored);
 
 // Syncs the model you created to the database by creating the table and if you have them, relations
 sequelize
