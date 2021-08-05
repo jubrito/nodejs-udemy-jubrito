@@ -13,22 +13,39 @@ exports.getIndex = (req, res, next) => {
     });
 }
 exports.getCart = (req, res, next) => {
-    Cart.getCart(cart => {
-        Product.fetchAll(products => {
-            const cartProducts = [];
-            for (product of products) {
-                const cartProductData = cart.products.find(prod => prod.id === product.id);
-                if (cartProductData){
-                    cartProducts.push({ productData: product, quantity: cartProductData.quantity });
-                }
-            }
-            res.render('shop/cart', {
-                pageTitle: 'Your cart',
-                products: cartProducts,
-                path: '/cart'
-            });
+    req.user.getCart()
+        .then((cart) => {
+            /* Since cart is associated with product (with belongsToMany on app.js) sequelize will 
+            look through the CartItem to find the matching products from the cart */
+            return cart
+                .getProducts()
+                .then(cartProducts => {
+                    res.render('shop/cart', {
+                        pageTitle: 'Your cart',
+                        products: cartProducts,
+                        path: '/cart'
+                    });
+                })
+                .catch(error => console.log(error));
         })
-    })
+        .catch(error => console.log(error))
+
+    // Cart.getCart(cart => {
+    //     Product.fetchAll(products => {
+    //         const cartProducts = [];
+    //         for (product of products) {
+    //             const cartProductData = cart.products.find(prod => prod.id === product.id);
+    //             if (cartProductData){
+    //                 cartProducts.push({ productData: product, quantity: cartProductData.quantity });
+    //             }
+    //         }
+    //         res.render('shop/cart', {
+    //             pageTitle: 'Your cart',
+    //             products: cartProducts,
+    //             path: '/cart'
+    //         });
+    //     })
+    // })
 }
 exports.postCart = (req, res, next) => {
     const productId = req.body.productId;
