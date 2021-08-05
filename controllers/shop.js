@@ -114,7 +114,9 @@ exports.postCreateOrder = (req, res, next) => {
             return req.user.createOrder();
         })
         .then(orderCreated => {
+            
             return orderCreated.addProducts(fetchedCartProducts.map(product => {
+                // array of products with all the old product data but also this new information regarding the quantity for my order 
                 product.orderItem = { quantity: product.cartItem.quantity };
                 return product;
             }));
@@ -125,8 +127,7 @@ exports.postCreateOrder = (req, res, next) => {
         .then(() => {
             res.redirect('/orders');
         })
-        .catch(err => console.log(err));
-       
+        .catch(err => console.log(err)); 
 }
 exports.getCheckout = (req, res, next) => {
     res.render('shop/checkout', {
