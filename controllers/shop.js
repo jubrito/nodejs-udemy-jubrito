@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-const Cart = require('../models/cart');
+const Order = require('../models/order');
 
 exports.getIndex = (req, res, next) => {
     Product.findAll().then(products => {
@@ -85,14 +85,57 @@ exports.postCartDeleteItem = (req, res, next) => {
         })
         .catch(err => console.log(err));
 }
-
 exports.getOrders= (req, res, next) => {
-    res.render('shop/orders', {
-        pageTitle: 'Orders',
-        path: '/orders',
-    })
+    /* Include
+        When fetching all the orders, also fetch all related products already and give back
+        one array of orders that also includes the products per order. 
+        We can do that since we have a relation between orders and products (associated on app.js, one order to many products)*/
+    req.user.getOrders({include: ['products']}) 
+        .then(orders => {
+            // Each order now have a products array
+            res.render('shop/orders', {
+                pageTitle: 'Orders',
+                orders: orders,
+                path: '/orders',
+            })
+        })
+        .catch(err => console.log(err));
+}
+exports.postCreateOrder = (req, res, next) => {
+    let fetchedCart;
+    let fetchedCartProducts;
+    req.user.getCart()
+        .then(cart => {
+            fetchedCart = cart;
+            return cart.getProducts();
+        })
+        .then(cartProducts => {
+            fetchedCartProducts = cartProducts;
+            return req.user.createOrder();
+        })
+        .then(orderCreated => {
+            return orderCreated.addProducts(fetchedCartProducts.map(product => {
+                product.orderItem = { quantity: product.cartItem.quantity };
+                return product;
+            }));
+        })
+        .then(() => {
+            fetchedCart.setProducts(null); // removing all products from cart
+        })
+        .then(() => {
+            res.redirect('/orders');
+        })
+        .catch(err => console.log(err));
+       
 }
 exports.getCheckout = (req, res, next) => {
+    res.render('shop/checkout', {
+        pageTitle: 'Checkout',
+        path: '/checkout',
+    })
+}
+
+exports.postCheckout = (req, res, next) => {
     res.render('shop/checkout', {
         pageTitle: 'Checkout',
         path: '/checkout',

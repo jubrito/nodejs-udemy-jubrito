@@ -16,6 +16,8 @@ const Product = require('./models/product');
 const User = require('./models/user'); 
 const Cart = require('./models/cart'); 
 const CartItem = require('./models/cart-item'); 
+const Order = require('./models/order');
+const OrderItem = require('./models/order-item');
 
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
@@ -58,6 +60,11 @@ const whereTheConnectionShouldBeStored = {
 }
 Cart.belongsToMany(Product, whereTheConnectionShouldBeStored);
 Product.belongsToMany(Cart, whereTheConnectionShouldBeStored);
+
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
+Product.belongsToMany(Order, { through: OrderItem });
 
 // Syncs the model you created to the database by creating the table and if you have them, relations
 sequelize

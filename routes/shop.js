@@ -14,6 +14,8 @@ router.get('/checkout', shopController.getCheckout);
 
 router.get('/orders', shopController.getOrders);
 
+router.post('/create-order', shopController.postCreateOrder);
+
 router.get('/', shopController.getIndex);
 
 
