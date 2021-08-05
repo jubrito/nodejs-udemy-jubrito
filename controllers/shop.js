@@ -29,37 +29,61 @@ exports.getCart = (req, res, next) => {
                 .catch(error => console.log(error));
         })
         .catch(error => console.log(error))
-
-    // Cart.getCart(cart => {
-    //     Product.fetchAll(products => {
-    //         const cartProducts = [];
-    //         for (product of products) {
-    //             const cartProductData = cart.products.find(prod => prod.id === product.id);
-    //             if (cartProductData){
-    //                 cartProducts.push({ productData: product, quantity: cartProductData.quantity });
-    //             }
-    //         }
-    //         res.render('shop/cart', {
-    //             pageTitle: 'Your cart',
-    //             products: cartProducts,
-    //             path: '/cart'
-    //         });
-    //     })
-    // })
 }
 exports.postCart = (req, res, next) => {
     const productId = req.body.productId;
-    Product.findById(productId, product => {
-        Cart.addProduct(productId, product.price);
-    })
-    res.redirect('/cart');
+    let fetchedCart;
+    let newQuantity = 1;
+    let fieldsThatShouldBeSetInTheInBetweenTable = { 
+        through: {}
+    };
+
+    req.user
+        .getCart()
+        .then(cart => {
+            fetchedCart = cart;
+            return cart.getProducts({where: { id: productId}});
+        })
+        .then(products => {
+            let product;
+            if (products.length > 0) {
+                product = products[0];
+            }
+            if (product) {
+                const oldQuantity = product.cartItem.quantity;
+                newQuantity = oldQuantity + 1;
+                return product
+            }
+            // if the product is not part of the cart yet
+            return Product.findByPk(productId)
+        })
+        .then(product => {
+            fieldsThatShouldBeSetInTheInBetweenTable = {
+                through: { quantity: newQuantity }
+            }
+            return fetchedCart.addProduct(product, fieldsThatShouldBeSetInTheInBetweenTable);
+        })
+        .then(() => {
+            res.redirect('/cart');
+        })
+        .catch(error => console.log(error))
 }
 exports.postCartDeleteItem = (req, res, next) => {
     const productId = req.body.productId;
-    Product.findById(productId, product => {
-        Cart.deleteProduct(productId, product.price);
-        res.redirect('/cart');
-    })
+    req.user.getCart()
+        .then(cart => {
+            return cart.getProducts({ where: { id: productId }})
+        })
+        .then(products => {
+            let product = products[0];
+            // we only want to remove the product from the in-between cartItem table that connects my cart with that product
+            return product.cartItem.destroy();
+        })
+        .then(result => {
+            res.redirect('/cart');
+
+        })
+        .catch(err => console.log(err));
 }
 
 exports.getOrders= (req, res, next) => {
