@@ -45,8 +45,10 @@ exports.getEditProduct = (req, res, next) => {
     if (!editIsEnabled) {
         return res.redirect('/');
     }
-    Product.findByPk(productId)
-        .then(product => {
+    /* using the request we defined on app.js instead of repeating this Product findByPk.. */
+    req.user.getProducts({ where: {id: productId}}) 
+        .then(products => {
+            const product = products[0]; // always returns an array even if there is only one match
             if (!product) {
                 // TODO: display an error to the user that the product wasn't found 
                 return res.redirect('/');
@@ -60,6 +62,22 @@ exports.getEditProduct = (req, res, next) => {
         }).catch(error => {
             console.log(error);
         });
+    /* Alternative
+    Instead of Product.findByPk, it gets the product from the specific user
+    req.user.findByPk(productId) 
+        .then(product => {
+            if (!product) {
+                return res.redirect('/');
+            }
+            res.render('admin/edit-product', {
+                pageTitle: 'Edit product',
+                path: '/admin/edit-product',
+                product: product,
+                editIsEnabled: editIsEnabled
+            })
+        }).catch(error => {
+            console.log(error);
+        }); */
 }
 
 exports.postEditProduct = (req, res, next) => {
@@ -87,7 +105,8 @@ exports.postEditProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    // Product.findAll() is the alternative for when there is no specific user
+    req.user.getProducts()
         .then(products => {
             res.render('admin/product-list', {
                 products: products,
