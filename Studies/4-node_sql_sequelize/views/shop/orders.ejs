@@ -1,0 +1,26 @@
+<%- include('../includes/head') %>
+</head>
+<body>
+    <%- include('../includes/navigation') %>
+    <main>
+        <% if (orders.length > 0) { %>
+            <ul>
+                <% orders.forEach(order => { %> 
+                    <li>
+                        <h1>#<%= order.id %></h1>
+                        <ul>
+                            <!-- we can access the products from the orders because we included 'products' on the getOrders (controllers/shop.js) -->
+                            <% order.products.forEach(product => { %> 
+                                <li>
+                                    <%= product.title %>  (<%= product.orderItem.quantity %> )
+                                </li>
+                                <% }) %> 
+                        </ul>
+                    </li>
+                <% }) %> 
+            </ul>
+        <% } else { %>  
+            <h1>No orders found</h1>
+        <% } %> 
+    </main>
+    <%- include('../includes/end')  %> 

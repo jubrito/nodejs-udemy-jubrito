@@ -1,20 +1,16 @@
-const mysql = require('mysql2');
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 
+const connectionStringFromMongodbWebsiteCluster = 'mongodb+srv://juliana:juju2009@clusterbackend0.luzfp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
-const hostOrIpAddresss = 'localhost';
-const schemaCreatedOnMySql = 'nodejs_udemy';
-const rootUsername = 'root';
-const rootPassword = 'juju2009';
+const mongoConnect = (callback) => {
+    MongoClient
+        .connect(connectionStringFromMongodbWebsiteCluster)
+        .then(clientObjectWhichGivesAccessToTheDatabase => {
+            console.log('connected!');
+            callback(clientObjectWhichGivesAccessToTheDatabase);
+        })
+        .catch(err => console.log(err));
+}
 
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize(
-    schemaCreatedOnMySql,
-    rootUsername,
-    rootPassword,
-    {
-        dialect: 'mysql',
-        host: hostOrIpAddresss
-    }
-)
-
-module.exports = sequelize;
+module.exports = mongoConnect;
