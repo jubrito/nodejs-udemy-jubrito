@@ -6,9 +6,9 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
-// const productRoutes = require('./routes/product');
-// const shopRoutes = require('./routes/shop');
-// const errorController = require('./controllers/error');
+const productRoutes = require('./routes/product');
+const shopRoutes = require('./routes/shop');
+const errorController = require('./controllers/error');
 
 const mongoConnect = require('./util/database').mongoConnect;
 
@@ -31,9 +31,9 @@ app.use((req, res, next) => {
 })
 
 app.use('/admin', adminRoutes); 
-// app.use(productRoutes); 
-// app.use(shopRoutes); 
-// app.use(errorController.get404);
+app.use(productRoutes); 
+app.use(shopRoutes); 
+app.use(errorController.get404);
 
 mongoConnect(() => {
     app.listen(8080); 
