@@ -12,7 +12,8 @@ class Product {
     save() {
         const db = getDb();
         // this = the object instanciated representing { name: 'Book', price:...} 
-        db.collection('products').insertOne(this)
+        return db.collection('products')
+            .insertOne(this)
             .then(result => {
                 console.log(result);
             })

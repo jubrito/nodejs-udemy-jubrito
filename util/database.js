@@ -13,7 +13,7 @@ const manageDatabaseConnectionAndReturnClientAccessViaMongodb = (callback) => {
         .connect(connectionStringFromMongodbWebsiteCluster)
         .then(clientObjectWhichGivesAccessToTheDatabase => {
             console.log('connected!');
-            _db = clientObjectWhichGivesAccessToTheDatabase.db(); // give access to the databaseIWantToConnect (you can pass a new database to connect as parameter and as string)
+            _storedConnectionWithDatabase = clientObjectWhichGivesAccessToTheDatabase.db(); // give access to the databaseIWantToConnect (you can pass a new database to connect as parameter and as string)
             callback();
         })
         .catch(err => {

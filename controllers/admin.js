@@ -14,23 +14,10 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
 
-    /* How to imediatlly save in the database if we have no relations between tables 
-    Product.create({
-        title: title,
-        price: price,
-        imageUrl: imageUrl,
-        description: description
-    }) */
-
-    /* How to save in the database if we have relations 
-    Sequelize automatically adds a create product method to the user because of the belongsTo and hasMany associations we created on app.js */
-    req.user
-        .createProduct({
-            title: title,
-            price: price,
-            imageUrl: imageUrl,
-            description: description
-        })
+    const product = new Product(title, price, description, imageUrl)
+    
+    product
+        .save()
         .then(result => {
             res.redirect('/admin/products');
         }).catch(error => {
