@@ -38,94 +38,94 @@ exports.postAddProduct = (req, res, next) => {
         })
 };
 
-exports.getEditProduct = (req, res, next) => {
-    const editIsEnabled = req.query.edit;
-    const productId = req.params.productId;
-    if (!editIsEnabled) {
-        return res.redirect('/');
-    }
-    /* using the request we defined on app.js instead of repeating this Product findByPk.. */
-    req.user.getProducts({ where: {id: productId}})
-        .then(products => {
-            const product = products[0]; // always returns an array even if there is only one match
-            if (!product) {
-                // TODO: display an error to the user that the product wasn't found 
-                return res.redirect('/');
-            }
-            res.render('admin/edit-product', {
-                pageTitle: 'Edit product',
-                path: '/admin/edit-product',
-                product: product,
-                editIsEnabled: editIsEnabled
-            })
-        }).catch(error => {
-            console.log(error);
-        });
-    /* Alternative
-    it gets the product but without considering the user
-    Product.findByPk(productId) 
-        .then(product => {
-            if (!product) {
-                return res.redirect('/');
-            }
-            res.render('admin/edit-product', {
-                pageTitle: 'Edit product',
-                path: '/admin/edit-product',
-                product: product,
-                editIsEnabled: editIsEnabled
-            })
-        }).catch(error => {
-            console.log(error);
-        }); */
-}
+// exports.getEditProduct = (req, res, next) => {
+//     const editIsEnabled = req.query.edit;
+//     const productId = req.params.productId;
+//     if (!editIsEnabled) {
+//         return res.redirect('/');
+//     }
+//     /* using the request we defined on app.js instead of repeating this Product findByPk.. */
+//     req.user.getProducts({ where: {id: productId}})
+//         .then(products => {
+//             const product = products[0]; // always returns an array even if there is only one match
+//             if (!product) {
+//                 // TODO: display an error to the user that the product wasn't found 
+//                 return res.redirect('/');
+//             }
+//             res.render('admin/edit-product', {
+//                 pageTitle: 'Edit product',
+//                 path: '/admin/edit-product',
+//                 product: product,
+//                 editIsEnabled: editIsEnabled
+//             })
+//         }).catch(error => {
+//             console.log(error);
+//         });
+//     /* Alternative
+//     it gets the product but without considering the user
+//     Product.findByPk(productId) 
+//         .then(product => {
+//             if (!product) {
+//                 return res.redirect('/');
+//             }
+//             res.render('admin/edit-product', {
+//                 pageTitle: 'Edit product',
+//                 path: '/admin/edit-product',
+//                 product: product,
+//                 editIsEnabled: editIsEnabled
+//             })
+//         }).catch(error => {
+//             console.log(error);
+//         }); */
+// }
 
-exports.postEditProduct = (req, res, next) => {
-    const existingId = req.body.productId;
-    const updatedTitle = req.body.title;
-    const updatedImageUrl = req.body.imageUrl;
-    const updatedPrice = req.body.price;
-    const updatedDescription = req.body.description;
+// exports.postEditProduct = (req, res, next) => {
+//     const existingId = req.body.productId;
+//     const updatedTitle = req.body.title;
+//     const updatedImageUrl = req.body.imageUrl;
+//     const updatedPrice = req.body.price;
+//     const updatedDescription = req.body.description;
     
-    Product.findByPk(existingId)
-        .then(product => {
-            product.title = updatedTitle;
-            product.price = updatedPrice;
-            product.imageUrl = updatedImageUrl;
-            product.description = updatedDescription;
-            return product.save(); // if it already exists it will update
-        })
-        // it will handle any successful responses for the promisse when it saves
-        .then(resultAfterSaving => {
-            res.redirect('/admin/products')
-        })
-        .catch(error => { // catches errors for both promisses
-            console.log(error);
-        })
-}
+//     Product.findByPk(existingId)
+//         .then(product => {
+//             product.title = updatedTitle;
+//             product.price = updatedPrice;
+//             product.imageUrl = updatedImageUrl;
+//             product.description = updatedDescription;
+//             return product.save(); // if it already exists it will update
+//         })
+//         // it will handle any successful responses for the promisse when it saves
+//         .then(resultAfterSaving => {
+//             res.redirect('/admin/products')
+//         })
+//         .catch(error => { // catches errors for both promisses
+//             console.log(error);
+//         })
+// }
 
-exports.getProducts = (req, res, next) => {
-    // Product.findAll() is the alternative for when there is no specific user
-    req.user.getProducts()
-        .then(products => {
-            res.render('admin/product-list', {
-                products: products,
-                pageTitle: 'Admin Product List',
-                path: '/admin/products'
-            });
-        })
-        .catch(error => {
-            console.log(error);
-        })
-};
+// exports.getProducts = (req, res, next) => {
+//     // Product.findAll() is the alternative for when there is no specific user
+//     req.user.getProducts()
+//         .then(products => {
+//             res.render('admin/product-list', {
+//                 products: products,
+//                 pageTitle: 'Admin Product List',
+//                 path: '/admin/products'
+//             });
+//         })
+//         .catch(error => {
+//             console.log(error);
+//         })
+// };
 
-exports.postDeleteProduct = (req, res, next) => {
-    const productId = req.body.productId;
-    Product.findByPk(productId)
-        .then(product => {
-           return product.destroy();
-        })
-        .then(resultAfterProductIsDestroyed => {
-            res.redirect('/admin/products');
-        })
-        .catch();
-}
+// exports.postDeleteProduct = (req, res, next) => {
+//     const productId = req.body.productId;
+//     Product.findByPk(productId)
+//         .then(product => {
+//            return product.destroy();
+//         })
+//         .then(resultAfterProductIsDestroyed => {
+//             res.redirect('/admin/products');
+//         })
+//         .catch();
+// }

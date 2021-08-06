@@ -5,12 +5,12 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-// const adminRoutes = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 // const productRoutes = require('./routes/product');
 // const shopRoutes = require('./routes/shop');
 // const errorController = require('./controllers/error');
 
-const mongoConnect = require('./util/database');
+const mongoConnect = require('./util/database').mongoConnect;
 
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
@@ -27,15 +27,15 @@ app.use((req, res, next) => {
     //     .catch(error => {
     //     console.log(error);
     // })
+    next();
 })
 
-// app.use('/admin', adminRoutes); 
+app.use('/admin', adminRoutes); 
 // app.use(productRoutes); 
 // app.use(shopRoutes); 
 // app.use(errorController.get404);
 
-mongoConnect((clientObjectWhichGivesAccessToTheDatabase) => {
-    console.log(clientObjectWhichGivesAccessToTheDatabase);
+mongoConnect(() => {
     app.listen(8080); 
 })
 
