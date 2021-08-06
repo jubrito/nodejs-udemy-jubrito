@@ -14,8 +14,10 @@ exports.getProducts = (req, resp, next) => {
 
 exports.getProductById = (req, res, next) => {
     const productId = req.params.productId;
-    Product.findByPk(productId)
+    Product.findById(productId)
         .then(product => {
+            console.log('product')
+            console.log(product)
             res.render(
                 'shop/product-detail', {
                     pageTitle: product.title,
@@ -25,16 +27,5 @@ exports.getProductById = (req, res, next) => {
             )
         })
         .catch((error) => { console.log(error)});
-    /* //Alternative way
-    Product.findAll({ where: { id: productId }})
-        .then(products => {
-            res.render(
-                'shop/product-detail', {
-                    pageTitle: products[0].title,
-                    product: products[0],
-                    path: `/products/`
-                }
-            )
-        })
-    */
+
 }
