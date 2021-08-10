@@ -7,7 +7,7 @@ class Product {
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
-        this._id = _id;
+        this._id = new mongodb.ObjectId(_id);
     }
 
 
@@ -15,7 +15,7 @@ class Product {
         const db = getDb();
         let databaseOperation;
         const theProductAlreadyExists = this._id;
-        const filterWhichDocumentWillBeUpdated = {_id: new mongodb.ObjectId(this._id)};
+        const filterWhichDocumentWillBeUpdated = {_id: this._id};
         // howTheDocumentWillBeUpdated could be { $set: { title: this.title, etc }}
         const howTheDocumentWillBeUpdated = { $set: this }; 
         if (theProductAlreadyExists) {
