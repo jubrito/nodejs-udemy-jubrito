@@ -2,19 +2,33 @@
 const mongodb = require('mongodb');
 const getDb = require('../util/database').getDb;
 class Product {
-    constructor(title, price, description, imageUrl){
+    constructor(title, price, description, imageUrl, _id){
         this.title = title;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
+        this._id = _id;
     }
 
 
     save() {
         const db = getDb();
-        // this = the object instanciated representing { name: 'Book', price:...} 
-        return db.collection('products')
-            .insertOne(this)
+        let databaseOperation;
+        const theProductAlreadyExists = this._id;
+        const filterWhichDocumentWillBeUpdated = {_id: new mongodb.ObjectId(this._id)};
+        // howTheDocumentWillBeUpdated could be { $set: { title: this.title, etc }}
+        const howTheDocumentWillBeUpdated = { $set: this }; 
+        if (theProductAlreadyExists) {
+            databaseOperation = db.collection('products')
+                .updateOne(
+                    filterWhichDocumentWillBeUpdated,
+                    howTheDocumentWillBeUpdated
+                )
+        } else {
+            // this = the object instanciated representing { name: 'Book', price:...} 
+            databaseOperation =  db.collection('products').insertOne(this);
+        }
+        return databaseOperation
             .then(result => {
                 console.log(result);
             })
