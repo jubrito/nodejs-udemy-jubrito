@@ -7,7 +7,7 @@ class Product {
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
-        this._id = new mongodb.ObjectId(_id);
+        this._id = _id ? new mongodb.ObjectId(_id) : null;
     }
 
 
@@ -16,8 +16,7 @@ class Product {
         let databaseOperation;
         const theProductAlreadyExists = this._id;
         const filterWhichDocumentWillBeUpdated = {_id: this._id};
-        // howTheDocumentWillBeUpdated could be { $set: { title: this.title, etc }}
-        const howTheDocumentWillBeUpdated = { $set: this }; 
+        const howTheDocumentWillBeUpdated = { $set: this }; // howTheDocumentWillBeUpdated could be { $set: { title: this.title, etc }}
         if (theProductAlreadyExists) {
             databaseOperation = db.collection('products')
                 .updateOne(
@@ -57,6 +56,16 @@ class Product {
                 return product;
             })
             .catch(err => console.log(err));
+    }
+
+    static deleteById(productId) {
+        const db = getDb();
+        return db.collection('products')
+            .deleteOne({_id: new mongodb.ObjectId(productId)})
+            .then(result => {
+                console.log('deleted');
+            })
+            .catch(err => console.log(err))
     }
 }
 
