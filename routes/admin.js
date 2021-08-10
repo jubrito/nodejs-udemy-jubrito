@@ -1,8 +1,6 @@
 const express = require('express');
-const path = require('path');
-const router = express.Router(); // mini express app
-
 const adminController = require('../controllers/admin');
+const router = express.Router(); // mini express app
 
 router.get('/add-product', adminController.getAddProduct);
 
