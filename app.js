@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
 
 app.use((req, res, next) => {
-    User.findByPk('6112b2841a0f930bf2374076')
+    User.findById('6112b2841a0f930bf2374076')
         .then(user => {
             /*  User was undefined but after this we are storing the new user created first when the sequelize is runned. This is only going to happen by demand this the middleware it is just registered and runned when the request is triggered
                 User is a sequilize object with the values stored in the database along with the sequelize methods like .destroy*/
