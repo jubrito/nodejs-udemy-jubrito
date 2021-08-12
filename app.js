@@ -1,18 +1,17 @@
 const express = require('express');
 const path = require('path');
-const app = express();
-
-app.set('view engine', 'ejs');
-app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
-
 const User = require('./models/user');
-
 const mongoConnect = require('./util/database').mongoConnect;
+
+const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
@@ -28,8 +27,7 @@ app.use((req, res, next) => {
         })
         .catch(error => {
         console.log(error);
-    })
-    next();
+        })
 })
 
 app.use('/admin', adminRoutes); 
@@ -38,7 +36,6 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 mongoConnect(() => {
-    if ()
     app.listen(8080); 
 })
 

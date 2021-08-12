@@ -1,15 +1,16 @@
 const Product = require('../models/product');
 
 exports.getProducts = (req, resp, next) => {
-    Product.fetchAll().then(products => {
-        resp.render('shop/product-list', { 
-            products: products, 
-            pageTitle: 'All products', 
-            path: '/products', 
-        }); 
-    }).catch(error => {
-        console.log(error)
-    });
+    Product.fetchAll()
+        .then(products => {
+            resp.render('shop/product-list', { 
+                products: products, 
+                pageTitle: 'All products', 
+                path: '/products', 
+            }); 
+        }).catch(error => {
+            console.log(error)
+        });
 }
 
 exports.getProductById = (req, res, next) => {
@@ -26,6 +27,5 @@ exports.getProductById = (req, res, next) => {
                 }
             )
         })
-        .catch((error) => { console.log(error)});
-
+        .catch((error) => {console.log(error)});
 }
