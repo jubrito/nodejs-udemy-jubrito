@@ -19,7 +19,8 @@ class Product {
         const filterWhichDocumentWillBeUpdated = {_id: this._id};
         const howTheDocumentWillBeUpdated = { $set: this }; // howTheDocumentWillBeUpdated could be { $set: { title: this.title, etc }}
         if (theProductAlreadyExists) {
-            databaseOperation = db.collection('products')
+            databaseOperation = db
+                .collection('products')
                 .updateOne(
                     filterWhichDocumentWillBeUpdated,
                     howTheDocumentWillBeUpdated

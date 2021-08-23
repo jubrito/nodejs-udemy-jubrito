@@ -6,7 +6,7 @@ const router = express.Router();
 
 // router.get('/cart', shopController.getCart);
 
-// router.post('/cart', shopController.postCart);
+router.post('/cart', shopController.postCart);
 
 // router.post('/cart-delete-item', shopController.postCartDeleteItem);
 
@@ -17,6 +17,5 @@ const router = express.Router();
 // router.post('/create-order', shopController.postCreateOrder);
 
 router.get('/', shopController.getIndex);
-
 
 module.exports = router;
