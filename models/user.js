@@ -19,51 +19,44 @@ class User {
   }
 
   // TODO static updateExistingProduct() {}
-  addToCart(product) {
-    const cartProductIndex = this.cart.items.findIndex(cartProduct => {
-      return cartProduct.productId.toString() === product._id.toString();
-    });
-    const newQuantity = 1;
-    const updatedCartItems = [...this.cart.items];
-    if (cartProductIndex >= 0) {
-      newQuantity = this.cart.items[cartProductIndex].quantity + 1;
-      updatedCartItems[cartProductIndex].quantity = newQuantity;
-    } else {
-      updatedCartItems.push({ 
+  addToCart(product) { 
+    const cartProductIndex = this.cart != null ? this.cart.items.findIndex((cartProduct) => cartProduct.productId.toString() === product._id.toString()) : -1; 
+    const updateCartItems = this.cart != null ? [...this.cart.items] : []; 
+    let newQuantity = 1; 
+    if (cartProductIndex >= 0) { 
+      newQuantity = this.cart.items[cartProductIndex].quantity + 1; 
+      updateCartItems[cartProductIndex].quantity = newQuantity; 
+    } else { 
+      updateCartItems.push({ 
         productId: new ObjectId(product._id), 
-        quantity: newQuantity 
-      })
-    }
-    const updatedCart = {
-      items: updatedCartItems
-    };
-    const db = getDb();
-    return db
-      .collection('users')
-      .updateOne(
-        { _id: new ObjectId(this._id) }, 
-        { $set: { cart: updatedCart} }
-      );
+        quantity: newQuantity
+      }); 
+    } 
+    const updateProduct = { items: updateCartItems }; 
+    const db = getDb(); 
+    return db.collection("users").updateOne(
+      { _id: new ObjectId(this._id) }, 
+      { $set: { cart: updateProduct } }); 
   }
 
   getCart() {
     const db = getDb();
     const productIds = this.getCart.items.map(cartItem => {
-        return cartItem.productId;
+      return cartItem.productId;
     });
     return db.collection('products')
-        .findById({_id: {$in: [productIds]}})
-        .toArray()
-        .then(cartProducts => {
-            return cartProducts.map(product => {
-                return {
-                    ...product, 
-                    quantity: this.cartItem.items.findById(item => {
-                        return item.productId.toString() === product._id.toString();
-                    }).quantity
-                };
-            })
+      .findById({ _id: { $in: [productIds] } })
+      .toArray()
+      .then(cartProducts => {
+        return cartProducts.map(product => {
+          return {
+            ...product,
+            quantity: this.cartItem.items.findById(item => {
+              return item.productId.toString() === product._id.toString();
+            }).quantity
+          };
         })
+      })
   }
 
   static findById(userId) {
