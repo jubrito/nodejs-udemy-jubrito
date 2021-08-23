@@ -12,24 +12,15 @@ exports.getIndex = (req, res, next) => {
         console.log(error)
     });
 }
-// exports.getCart = (req, res, next) => {
-//     req.user.getCart()
-//         .then((cart) => {
-//             /* Since cart is associated with product (with belongsToMany on app.js) sequelize will 
-//             look through the CartItem to find the matching products from the cart */
-//             return cart
-//                 .getProducts()
-//                 .then(cartProducts => {
-//                     res.render('shop/cart', {
-//                         pageTitle: 'Your cart',
-//                         products: cartProducts,
-//                         path: '/cart'
-//                     });
-//                 })
-//                 .catch(error => console.log(error));
-//         })
-//         .catch(error => console.log(error))
-// }
+exports.getCart = (req, res, next) => {
+   req.user.getCart().then(products => {
+       res.render('shop/cart', {
+           path: '/cart',
+           pageTitle: 'Cart',
+           products: products
+       })
+   })
+}
 exports.postCart = (req, res, next) => {
     const productId = req.body.productId;
     Product.findById(productId)
@@ -38,11 +29,7 @@ exports.postCart = (req, res, next) => {
         })
         .then(result => console.log(result))
         .catch(err => console.log(err))
-    // let fetchedCart;
-    // let newQuantity = 1;
-    // let fieldsThatShouldBeSetInTheInBetweenTable = { 
-    //     through: {}
-    // };
+}
 
     // req.user
     //     .getCart()
@@ -73,8 +60,8 @@ exports.postCart = (req, res, next) => {
     //         res.redirect('/cart');
     //     })
     //     .catch(error => console.log(error))
-}
-// exports.postCartDeleteItem = (req, res, next) => {
+
+    // exports.postCartDeleteItem = (req, res, next) => {
 //     const productId = req.body.productId;
 //     req.user.getCart()
 //         .then(cart => {
