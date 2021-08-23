@@ -13,13 +13,16 @@ exports.getIndex = (req, res, next) => {
     });
 }
 exports.getCart = (req, res, next) => {
-   req.user.getCart().then(products => {
-       res.render('shop/cart', {
-           path: '/cart',
-           pageTitle: 'Cart',
-           products: products
-       })
-   })
+   req.user
+    .getCart()
+    .then(products => {
+        res.render('shop/cart', {
+            path: '/cart',
+            pageTitle: 'Cart',
+            products: products
+        })
+    })
+    .catch(err => console.log(err))
 }
 exports.postCart = (req, res, next) => {
     const productId = req.body.productId;

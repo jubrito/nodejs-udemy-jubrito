@@ -41,18 +41,19 @@ class User {
 
   getCart() {
     const db = getDb();
-    const productIds = this.getCart.items.map(cartItem => {
+    const productIds = this.cart.items.map(cartItem => {
       return cartItem.productId;
     });
-    return db.collection('products')
-      .findById({ _id: { $in: [productIds] } })
+    return db
+      .collection('products')
+      .find({ _id: { $in: productIds } })
       .toArray()
       .then(cartProducts => {
-        return cartProducts.map(product => {
+        return cartProducts.map(cartProduct => {
           return {
-            ...product,
-            quantity: this.cartItem.items.findById(item => {
-              return item.productId.toString() === product._id.toString();
+            ...cartProduct,
+            quantity: this.cart.items.find(item => {
+              return item.productId.toString() === cartProduct._id.toString();
             }).quantity
           };
         })
