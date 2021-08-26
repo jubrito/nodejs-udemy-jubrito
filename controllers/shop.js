@@ -46,6 +46,17 @@ exports.postCartDeleteItem = (req, res, next) => {
         .catch(err => console.log(err));
     
 }
+
+exports.postCreateOrder = (req, res, next) => {
+    req.user
+        .addOrder()
+        .then(result => {
+            res.redirect('/orders');
+        })
+        .catch(err => {console.log(err)})
+}
+
+
 // TODO: add or remove items one by one from cart
 // exports.postCartDeleteOneItem = (req, res, next) => {
 //     const productId = req.body.productId;

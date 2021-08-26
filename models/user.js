@@ -42,41 +42,6 @@ class User {
       { $set: { cart: updatedProduct } }); 
   }
 
-  removeOneFromCart(product) {
-    const cartProductIndex = this.cart != null ? this.cart.items.findIndex((cartProduct) => cartProduct.productId.toString() === product._id.toString()) : -1;
-    const updatedCartItems = this.cart != null ? [...this.cart.items] : [];
-    let currentQuantity = this.cart.items[cartProductIndex].quantity;
-    let newQuantity = 0;
-    console.log('cartProductIndex',cartProductIndex)
-    if (cartProductIndex < 0) {
-      return;
-    }
-    if (currentQuantity > 1) {
-      newQuantity = this.cart.items[cartProductIndex].quantity - 1; 
-      updatedCartItems[cartProductIndex].quantity = newQuantity; 
-    } else {
-      updatedCartItems = updatedCartItems.splice(cartProductIndex, 1);
-    }
-    const updatedProduct = { items: updatedCartItems };
-    const db = getDb();
-    return db.collection("users").updateOne(
-      { _id: new ObjectId(this._id)},
-      { $set: { cart: updatedProduct }}
-    )
-  }
-
-  deleteItemFromCart(productId) {
-    const updatedCartItems = this.cart.items.filter(cartItem => {
-      return cartItem.productId.toString() !== productId.toString(); // return true if I want to keep and false if you want to get rid of it
-    })
-    const db = getDb();
-    return db
-      .collection("users")
-      .updateOne(
-        { _id: new ObjectId(this._id)},
-        { $set: { cart: { items: updatedCartItems } }}
-      );
-  }
   getCart() {
     const db = getDb();
     const productIds = this.cart.items.map(cartItem => {
@@ -95,6 +60,59 @@ class User {
             }).quantity
           };
         })
+      })
+  }
+
+  deleteItemFromCart(productId) {
+    const updatedCartItems = this.cart.items.filter(cartItem => {
+      return cartItem.productId.toString() !== productId.toString(); // return true if I want to keep and false if you want to get rid of it
+    })
+    const db = getDb();
+    return db
+      .collection("users")
+      .updateOne(
+        { _id: new ObjectId(this._id)},
+        { $set: { cart: { items: updatedCartItems } }}
+      );
+  }
+
+  // TODO: add or remove items one by one from cart
+  // removeOneFromCart(product) {
+  //   const cartProductIndex = this.cart != null ? this.cart.items.findIndex((cartProduct) => cartProduct.productId.toString() === product._id.toString()) : -1;
+  //   const updatedCartItems = this.cart != null ? [...this.cart.items] : [];
+  //   let currentQuantity = this.cart.items[cartProductIndex].quantity;
+  //   let newQuantity = 0;
+  //   console.log('cartProductIndex',cartProductIndex)
+  //   if (cartProductIndex < 0) {
+  //     return;
+  //   }
+  //   if (currentQuantity > 1) {
+  //     newQuantity = this.cart.items[cartProductIndex].quantity - 1; 
+  //     updatedCartItems[cartProductIndex].quantity = newQuantity; 
+  //   } else {
+  //     updatedCartItems = updatedCartItems.splice(cartProductIndex, 1);
+  //   }
+  //   const updatedProduct = { items: updatedCartItems };
+  //   const db = getDb();
+  //   return db.collection("users").updateOne(
+  //     { _id: new ObjectId(this._id)},
+  //     { $set: { cart: updatedProduct }}
+  //   )
+  // }
+
+  addOrder() {
+    const db = getDb();
+    db
+      .collection('orders')
+      .insertOne(this.cart)
+      .then(result => {
+        this.cart = {items: []};
+        return db
+        .collection("users")
+        .updateOne(
+          { _id: new ObjectId(this._id)},
+          { $set: { cart: { items: [] } }}
+        );
       })
   }
 
