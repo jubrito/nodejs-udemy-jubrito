@@ -209,7 +209,7 @@ form {
   color: white;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 700px) {
   .main-header__nav {
     display: flex;
   }
