@@ -56,6 +56,18 @@ exports.postCreateOrder = (req, res, next) => {
         .catch(err => {console.log(err)})
 }
 
+exports.getOrders = (req, res, next) => {
+    req.user
+        .getOrders()
+        .then(orders => {
+            res.render('shop/orders', {
+                path: '/orders',
+                pageTitle: 'Orders',
+                orders: orders,
+            })
+        })
+        .catch(err => console.log(err));
+}
 
 // TODO: add or remove items one by one from cart
 // exports.postCartDeleteOneItem = (req, res, next) => {
