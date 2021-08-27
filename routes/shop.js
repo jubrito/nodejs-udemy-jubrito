@@ -1,6 +1,6 @@
 const express = require('express');
 
-// const shopController = require('../controllers/shop');
+const shopController = require('../controllers/shop');
 
 const router = express.Router();
 
@@ -16,6 +16,6 @@ const router = express.Router();
 
 // router.post('/create-order', shopController.postCreateOrder);
 
-// router.get('/', shopController.getIndex);
+router.get('/', shopController.getIndex);
 
 module.exports = router;

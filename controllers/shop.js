@@ -1,8 +1,7 @@
 const Product = require('../models/product');
-const Order = require('../models/order');
 
 exports.getIndex = (req, res, next) => {
-    Product.fetchAll().then(products => {
+    Product.find().then(products => {
         res.render('shop/index', {
             products: products,
             pageTitle: 'Shop',
@@ -68,18 +67,3 @@ exports.getOrders = (req, res, next) => {
         })
         .catch(err => console.log(err));
 }
-
-// TODO: add or remove items one by one from cart
-// exports.postCartDeleteOneItem = (req, res, next) => {
-//     const productId = req.body.productId;
-//     Product.findById(productId)
-//         .then(product => {
-//             return req.user.removeFromCart(product);
-//         })
-//         .then(result => {
-//             res.redirect('/cart');
-//             console.log(result);
-//         })
-//         .catch(err => console.log(err));
-    
-// }
