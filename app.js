@@ -17,17 +17,17 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
 
-app.use((req, res, next) => {
-    User.findById('6112b2841a0f930bf2374076')
-        .then(user => {
-            /*  User model with methods and variables registered and accesible as middleware */
-            req.user = new User(user.username, user.email, user.cart, user._id); 
-            next();
-        })
-        .catch(error => {
-        console.log(error);
-        })
-})
+// app.use((req, res, next) => {
+//     User.findById('6112b2841a0f930bf2374076')
+//         .then(user => {
+//             /*  User model with methods and variables registered and accesible as middleware */
+//             req.user = new User(user.username, user.email, user.cart, user._id); 
+//             next();
+//         })
+//         .catch(error => {
+//         console.log(error);
+//         })
+// })
 
 app.use('/admin', adminRoutes); 
 app.use(productRoutes); 
