@@ -1,0 +1,41 @@
+<%- include('../includes/head.ejs') %> 
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+<body>
+    <%- include('../includes/navigation.ejs') %> 
+    <main>
+        <!-- enclosing/wraping a certain block doesn't require the =, because the = is only used if you are setting an exact value -->
+        <% if (products.length > 0) {%>
+            <div class="grid">
+                <% for (let product of products) { %> 
+                    <article class="card product-item">
+                        <header class="card__header">
+                            <h1 class="product__title">
+                                <%= product.title %> 
+                            </h1>
+                        </header>
+                        <div class="card__image">
+                            <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                            <!-- https://i.pinimg.com/originals/a3/6b/42/a36b422bb2bebcbd77bba846b83ddf5d.png -->
+                        </div>
+                        <div class="card__content">
+                            <h2 class="product__price">
+                                $ <%= product.price  %> 
+                            </h2>
+                            <p class="product__description">
+                                <%= product.description %> 
+                            </p>
+                        </div>
+                        <div class="card__actions">
+                            <a href="/products/<%= product._id %> " class="btn">Details</a>
+                            <!-- since the include is inside a loop we need to pass the local variable -->
+                            <%- include('../includes/add-to-cart', {product: product})  %> 
+                        </div>
+                    </article>
+                <% } %> 
+            </div>
+        <% } else {%>
+            <h1>No products found</h1>
+        <% } %>  
+    </main>
+    <%- include('../includes/end.ejs') %> 
