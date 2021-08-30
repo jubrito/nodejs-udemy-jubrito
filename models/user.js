@@ -20,7 +20,19 @@ const UserSchema = new Schema ({
                 type: Number, required: true
             }
         }],
-    }
+    },
+    orders: [
+        {
+            items: [{
+                productId: { 
+                    type: Schema.Types.ObjectId, ref: 'Product', required: true
+                }, 
+                quantity: { 
+                    type: Number, required: true
+                }
+            }]
+        }
+    ]
 });
 
 UserSchema.methods.addToCart = function(product) {
@@ -50,6 +62,16 @@ UserSchema.methods.removeFromCart = function(productId) {
         return item.productId.toString() !== productId.toString();
     })
     this.cart.items = updatedCartItems;
+    return this.save();
+}
+
+UserSchema.methods.createOrder = function() {
+    const cart = this.cart;
+    if (!cart) {
+        return;
+    }
+    this.orders.push(cart);
+    this.cart = {items: []};
     return this.save();
 }
 
