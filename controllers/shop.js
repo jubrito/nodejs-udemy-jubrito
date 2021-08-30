@@ -11,16 +11,6 @@ exports.getIndex = (req, res, next) => {
         console.log(error)
     });
 }
-//// Alternative method I created but not sure if it is a good approach 
-// exports.getCart = (req, res, next) => {
-//     // https://thoughtworks.udemy.com/course/nodejs-the-complete-guide/learn/lecture/11954178#questions/15734514
-//     console.log(req.user.cart);
-//         res.render('shop/cart', {
-//             path: '/cart',
-//             pageTitle: 'Cart',
-//             products: req.user.cart.items
-//         }) 
-// }
 exports.getCart = (req, res, next) => {
     req.user
         .populate('cart.items.productId') //fetch data for a path (cart.items.productId)
@@ -49,7 +39,7 @@ exports.postCart = (req, res, next) => {
 exports.postCartDeleteItem = (req, res, next) => {
     const productId = req.body.productId;
     req.user
-        .deleteItemFromCart(productId)
+        .removeFromCart(productId)
         .then(result => {
             res.redirect('/cart');
         })
