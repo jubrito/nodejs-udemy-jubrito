@@ -6,7 +6,7 @@ const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
-// const User = require('./models/user');
+const User = require('./models/user');
 
 const app = express();
 
@@ -17,17 +17,17 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
 
-// app.use((req, res, next) => {
-//     User.findById('6112b2841a0f930bf2374076')
-//         .then(user => {
-//             /*  User model with methods and variables registered and accesible as middleware */
-//             req.user = new User(user.username, user.email, user.cart, user._id); 
-//             next();
-//         })
-//         .catch(error => {
-//         console.log(error);
-//         })
-// })
+app.use((req, res, next) => {
+    User.findById('612cf29d744acef2c2f9d419')
+        .then(user => {
+            /*  User model with methods and variables registered and accesible as middleware */
+            req.user = user;
+            next();
+        })
+        .catch(error => {
+        console.log(error);
+        })
+})
 
 app.use('/admin', adminRoutes); 
 app.use(productRoutes); 
@@ -42,6 +42,18 @@ const connectionStringFromMongodbWebsiteCluster = `mongodb+srv://${username}:${p
 mongoose
     .connect(connectionStringFromMongodbWebsiteCluster)
     .then(connectionResult => {
+        User.findOne().then(user => {
+            if (!user) {
+                const user = new User({
+                    name: 'User',
+                    email: 'user@email.com',
+                    cart: {
+                        items: []
+                    }
+                });
+                user.save();
+            }
+        })
         app.listen(8080);
     })
     .catch(err => console.log(err));
