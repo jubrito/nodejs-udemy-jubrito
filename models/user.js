@@ -11,7 +11,6 @@ const UserSchema = new Schema ({
         required: true,
     },
     // Embedded Document
-
     cart: {
         items: [{
             productId: { 
