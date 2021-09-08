@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
+const authRoutes = require('./routes/auth');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
@@ -28,17 +29,16 @@ app.use((req, res, next) => {
         console.log(error);
         })
 })
-
 app.use('/admin', adminRoutes); 
 app.use(productRoutes); 
 app.use(shopRoutes); 
+app.use(authRoutes); 
 app.use(errorController.get404);
 
 const username = 'juliana';
 const password = 'ar6tE3vMlcpFT4OW';
 const databaseIWantToConnect = 'shop';
 const connectionStringFromMongodbWebsiteCluster = `mongodb+srv://${username}:${password}@clusterbackend0.luzfp.mongodb.net/${databaseIWantToConnect}?retryWrites=true&w=majority`;
-
 mongoose
     .connect(connectionStringFromMongodbWebsiteCluster)
     .then(connectionResult => {
