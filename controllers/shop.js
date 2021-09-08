@@ -79,8 +79,8 @@ exports.postCreateOrder = (req, res, next) => {
 }
 
 exports.getOrders = (req, res, next) => {
-    req.user
-        .populate('orders.items.productId')
+    Order
+        .find({"user.userId": req.user._id})
         .then(orders => {
             console.log(orders)
             res.render('shop/orders', {
