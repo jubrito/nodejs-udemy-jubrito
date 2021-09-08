@@ -56,7 +56,7 @@ exports.postCreateOrder = (req, res, next) => {
                 // to match the order model
                 return {
                     quantity: cartItems.quantity, 
-                    product: cartItems.productId
+                    product: {...cartItems.productId._doc}
                 }
             });
             const order = new Order({
