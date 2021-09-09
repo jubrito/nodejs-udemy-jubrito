@@ -6,7 +6,8 @@ exports.getIndex = (req, res, next) => {
         res.render('shop/index', {
             products: products,
             pageTitle: 'Shop',
-            path: '/'
+            path: '/',
+            isAuthenticated: req.isAuthenticated,
         });
     }).catch(error => {
         console.log(error)
@@ -20,7 +21,8 @@ exports.getCart = (req, res, next) => {
             res.render('shop/cart', {
                 path: '/cart',
                 pageTitle: 'Cart',
-                products: products
+                products: products,
+                isAuthenticated: req.isAuthenticated,
             })
         })
         .catch(err => console.log(err));
@@ -87,6 +89,7 @@ exports.getOrders = (req, res, next) => {
                 path: '/orders',
                 pageTitle: 'Orders',
                 orders: orders,
+                isAuthenticated: req.isAuthenticated,
             })
         })
         .catch(err => console.log(err));

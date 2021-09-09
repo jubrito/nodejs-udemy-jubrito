@@ -7,6 +7,7 @@ exports.getProducts = (req, resp, next) => {
                 products: products, 
                 pageTitle: 'All products', 
                 path: '/products', 
+                isAuthenticated: req.isAuthenticated,
             }); 
         }).catch(error => {
             console.log(error)
@@ -21,7 +22,8 @@ exports.getProductById = (req, res, next) => {
                 'shop/product-detail', {
                     pageTitle: product.title,
                     product: product,
-                    path: '/products/'
+                    path: '/products/',
+                    isAuthenticated: req.isAuthenticated,
                 }
             )
         })
