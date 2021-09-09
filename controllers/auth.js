@@ -11,6 +11,6 @@ exports.getLogin = (req, res, next) => {
 }
 
 exports.postLogin = (req, res, next) => {
-    res.setHeader('Set-Cookie', 'isAuthenticated=true;');
+    res.setHeader('Set-Cookie', 'isAuthenticated=true; httpOnly');
     res.redirect('/');
 }
