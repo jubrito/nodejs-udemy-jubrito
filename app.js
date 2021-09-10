@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const expressSession = require('express-session');
 
 const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
@@ -8,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
+
 
 const app = express();
 
@@ -17,6 +19,14 @@ app.set('views', 'views');
 //  PARSE REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
+
+// session middleware to be used for every incoming request.
+app.use(expressSession({
+    secret: 'this text will be used for signing the hash which secretly stores our ID in the cookie.',
+    resave: false, // session will only be saved when the session changes, it won't be saved on every request done on every response sent
+    saveUninitialized: false, // ensure that no session gets saved for a request where it doesn't need to be saved because nothing was cahnged about it
+    // cookie: {maxAge}
+}))
 
 app.use((req, res, next) => {
     User.findById('612cf29d744acef2c2f9d419')

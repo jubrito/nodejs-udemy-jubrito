@@ -28,8 +28,9 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-handlebars": "^3.0.2",
+    "express-session": "^1.17.2",
     "mongodb": "^4.1.0",
-    "mongoose": "^6.0.2",
+    "mongoose": "^6.0.5",
     "mysql2": "^2.2.5",
     "pug": "^3.0.2",
     "sequelize": "^6.6.5"
