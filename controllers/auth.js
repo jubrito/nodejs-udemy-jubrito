@@ -13,11 +13,9 @@ exports.getLogin = (req, res, next) => {
 }
 
 exports.postLogin = (req, res, next) => {
-    // res.setHeader('Set-Cookie', 'isAuthenticated=true; httpOnly');
     User
     .findById('612cf29d744acef2c2f9d419')
     .then(user => {
-        console.log('login')
         req.session.isAuthenticated = true;
         req.session.user = user;
         res.redirect('/');
@@ -26,12 +24,6 @@ exports.postLogin = (req, res, next) => {
 }
 
 exports.postLogout = (req, res, next) => {
-    // function calledAfterDestroyingTheSession (err) {
-    //     console.log(err);
-    //     res.redirect('/');
-    // }
-
-    // req.session.destroy(calledAfterDestroyingTheSession());
     req.session.destroy((err) => {
         console.log(err);
         res.redirect('/');

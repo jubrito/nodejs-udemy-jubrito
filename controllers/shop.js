@@ -14,7 +14,7 @@ exports.getIndex = (req, res, next) => {
     });
 }
 exports.getCart = (req, res, next) => {
-    req.session.user
+    req.user
         .populate('cart.items.productId') //fetch data for a path (cart.items.productId)
         .then(user => {
             const products = user.cart.items;
@@ -31,7 +31,7 @@ exports.postCart = (req, res, next) => {
     const productId = req.body.productId;
     Product.findById(productId)
         .then(product => {
-            return req.session.user.addToCart(product);
+            return req.user.addToCart(product);
         })
         .then(result => {
             res.redirect('/cart');
@@ -41,7 +41,7 @@ exports.postCart = (req, res, next) => {
 
 exports.postCartDeleteItem = (req, res, next) => {
     const productId = req.body.productId;
-    req.session.user
+    req.user
         .removeFromCart(productId)
         .then(result => {
             res.redirect('/cart');
@@ -51,7 +51,7 @@ exports.postCartDeleteItem = (req, res, next) => {
 }
 
 exports.postCreateOrder = (req, res, next) => {
-    req.session.user
+    req.user
         .populate('cart.items.productId')
         .then(user => {
             const products = user.cart.items.map(cartItems => {
@@ -63,7 +63,7 @@ exports.postCreateOrder = (req, res, next) => {
             });
             const order = new Order({
                 user: {
-                    username: req.session.user.name,
+                    username: req.user.name,
                     userId: req.session,
                 },
                 products: products
@@ -71,7 +71,7 @@ exports.postCreateOrder = (req, res, next) => {
             return order.save();
         })
         .then(result => {
-            return req.session.user.clearCart();
+            return req.user.clearCart();
         })
         .then(result => {
             res.redirect('/orders');
@@ -82,7 +82,7 @@ exports.postCreateOrder = (req, res, next) => {
 
 exports.getOrders = (req, res, next) => {
     Order
-        .find({"user.userId": req.session.user})
+        .find({"user.userId": req.user})
         .then(orders => {
             console.log(orders)
             res.render('shop/orders', {

@@ -39,6 +39,20 @@ app.use(expressSession({
     // cookie: {maxAge}
 }))
 
+app.use((req, res, next) => {
+    if (!req.session.user) {
+        return next(); // this middleware will only run if the user is logged in
+    }
+    User
+    .findById(req.session.user._id)
+    .then(mongooseModelUser => {
+        // use that session data to load our real user, to create our mongoose user model 
+        req.user = mongooseModelUser;
+        next();
+    })
+    .catch(err => console.log(err));
+})
+
 app.use('/admin', adminRoutes); 
 app.use(productRoutes); 
 app.use(shopRoutes); 
