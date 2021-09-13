@@ -38,9 +38,11 @@
         <ul class="main-header__item-list">
             <% if (isAuthenticated) { %> 
                 <li class="main-header__item">
-                    <a class="<%= path === '/logout' ? 'active' : ''  %> " href="/logout">
-                        Logout
-                    </a>
+                    <form action="/logout" method="POST">
+                        <button class="<%= path === '/logout' ? 'active' : ''  %> " type="submit" class="btn">
+                            Logout
+                        </button>
+                    </form>
                 </li>
             <% } else { %> 
                 <li class="main-header__item">

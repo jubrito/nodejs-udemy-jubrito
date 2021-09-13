@@ -24,3 +24,12 @@ exports.postLogin = (req, res, next) => {
     .catch(err => console.log(err))
     res.redirect('/');
 }
+
+exports.postLogout = (req, res, next) => {
+    function calledAfterDestroyingTheSession (err) {
+        console.log(err);
+        res.redirect('/');
+    }
+
+    req.session.destroy(calledAfterDestroyingTheSession());
+}
