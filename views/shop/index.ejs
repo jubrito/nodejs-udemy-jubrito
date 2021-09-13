@@ -29,7 +29,9 @@
                         <div class="card__actions">                           
                             <a href="/products/<%= product._id %> " class="btn">Details</a>
                             <!-- since the include is inside a loop we need to pass the local variable -->
-                            <%- include('../includes/add-to-cart', {product: product})  %> 
+                            <% if (isAuthenticated) { %> 
+                                <%- include('../includes/add-to-cart', {product: product})  %> 
+                            <% } %> 
                         </div>
                     </article>
                 <% } %> 
