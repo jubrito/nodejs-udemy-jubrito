@@ -18,8 +18,9 @@ exports.postLogin = (req, res, next) => {
     .then(user => {
         req.session.isAuthenticated = true;
         req.session.user = user;
-        req.session.save(() => {
+        req.session.save((err) => {
              // make sure the session was created before you continue, so it doesn't redirect before updating the session
+             console.log(err);
              res.redirect('/'); // redirect only after creating the session
         });
     })
