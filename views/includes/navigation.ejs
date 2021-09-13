@@ -11,6 +11,7 @@
                     Products
                 </a>
             </li>
+            <% if (isAuthenticated) { %> 
             <li class="main-header__item">
                 <a class="<%= path === '/cart' ? 'active' : ''  %>" href="/cart">
                     Cart
@@ -21,7 +22,6 @@
                     Orders
                 </a>
             </li>
-            <% if (isAuthenticated) { %> 
             <li class="main-header__item">
                 <a class="<%= path === '/admin/add-product' ? 'active' : ''  %> " href="/admin/add-product">
                     Add Product

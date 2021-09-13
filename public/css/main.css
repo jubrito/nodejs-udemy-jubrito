@@ -51,14 +51,21 @@ form {
   padding: 0;
 }
 
-.main-header__item a {
+.main-header__item a, .main-header__item button {
   text-decoration: none;
   color: white;
+  background-color: transparent;
+  border: 0;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .main-header__item a:hover,
 .main-header__item a:active,
-.main-header__item a.active {
+.main-header__item a.active,
+.main-header__item button:hover,
+.main-header__item button:active,
+.main-header__item button.active {
   color: #ffeb3b;
 }
 

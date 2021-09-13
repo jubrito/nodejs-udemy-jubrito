@@ -47,7 +47,7 @@ app.use(errorController.get404);
 
 
 mongoose
-    .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
+    .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER+'?retryWrites=true&w=majority')
     .then(connectionResult => {
         User.findOne().then(user => {
             if (!user) {

@@ -17,19 +17,23 @@ exports.postLogin = (req, res, next) => {
     User
     .findById('612cf29d744acef2c2f9d419')
     .then(user => {
+        console.log('login')
         req.session.isAuthenticated = true;
         req.session.user = user;
         res.redirect('/');
     })
     .catch(err => console.log(err))
-    res.redirect('/');
 }
 
 exports.postLogout = (req, res, next) => {
-    function calledAfterDestroyingTheSession (err) {
+    // function calledAfterDestroyingTheSession (err) {
+    //     console.log(err);
+    //     res.redirect('/');
+    // }
+
+    // req.session.destroy(calledAfterDestroyingTheSession());
+    req.session.destroy((err) => {
         console.log(err);
         res.redirect('/');
-    }
-
-    req.session.destroy(calledAfterDestroyingTheSession());
+    });
 }
