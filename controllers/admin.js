@@ -5,7 +5,7 @@ exports.getAddProduct = (req, res, next) => {
         pageTitle: 'Add Product', 
         path: '/admin/add-product',
         editIsEnabled: false,
-        isAuthenticated: req.isAuthenticated,
+        isAuthenticated: req.session.isAuthenticated,
     });
 };
 
@@ -19,7 +19,7 @@ exports.postAddProduct = (req, res, next) => {
         price: price,
         description: description, 
         imageUrl: imageUrl,
-        userId: req.user // mongoose executes req.user._id behind the scenes
+        userId: req.session.user 
     });
     product
         .save()
@@ -46,7 +46,7 @@ exports.getEditProduct = (req, res, next) => {
                 path: '/admin/edit-product',
                 product: product,
                 editIsEnabled: editIsEnabled,
-                isAuthenticated: req.isAuthenticated,
+                isAuthenticated: req.session.isAuthenticated,
             })
         }).catch(error => {
             console.log(error);
@@ -87,7 +87,7 @@ exports.getProducts = (req, res, next) => {
                 products: products,
                 pageTitle: 'Admin Product List',
                 path: '/admin/products',
-                isAuthenticated: req.isAuthenticated,
+                isAuthenticated: req.session.isAuthenticated,
             });
         })
         .catch(error => {

@@ -39,17 +39,6 @@ app.use(expressSession({
     // cookie: {maxAge}
 }))
 
-app.use((req, res, next) => {
-    User.findById('612cf29d744acef2c2f9d419')
-        .then(user => {
-            /*  User model with methods and variables registered and accesible as middleware */
-            req.user = user;
-            next();
-        })
-        .catch(error => {
-        console.log(error);
-        })
-})
 app.use('/admin', adminRoutes); 
 app.use(productRoutes); 
 app.use(shopRoutes); 
