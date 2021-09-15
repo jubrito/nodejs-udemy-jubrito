@@ -63,18 +63,6 @@ app.use(errorController.get404);
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER+'?retryWrites=true&w=majority')
     .then(connectionResult => {
-        User.findOne().then(user => {
-            if (!user) {
-                const user = new User({
-                    name: 'User',
-                    email: 'user@email.com',
-                    cart: {
-                        items: []
-                    }
-                });
-                user.save();
-            }
-        })
         app.listen(8080);
     })
     .catch(err => console.log(err));
