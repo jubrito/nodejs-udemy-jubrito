@@ -45,7 +45,6 @@ exports.getEditProduct = (req, res, next) => {
                 path: '/admin/edit-product',
                 product: product,
                 editIsEnabled: editIsEnabled,
-                isAuthenticated: req.session.isAuthenticated,
             })
         }).catch(error => {
             console.log(error);
@@ -86,7 +85,6 @@ exports.getProducts = (req, res, next) => {
                 products: products,
                 pageTitle: 'Admin Product List',
                 path: '/admin/products',
-                isAuthenticated: req.session.isAuthenticated,
             });
         })
         .catch(error => {
