@@ -9,7 +9,6 @@ exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'login',
-        isAuthenticated: req.session.isAuthenticated, 
     })
 }
 
