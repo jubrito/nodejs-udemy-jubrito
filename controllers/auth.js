@@ -38,6 +38,7 @@ exports.postLogin = (req, res, next) => {
                             res.redirect('/'); // with save we redirect only after creating the session
                         });
                     }
+                    req.flash('loginError', 'Invalid email or password');
                     return res.redirect('/login');
                 })
                 .catch(err => {
@@ -55,10 +56,18 @@ exports.postLogout = (req, res, next) => {
 }
 
 exports.getSignup = (req, res, next) => {
+    var loginErrorMessage = req.flash('loginError');
+    console.log(loginErrorMessage)
+    if (loginErrorMessage.length > 0) {
+        loginErrorMessage = loginErrorMessage[0];
+    } else {
+        loginErrorMessage = false;
+    }
     res.render('auth/signup', {
         path: '/signup',
         pageTitle: 'signup',
         isAuthenticated: false, 
+        errorMessage: loginErrorMessage
     })
 }
 exports.postSignup = (req, res, next) => {
@@ -69,6 +78,7 @@ exports.postSignup = (req, res, next) => {
         .findOne({email: email})
         .then(userWithEmailThatAlreadyExists => {
             if (userWithEmailThatAlreadyExists) {
+                req.flash('loginError', 'Email already exists. Choose a different one!');
                 return res.redirect('/signup'); 
             }
             const howManyRoundsOfHashingWillBeAppliedToTheField = 12;// the higher the value the longer will take but the more secure it will be
