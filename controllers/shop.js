@@ -8,6 +8,7 @@ exports.getIndex = (req, res, next) => {
             pageTitle: 'Shop',
             path: '/',
             isAuthenticated: req.session.isAuthenticated,
+            csurfToken: req.csrfToken()
         });
     }).catch(error => {
         console.log(error)

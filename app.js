@@ -3,6 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const expressSession = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(expressSession);
+const csurf = require('csurf');
 
 const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
@@ -22,6 +23,7 @@ const store = new MongoDBStore({
     collection: 'sessions',
     // expires
 });
+const csurfProtectionMiddleware = csurf();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -38,6 +40,8 @@ app.use(expressSession({
     store: store,
     // cookie: {maxAge}
 }))
+
+app.use(csurfProtectionMiddleware);
 
 app.use((req, res, next) => {
     if (!req.session.user) {

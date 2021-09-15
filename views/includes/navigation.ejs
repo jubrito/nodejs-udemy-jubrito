@@ -41,6 +41,7 @@
             <% if (isAuthenticated) { %> 
                 <li class="main-header__item">
                     <form action="/logout" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csurfToken %>" />
                         <button class="<%= path === '/logout' ? 'active' : ''  %> " type="submit" class="btn">
                             Logout
                         </button>
@@ -96,6 +97,7 @@
             <% } else { %>
                 <li class="mobile-nav__item">
                     <form action="/logout" method="post">
+                        <input type="hidden" name="_csrf" value="<%= csurfToken %>" />
                         <button type="submit">Logout</button>
                     </form>
                 </li>
