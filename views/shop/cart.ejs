@@ -16,6 +16,7 @@
                                 <button type="submit" class="btn danger">
                                     Delete
                                 </button>
+                                <input type="hidden" name="_csrf" value="<%= csrfToken  %>" /> 
                             </form>
                         </li>
                     <% }) %> 
@@ -24,6 +25,7 @@
                     <button type="submit" class="btn">
                         Order
                     </button>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken  %>" /> 
                 </form>
             <% } else { %>
                 <h1>No products found</h1>
