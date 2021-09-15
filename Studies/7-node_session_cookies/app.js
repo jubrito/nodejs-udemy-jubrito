@@ -17,6 +17,7 @@ const USERNAME_MONGODB = 'juliana';
 const PASSWORD_MONGODB = 'ar6tE3vMlcpFT4OW';
 const DATABASE_I_WANT_TO_CONNECT = 'shop';
 const CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER = `mongodb+srv://${USERNAME_MONGODB}:${PASSWORD_MONGODB}@clusterbackend0.luzfp.mongodb.net/${DATABASE_I_WANT_TO_CONNECT}`;
+console.log(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
 const store = new MongoDBStore({
     uri: CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER,
     collection: 'sessions',
