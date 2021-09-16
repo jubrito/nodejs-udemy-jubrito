@@ -140,24 +140,27 @@ exports.postResetPassword = (req, res, next) => {
         }
         const token = buffer.toString('hex'); // convert hexadecimal values to normal ASCII characters
         User
-            .findOne({ email: req.body.email})
+            .findOne({ email: req.body.email })
             .then(user => {
                 if (!user) {
-                    req.flash('error', 'No account with that email found');
-                    res.redirect('/reset-password');
-                    const oneHourInMilliseconds = 3600000;
-                    user.resetTokenExpiration = Date.now() + oneHourInMilliseconds;
-                    return user.save();
+                    req.flash('error', 'No account with found with this email ');
+                    return res.redirect('/reset-password');
                 }
+                const oneHourInMilliseconds = 3600000;
+                user.resetToken = token;
+                user.resetTokenExpiration = Date.now() + oneHourInMilliseconds;
+                return user.save();
             })
-            .then(result => {
-                res.redirect('/');
-                nodemailerTransporter.sendMail({
-                    from: 'jujubrito@outlook.com',
-                    to: req.user.email,
-                    subject: 'Password Reset',
-                    html: `<a href="http://localhost:8080/reset-password/${token}">click here to reset your password</a>`
-                });
+            .then(resetPasswordTokenWasGenerated => {
+                if (resetPasswordTokenWasGenerated) {
+                    res.redirect('/');
+                    nodemailerTransporter.sendMail({
+                        from: 'jujubrito@outlook.com',
+                        to: req.body.email,
+                        subject: 'Password Reset',
+                        html: `<a href="http://localhost:8080/reset-password/${token}">click here to reset your password</a>`
+                    });
+                }
             })
             .catch(err => console.log(err))
     })
