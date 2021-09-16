@@ -125,7 +125,7 @@ exports.getResetPassword = (req, res, next) => {
     } else {
         resetPasswordErrorMessage = false;
     }
-    res.render('auth/reset', {
+    res.render('auth/reset-password', {
         path: '/reset-password',
         pageTitle: 'Reset password',
         errorMessage: resetPasswordErrorMessage
@@ -164,4 +164,29 @@ exports.postResetPassword = (req, res, next) => {
             })
             .catch(err => console.log(err))
     })
+}
+
+exports.getNewPassword = (req, res, next) => {
+    const token = req.params.token;
+    User.findOne({
+        resetToken: token,
+        resetTokenExpiration: {
+            $gt: Date.now() // if the token expiration is greater than now (in the future)
+        }
+    })
+        .then(user => {
+            let message = req.flash('error');
+            if (message.length > 0) {
+                message = message[0];
+            } else {
+                message = null;
+            }
+            res.render('auth/new-password', {
+                path: '/new-password',
+                pageTitle: 'New password',
+                errorMessage: resetPasswordErrorMessage,
+                userId: user._id.toString()
+            })
+        })
+        .catch(err => console.log(err))
 }
