@@ -62,14 +62,19 @@ exports.postEditProduct = (req, res, next) => {
     Product
         .findById(existingId)
         .then(product => {
+            const userHasPermission = product.userId === req.user._id;
+            if (!userHasPermission) {
+                return res.redirect('/');
+            }
             product.title = updatedTitle;
             product.price = updatedPrice;
             product.description = updatedDescription;
             product.imageUrl = updatedImageUrl;
-            return product.save();
-        })
-        .then(resultAfterSaving => {
-            res.redirect('/admin/products')
+            return product
+                .save()
+                .then(resultAfterSaving => {
+                    res.redirect('/admin/products')
+                });
         })
         .catch(error => { // catches errors for both promisses
             console.log(error);
@@ -94,7 +99,11 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const productId = req.body.productId;
-    Product.findByIdAndRemove(productId)
+    Product
+        .deleteOne({
+            _id: productId,
+            userId: req.user._id
+        })
         .then(resultAfterProductIsDestroyed => {
             res.redirect('/admin/products');
         })
