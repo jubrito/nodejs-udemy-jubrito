@@ -10,8 +10,9 @@ const UserSchema = new Schema ({
         type: String,
         required: true,
     },
-    // Embedded Document
-    cart: {
+    resetToken: String,
+    resetTokenExpiration: Date,
+    cart: { // Embedded Document
         items: [{
             productId: { 
                 type: Schema.Types.ObjectId, ref: 'Product', required: true

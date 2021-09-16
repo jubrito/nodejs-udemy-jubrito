@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const bcryptjs = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 var nodemailerTransporter = nodemailer.createTransport({
     host: "smtp.mailtrap.io",
@@ -13,7 +14,7 @@ var nodemailerTransporter = nodemailer.createTransport({
 
 
 exports.getLogin = (req, res, next) => {
-    var loginErrorMessage = req.flash('loginError');
+    var loginErrorMessage = req.flash('error');
     if (loginErrorMessage.length > 0) {
         loginErrorMessage = loginErrorMessage[0];
     } else {
@@ -33,7 +34,7 @@ exports.postLogin = (req, res, next) => {
         .findOne({ email: email})
         .then(user => {
             if (!user) {
-                req.flash('loginError', 'Invalid email or password');
+                req.flash('error', 'Invalid email or password');
                 return res.redirect('/login');
             }
             bcryptjs
@@ -48,7 +49,7 @@ exports.postLogin = (req, res, next) => {
                             res.redirect('/'); // with save we redirect only after creating the session
                         });
                     }
-                    req.flash('loginError', 'Invalid email or password');
+                    req.flash('error', 'Invalid email or password');
                     return res.redirect('/login');
                 })
                 .catch(err => {
@@ -66,7 +67,7 @@ exports.postLogout = (req, res, next) => {
 }
 
 exports.getSignup = (req, res, next) => {
-    var loginErrorMessage = req.flash('loginError');
+    var loginErrorMessage = req.flash('error');
     if (loginErrorMessage.length > 0) {
         loginErrorMessage = loginErrorMessage[0];
     } else {
@@ -87,7 +88,7 @@ exports.postSignup = (req, res, next) => {
         .findOne({email: email})
         .then(userWithEmailThatAlreadyExists => {
             if (userWithEmailThatAlreadyExists) {
-                req.flash('loginError', 'Email already exists. Choose a different one!');
+                req.flash('error', 'Email already exists. Choose a different one!');
                 return res.redirect('/signup'); 
             }
             const howManyRoundsOfHashingWillBeAppliedToTheField = 12;// the higher the value the longer will take but the more secure it will be
@@ -105,7 +106,7 @@ exports.postSignup = (req, res, next) => {
                 res.redirect('/login');
                 return nodemailerTransporter.sendMail({
                     from: 'jujubrito@outlook.com',
-                    to: 'jujubrito@outlook.com',
+                    to: email,
                     subject: 'Sign up succeeded!',
                     html: '<h1>You successfully signed up!</h1>'
                 });
@@ -118,7 +119,7 @@ exports.postSignup = (req, res, next) => {
 }
 
 exports.getResetPassword = (req, res, next) => {
-    var resetPasswordErrorMessage = req.flash('loginError');
+    var resetPasswordErrorMessage = req.flash('error');
     if (resetPasswordErrorMessage.length > 0) {
         resetPasswordErrorMessage = resetPasswordErrorMessage[0];
     } else {
@@ -128,5 +129,36 @@ exports.getResetPassword = (req, res, next) => {
         path: '/reset-password',
         pageTitle: 'Reset password',
         errorMessage: resetPasswordErrorMessage
+    })
+}
+
+exports.postResetPassword = (req, res, next) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            console.log(err);
+            return res.redirect('/reset');
+        }
+        const token = buffer.toString('hex'); // convert hexadecimal values to normal ASCII characters
+        User
+            .findOne({ email: req.body.email})
+            .then(user => {
+                if (!user) {
+                    req.flash('error', 'No account with that email found');
+                    res.redirect('/reset-password');
+                    const oneHourInMilliseconds = 3600000;
+                    user.resetTokenExpiration = Date.now() + oneHourInMilliseconds;
+                    return user.save();
+                }
+            })
+            .then(result => {
+                res.redirect('/');
+                nodemailerTransporter.sendMail({
+                    from: 'jujubrito@outlook.com',
+                    to: req.user.email,
+                    subject: 'Password Reset',
+                    html: `<a href="http://localhost:8080/reset-password/${token}">click here to reset your password</a>`
+                });
+            })
+            .catch(err => console.log(err))
     })
 }
