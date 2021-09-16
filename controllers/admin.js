@@ -62,7 +62,7 @@ exports.postEditProduct = (req, res, next) => {
     Product
         .findById(existingId)
         .then(product => {
-            const userHasPermission = product.userId === req.user._id;
+            const userHasPermission = product.userId.toString() === req.user._id.toString();
             if (!userHasPermission) {
                 return res.redirect('/');
             }
