@@ -167,6 +167,12 @@ exports.postResetPassword = (req, res, next) => {
 }
 
 exports.getNewPassword = (req, res, next) => {
+    var resetPasswordErrorMessage = req.flash('error');
+    if (resetPasswordErrorMessage.length > 0) {
+        resetPasswordErrorMessage = resetPasswordErrorMessage[0];
+    } else {
+        resetPasswordErrorMessage = false;
+    }
     const token = req.params.token;
     User.findOne({
         resetToken: token,
@@ -174,7 +180,7 @@ exports.getNewPassword = (req, res, next) => {
             $gt: Date.now() // if the token expiration is greater than now (in the future)
         }
     })
-        .then(user => {
+        .then(userThatPasswordWillBeRestored => {
             let message = req.flash('error');
             if (message.length > 0) {
                 message = message[0];
@@ -185,8 +191,38 @@ exports.getNewPassword = (req, res, next) => {
                 path: '/new-password',
                 pageTitle: 'New password',
                 errorMessage: resetPasswordErrorMessage,
-                userId: user._id.toString()
+                userId: userThatPasswordWillBeRestored._id.toString(),
+                passwordToken: token
             })
         })
         .catch(err => console.log(err))
+}
+
+exports.postNewPassword = (req, res, next) => {
+    const newPassword = req.body.password;
+    const userId = req.body.userId;
+    const passwordToken = req.body.passwordToken;
+    let userThatPasswordWillBeRestored;
+    User
+        .findOne({
+            resetToken: passwordToken,
+            resetTokenExpiration: {
+                $gt: Date.now()
+            },
+            _id: userId
+        })
+        .then(user => {
+            userThatPasswordWillBeRestored = user;
+            return bcryptjs.hash(newPassword, 12)
+        })
+        .then(hashedPassword => {
+            userThatPasswordWillBeRestored.password = hashedPassword;
+            userThatPasswordWillBeRestored.resetToken = undefined;
+            userThatPasswordWillBeRestored.resetTokenExpiration = undefined;
+            return userThatPasswordWillBeRestored.save();
+        })
+        .then(result => {
+            res.redirect('/login');
+        })
+        .catch(err => console.log(err));
 }
