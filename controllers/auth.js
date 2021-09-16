@@ -1,9 +1,19 @@
 const User = require("../models/user");
 const bcryptjs = require('bcryptjs');
+const nodemailer = require('nodemailer');
+
+var nodemailerTransporter = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "7776a05245f738",
+      pass: "921d80fe8128c9"
+    }
+  });
+
 
 exports.getLogin = (req, res, next) => {
     var loginErrorMessage = req.flash('loginError');
-    console.log(loginErrorMessage)
     if (loginErrorMessage.length > 0) {
         loginErrorMessage = loginErrorMessage[0];
     } else {
@@ -57,7 +67,6 @@ exports.postLogout = (req, res, next) => {
 
 exports.getSignup = (req, res, next) => {
     var loginErrorMessage = req.flash('loginError');
-    console.log(loginErrorMessage)
     if (loginErrorMessage.length > 0) {
         loginErrorMessage = loginErrorMessage[0];
     } else {
@@ -94,7 +103,30 @@ exports.postSignup = (req, res, next) => {
             })
             .then(newUser => {
                 res.redirect('/login');
+                return nodemailerTransporter.sendMail({
+                    from: 'jujubrito@outlook.com',
+                    to: 'jujubrito@outlook.com',
+                    subject: 'Sign up succeeded!',
+                    html: '<h1>You successfully signed up!</h1>'
+                });
+            })
+            .catch(err => {
+                console.log(err);
             })
         })
         .catch(err => console.log(err));
+}
+
+exports.getResetPassword = (req, res, next) => {
+    var resetPasswordErrorMessage = req.flash('loginError');
+    if (resetPasswordErrorMessage.length > 0) {
+        resetPasswordErrorMessage = resetPasswordErrorMessage[0];
+    } else {
+        resetPasswordErrorMessage = false;
+    }
+    res.render('auth/reset', {
+        path: '/reset-password',
+        pageTitle: 'Reset password',
+        errorMessage: resetPasswordErrorMessage
+    })
 }
