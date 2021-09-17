@@ -12,7 +12,17 @@ router.post('/logout', authController.postLogout);
 
 router.get('/signup', authController.getSignup);
 
-router.post('/signup', check('email').isEmail(), authController.postSignup);
+router.post(
+    '/signup', 
+    check('email')
+        .isEmail()
+        .withMessage('Please enter a valid email')
+        .custom((fieldValue, {req}) => {
+            if (fieldValue === 'forbidden@example.com') {
+                throw new Error('This email address is forbidden')
+            }
+        }), 
+    authController.postSignup);
 
 router.get('/reset-password', authController.getResetPassword);
 

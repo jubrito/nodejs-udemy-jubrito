@@ -87,13 +87,12 @@ exports.postSignup = (req, res, next) => {
     const confirmPassword = req.body.confirmPassword;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log(errors.array());
         const ERROR_VALIDATION_FAILED = 422;
         return res.status(ERROR_VALIDATION_FAILED).render('auth/signup', {
             path: '/signup',
             pageTitle: 'signup',
             isAuthenticated: false, 
-            errorMessage: errors.array()
+            errorMessage: errors.array()[0].msg
         }); 
     }
     User
