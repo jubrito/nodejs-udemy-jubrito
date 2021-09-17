@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcryptjs = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const { validationResult } = require('express-validator');
 
 var nodemailerTransporter = nodemailer.createTransport({
     host: "smtp.mailtrap.io",
@@ -10,7 +11,7 @@ var nodemailerTransporter = nodemailer.createTransport({
       user: "7776a05245f738",
       pass: "921d80fe8128c9"
     }
-  });
+});
 
 
 exports.getLogin = (req, res, next) => {
@@ -84,6 +85,17 @@ exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log(errors.array());
+        const ERROR_VALIDATION_FAILED = 422;
+        return res.status(ERROR_VALIDATION_FAILED).render('auth/signup', {
+            path: '/signup',
+            pageTitle: 'signup',
+            isAuthenticated: false, 
+            errorMessage: errors.array()
+        }); 
+    }
     User
         .findOne({email: email})
         .then(userWithEmailThatAlreadyExists => {
