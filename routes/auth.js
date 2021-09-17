@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { check, body } = require('express-validator');
-
+const User = require('../models/user');
 const authController = require('../controllers/auth');
+
 
 router.get('/login', authController.getLogin);
 
@@ -22,12 +23,29 @@ router.post(
                 if (fieldValue === 'forbidden@example.com') {
                     throw new Error('This email address is forbidden')
                 }
-            }), 
+                return User
+                    .findOne({email: fieldValue})
+                    .then(userWithEmailThatAlreadyExists => {
+                        if (userWithEmailThatAlreadyExists) {
+                          return Promise.reject(
+                            'Email already exists. Choose a different one!'
+                          )
+                        }
+                    })
+             }),
         body(
             'password',
-            'Please enter a valid password with at least 6 characters '
+            'Please enter a valid password with at least 6 characters'
         )
-            .isLength({ min: 6 })
+            .isLength({ min: 6 }),
+        body('confirmPassword')
+            .custom((fieldValue, {req}) => {
+                if (fieldValue !== req.body.password) {
+                    throw new Error('Passwords have to match');
+                }
+                return true;
+            }
+        )
     ],
     authController.postSignup
 );
