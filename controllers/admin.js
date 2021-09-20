@@ -1,6 +1,8 @@
 const Product = require('../models/product');
 const { validationResult } = require('express-validator');
 
+const ERROR_VALIDATION_FAILED = 422;
+
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', { 
         pageTitle: 'Add Product', 
@@ -31,7 +33,6 @@ exports.postAddProduct = (req, res, next) => {
         userId: req.user 
     });
     const errors = validationResult(req);
-    const ERROR_VALIDATION_FAILED = 422;
     if (!errors.isEmpty()) {
         return res.status(ERROR_VALIDATION_FAILED).render(
             'admin/edit-product', { 
@@ -92,7 +93,6 @@ exports.postEditProduct = (req, res, next) => {
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
     const errors = validationResult(req);
-    const ERROR_VALIDATION_FAILED = 422;
     if (!errors.isEmpty()) {
         return res.status(ERROR_VALIDATION_FAILED).render(
             'admin/edit-product', { 
