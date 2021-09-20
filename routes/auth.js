@@ -5,9 +5,34 @@ const User = require('../models/user');
 const authController = require('../controllers/auth');
 
 
+const validEmailMessage = 'Please enter a valid email';
+const validPasswordMessage = 'Please enter a valid password with at least 6 characters';
+const validEmailAndPasswordMessage = 'Invalid email or password';
+const minPasswordLength = 6;
+
 router.get('/login', authController.getLogin);
 
-router.post('/login', authController.postLogin);
+router.post(
+    '/login', 
+    [
+        check('email', validEmailMessage)
+            .isEmail()
+            .custom((fieldValue, {req}) => {
+                return User
+                    .findOne({ email: fieldValue })
+                    .then(userWithEmailWasFound => {
+                        if (!userWithEmailWasFound) {
+                            return Promise.reject(
+                                validEmailAndPasswordMessage
+                            )
+                        }
+                    })
+            }),
+        check('password', validEmailAndPasswordMessage)
+            .isLength({ min: minPasswordLength })
+    ],
+    authController.postLogin
+);
 
 router.post('/logout', authController.postLogout);
 
@@ -16,9 +41,9 @@ router.get('/signup', authController.getSignup);
 router.post(
     '/signup', 
     [
-        check('email')
+        check('email', validEmailMessage)
             .isEmail()
-            .withMessage('Please enter a valid email')
+            .withMessage()
             .custom((fieldValue, {req}) => {
                 if (fieldValue === 'forbidden@example.com') {
                     throw new Error('This email address is forbidden')
@@ -33,11 +58,8 @@ router.post(
                         }
                     })
              }),
-        body(
-            'password',
-            'Please enter a valid password with at least 6 characters'
-        )
-            .isLength({ min: 6 }),
+        body('password', validPasswordMessage)
+            .isLength({ min: minPasswordLength }),
         body('confirmPassword')
             .custom((fieldValue, {req}) => {
                 if (fieldValue !== req.body.password) {

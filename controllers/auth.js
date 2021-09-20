@@ -31,13 +31,19 @@ exports.getLogin = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
+    const errors = validationResult(req);
+    const errorMessage = errors.array()[0].msg;
+    if (!errors.isEmpty()) {
+        const ERROR_VALIDATION_FAILED = 422;
+        return res.status(ERROR_VALIDATION_FAILED).render('auth/login', {
+            path: '/login',
+            pageTitle: 'login',
+            errorMessage: errorMessage
+        })
+    }
     User
         .findOne({ email: email})
         .then(user => {
-            if (!user) {
-                req.flash('error', 'Invalid email or password');
-                return res.redirect('/login');
-            }
             bcryptjs
                 .compare(password, user.password)
                 .then(hashedPasswordIsEqualToFielPassword => {
@@ -78,7 +84,12 @@ exports.getSignup = (req, res, next) => {
         path: '/signup',
         pageTitle: 'signup',
         isAuthenticated: false, 
-        errorMessage: loginErrorMessage
+        errorMessage: loginErrorMessage,
+        oldInputs: {
+            email: "",
+            password: "",
+            confirmPassword: "",
+        }
     })
 }
 exports.postSignup = (req, res, next) => {
@@ -92,7 +103,12 @@ exports.postSignup = (req, res, next) => {
             path: '/signup',
             pageTitle: 'signup',
             isAuthenticated: false, 
-            errorMessage: errors.array()[0].msg
+            errorMessage: errors.array()[0].msg,
+            oldInputs: {
+                email: email,
+                password: password,
+                confirmPassword: req.body.confirmPassword,
+            }
         }); 
     }
     const howManyRoundsOfHashingWillBeAppliedToTheField = 12;// the higher the value the longer will take but the more secure it will be
