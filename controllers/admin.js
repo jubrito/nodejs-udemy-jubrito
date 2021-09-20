@@ -97,17 +97,18 @@ exports.postEditProduct = (req, res, next) => {
         return res.status(ERROR_VALIDATION_FAILED).render(
             'admin/edit-product', { 
                 pageTitle: 'Add Product', 
-                path: '/admin/add-product',
+                path: '/admin/edit-product',
                 editIsEnabled: true,
                 hasError: true,
                 errorMessage: errors.array()[0].msg,
                 product: {
+                    _id: existingId,
                     title: updatedTitle,
                     imageUrl: updatedImageUrl,
                     price: updatedPrice,
                     description: updatedDescription
                 },
-                validationErrors: errors.array()
+                validationErrors: errors.array(),
             }
         )
     }
