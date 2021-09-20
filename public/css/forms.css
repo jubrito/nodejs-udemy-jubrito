@@ -17,6 +17,6 @@
     border-radius: 2px;
 }
 
-.form-control input.invalid {
+.form-control input.invalid, textarea.invalid {
     border-color: red;
 }
