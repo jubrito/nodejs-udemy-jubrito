@@ -27,9 +27,11 @@ router.post(
                             )
                         }
                     })
-            }),
+            })
+            .normalizeEmail(),
         check('password', validEmailAndPasswordMessage)
             .isLength({ min: minPasswordLength })
+            .trim()
     ],
     authController.postLogin
 );
@@ -44,6 +46,7 @@ router.post(
         check('email', validEmailMessage)
             .isEmail()
             .withMessage()
+            .normalizeEmail()
             .custom((fieldValue, {req}) => {
                 if (fieldValue === 'forbidden@example.com') {
                     throw new Error('This email address is forbidden')
@@ -59,6 +62,7 @@ router.post(
                     })
              }),
         body('password', validPasswordMessage)
+            .trim()
             .isLength({ min: minPasswordLength }),
         body('confirmPassword')
             .custom((fieldValue, {req}) => {
