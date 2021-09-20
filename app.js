@@ -76,6 +76,7 @@ app.use(productRoutes);
 app.use(shopRoutes); 
 app.use(authRoutes); 
 app.use(errorController.get404);
+app.use('/500', errorController.get500);
 
 
 mongoose

@@ -1,7 +1,8 @@
 const Product = require('../models/product');
 const { validationResult } = require('express-validator');
 
-const ERROR_VALIDATION_FAILED = 422;
+const UNPROCESSABLE_ENTITY_ERROR = 422; // VALIDATION FAILED
+const INTERNAL_SERVER_ERROR = 422; // SERVER SIDE ISSUE OCCORUDE
 
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', { 
@@ -34,7 +35,7 @@ exports.postAddProduct = (req, res, next) => {
     });
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(ERROR_VALIDATION_FAILED).render(
+        return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
             'admin/edit-product', { 
                 pageTitle: 'Add Product', 
                 path: '/admin/add-product',
@@ -56,7 +57,23 @@ exports.postAddProduct = (req, res, next) => {
         .then(result => {
             res.redirect('/admin/products');
         }).catch(error => {
-            console.log(error);
+            res.redirect('/500');
+            // return res.status(INTERNAL_SERVER_ERROR).render(
+            //     'admin/edit-product', { 
+            //         pageTitle: 'Add Product', 
+            //         path: '/admin/add-product',
+            //         editIsEnabled: false,
+            //         hasError: true,
+            //         errorMessage: 'Database operation failed, please try again',
+            //         product: {
+            //             title: title,
+            //             imageUrl: imageUrl,
+            //             price: price,
+            //             description: description
+            //         },
+            //         validationErrors: []
+            //     }
+            // )
         })
 };
 
@@ -94,7 +111,7 @@ exports.postEditProduct = (req, res, next) => {
     const updatedDescription = req.body.description;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(ERROR_VALIDATION_FAILED).render(
+        return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
             'admin/edit-product', { 
                 pageTitle: 'Add Product', 
                 path: '/admin/edit-product',
