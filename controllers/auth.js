@@ -24,7 +24,12 @@ exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'login',
-        errorMessage: loginErrorMessage
+        errorMessage: loginErrorMessage,
+        oldInputs: {
+            email: '',
+            password: ''
+        },
+        validationErrors: []
     })
 }
 
@@ -32,13 +37,18 @@ exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const errors = validationResult(req);
-    const errorMessage = errors.array()[0].msg;
+    const errorMessage = errors.array()[0] ? errors.array()[0].msg : "";
     if (!errors.isEmpty()) {
         const ERROR_VALIDATION_FAILED = 422;
         return res.status(ERROR_VALIDATION_FAILED).render('auth/login', {
             path: '/login',
             pageTitle: 'login',
-            errorMessage: errorMessage
+            errorMessage: errorMessage,
+            oldInputs: { 
+                email: email,
+                password: password
+            },
+            validationErrors: errors.array()
         })
     }
     User
@@ -56,8 +66,16 @@ exports.postLogin = (req, res, next) => {
                             res.redirect('/'); // with save we redirect only after creating the session
                         });
                     }
-                    req.flash('error', 'Invalid email or password');
-                    return res.redirect('/login');
+                    return res.status(ERROR_VALIDATION_FAILED).render('auth/login', {
+                        path: '/login',
+                        pageTitle: 'login',
+                        errorMessage: 'Invalid email or password',
+                        oldInputs: { 
+                            email: email,
+                            password: password
+                        },
+                        validationErrors: []
+                    })
                 })
                 .catch(err => {
                     res.redirect('/');
@@ -89,7 +107,8 @@ exports.getSignup = (req, res, next) => {
             email: "",
             password: "",
             confirmPassword: "",
-        }
+        },
+        validationErrors: []
     })
 }
 exports.postSignup = (req, res, next) => {
@@ -108,7 +127,8 @@ exports.postSignup = (req, res, next) => {
                 email: email,
                 password: password,
                 confirmPassword: req.body.confirmPassword,
-            }
+            },
+            validationErrors: errors.array()
         }); 
     }
     const howManyRoundsOfHashingWillBeAppliedToTheField = 12;// the higher the value the longer will take but the more secure it will be
