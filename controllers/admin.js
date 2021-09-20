@@ -2,7 +2,6 @@ const Product = require('../models/product');
 const { validationResult } = require('express-validator');
 
 const UNPROCESSABLE_ENTITY_ERROR = 422; // VALIDATION FAILED
-const INTERNAL_SERVER_ERROR = 422; // SERVER SIDE ISSUE OCCORUDE
 
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', { 
@@ -56,8 +55,10 @@ exports.postAddProduct = (req, res, next) => {
         .save()
         .then(result => {
             res.redirect('/admin/products');
-        }).catch(error => {
-            res.redirect('/500');
+        }).catch(err => {
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
         })
 };
 
@@ -69,6 +70,7 @@ exports.getEditProduct = (req, res, next) => {
     }
     Product.findById(productId)
         .then(product => {
+            // throw new Error('Dummy')
             if (!product) {
                 return res.redirect('/');
             }
@@ -81,8 +83,10 @@ exports.getEditProduct = (req, res, next) => {
                 errorMessage: undefined,
                 validationErrors: []
             })
-        }).catch(error => {
-            console.log(error);
+        }).catch(err => {
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
 
@@ -116,6 +120,7 @@ exports.postEditProduct = (req, res, next) => {
     Product
         .findById(existingId)
         .then(product => {
+            throw new Error('dummy')
             const userHasPermission = product.userId.toString() === req.user._id.toString();
             if (!userHasPermission) {
                 return res.redirect('/');
@@ -130,8 +135,8 @@ exports.postEditProduct = (req, res, next) => {
                     res.redirect('/admin/products')
                 });
         })
-        .catch(error => { // catches errors for both promisses
-            console.log(error);
+        .catch(err => { // catches errors for both promisses
+           console.log(err);
         })
 }
 
@@ -146,8 +151,10 @@ exports.getProducts = (req, res, next) => {
                 path: '/admin/products',
             });
         })
-        .catch(error => {
-            console.log(error);
+        .catch(err => {
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
         })
 };
 
@@ -162,6 +169,8 @@ exports.postDeleteProduct = (req, res, next) => {
             res.redirect('/admin/products');
         })
         .catch(err => {
-            console.log(err);
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
