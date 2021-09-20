@@ -53,11 +53,16 @@ app.use((req, res, next) => {
     User
     .findById(req.session.user._id)
     .then(mongooseModelUser => {
+        if (!mongooseModelUser) {
+            return next();
+        }
         // use that session data to load our real user, to create our mongoose user model 
         req.user = mongooseModelUser;
         next();
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        throw new Error(err);
+    });
 })
 
 app.use((req, res, next) => {
