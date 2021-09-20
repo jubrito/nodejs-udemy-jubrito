@@ -70,7 +70,6 @@ exports.getEditProduct = (req, res, next) => {
     }
     Product.findById(productId)
         .then(product => {
-            // throw new Error('Dummy')
             if (!product) {
                 return res.redirect('/');
             }
@@ -120,7 +119,6 @@ exports.postEditProduct = (req, res, next) => {
     Product
         .findById(existingId)
         .then(product => {
-            throw new Error('dummy')
             const userHasPermission = product.userId.toString() === req.user._id.toString();
             if (!userHasPermission) {
                 return res.redirect('/');
@@ -135,9 +133,11 @@ exports.postEditProduct = (req, res, next) => {
                     res.redirect('/admin/products')
                 });
         })
-        .catch(err => { // catches errors for both promisses
-           console.log(err);
-        })
+        .catch(err => {
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 }
 
 exports.getProducts = (req, res, next) => {
