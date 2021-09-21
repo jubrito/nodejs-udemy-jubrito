@@ -11,7 +11,7 @@ exports.getAddProduct = (req, res, next) => {
         hasError: false,
         oldInputs: {
             title: '',
-            imageUrl: '',
+            imagePath: '',
             price: '',
             description: ''
         },
@@ -22,17 +22,27 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
-    const image = req.body.image;
+    const image = req.file;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product({
-        title: title,
-        price: price,
-        description: description, 
-        imageUrl: image,
-        userId: req.user 
-    });
     const errors = validationResult(req);
+    if (!image) {
+        return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
+            'admin/edit-product', { 
+                pageTitle: 'Add Product', 
+                path: '/admin/add-product',
+                editIsEnabled: false,
+                hasError: true,
+                errorMessage: 'Attached file is not a valid image',
+                product: {
+                    title: title,
+                    price: price,
+                    description: description,
+                },
+                validationErrors: []
+            }
+        )
+    }
     if (!errors.isEmpty()) {
         return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
             'admin/edit-product', { 
@@ -43,14 +53,21 @@ exports.postAddProduct = (req, res, next) => {
                 errorMessage: errors.array()[0].msg,
                 product: {
                     title: title,
-                    imageUrl: image,
                     price: price,
-                    description: description
+                    description: description,
                 },
                 validationErrors: errors.array()
             }
         )
     }
+    const imagePath = image.path;
+    const product = new Product({
+        title: title,
+        price: price,
+        description: description, 
+        imagePath: imagePath,
+        userId: req.user 
+    });
     product
         .save()
         .then(result => {
@@ -93,7 +110,7 @@ exports.getEditProduct = (req, res, next) => {
 exports.postEditProduct = (req, res, next) => {
     const existingId = req.body.productId;
     const updatedTitle = req.body.title;
-    const updatedImageUrl = req.body.imageUrl;
+    const image = req.file;
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
     const errors = validationResult(req);
@@ -108,7 +125,6 @@ exports.postEditProduct = (req, res, next) => {
                 product: {
                     _id: existingId,
                     title: updatedTitle,
-                    imageUrl: updatedImageUrl,
                     price: updatedPrice,
                     description: updatedDescription
                 },
@@ -126,7 +142,9 @@ exports.postEditProduct = (req, res, next) => {
             product.title = updatedTitle;
             product.price = updatedPrice;
             product.description = updatedDescription;
-            product.imageUrl = updatedImageUrl;
+            if (image) {
+                product.imagePath = image.path;
+            }
             return product
                 .save()
                 .then(resultAfterSaving => {

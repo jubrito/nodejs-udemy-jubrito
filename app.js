@@ -64,7 +64,12 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
 
-app.use(multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image'));
+app.use(
+    multer({
+        storage: multerFileStorage, 
+        fileFilter: multerFileFilter
+    }).single('image')
+);
 
 // session middleware to be used for every incoming request.
 app.use(expressSession({
