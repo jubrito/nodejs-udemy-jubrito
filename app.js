@@ -25,6 +25,26 @@ const store = new MongoDBStore({
 });
 const csrfProtectionMiddleware = csrf();
 
+const errorMessage = undefined;
+const destinationFolder = 'images';
+let uniqueFileName = '';
+const snapShotOfTheCurrentDate = new Date().toISOString();
+const multerFileStorage = multer.diskStorage({
+    destination: (req, fileData, callbackOnceIsDone) => {
+        callbackOnceIsDone(
+            errorMessage,
+            destinationFolder
+        )
+    },
+    filename: (req, fileData, callbackOnceIsDone) => {
+        uniqueFileName = snapShotOfTheCurrentDate + '-' + fileData.originalname;
+        callbackOnceIsDone(
+            errorMessage,
+            uniqueFileName
+        )
+    }
+});
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
@@ -32,9 +52,7 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
 
-app.use(
-    multer({dest: 'images'}).single('image')
-);
+app.use(multer({storage: multerFileStorage}).single('image'));
 
 // session middleware to be used for every incoming request.
 app.use(expressSession({
