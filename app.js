@@ -5,14 +5,13 @@ const expressSession = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(expressSession);
 const csrf = require('csurf');
 const flash = require('connect-flash');
-
 const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 const authRoutes = require('./routes/auth');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
-
+const multer = require('multer');
 
 const app = express();
 const USERNAME_MONGODB = 'juliana';
@@ -32,6 +31,10 @@ app.set('views', 'views');
 //  PARSE (TO URL ENCODED DATA) - REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
+
+app.use(
+    multer({dest: 'images'}).single('image')
+);
 
 // session middleware to be used for every incoming request.
 app.use(expressSession({
