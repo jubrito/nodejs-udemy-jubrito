@@ -29,7 +29,7 @@ const csrfProtectionMiddleware = csrf();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-//  PARSE REQUEST BODY MIDDLEWARE 
+//  PARSE (TO URL ENCODED DATA) - REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
 
