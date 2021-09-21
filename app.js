@@ -44,6 +44,18 @@ const multerFileStorage = multer.diskStorage({
         )
     }
 });
+const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
+    let typeOfFileIsAccepted;
+    if (fileData.mimetype === 'image/png' || fileData.mimetype === 'image/jpg' || fileData.mimetype === 'image/jpeg') {
+        typeOfFileIsAccepted = true;
+    } else {
+        typeOfFileIsAccepted = false;
+    }
+    callbackOnceIsDone(
+        errorMessage,
+        typeOfFileIsAccepted
+    )
+}
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -52,7 +64,7 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
 
-app.use(multer({storage: multerFileStorage}).single('image'));
+app.use(multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image'));
 
 // session middleware to be used for every incoming request.
 app.use(expressSession({
