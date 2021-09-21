@@ -23,7 +23,7 @@
                     value="<%= editIsEnabled || hasError ? product.title : '' %>"
                 />
             </div>
-            <div class="form-control">
+            <!-- <div class="form-control">
                 <label for="imageUrl">Image URL</label>
                 <input 
                     class="<%= validationErrors.find(error => error.param === 'imageUrl') ? 'invalid' : '' %> "
@@ -32,6 +32,14 @@
                     id="imageUrl" 
                     value="<%= editIsEnabled || hasError ? product.imageUrl : '' %>"
                 />
+            </div> -->
+            <div class="form-control">
+                <label for="image">
+                    <input 
+                        type="file"
+                        name="image"
+                        id="image" />
+                </label>
             </div>
             <div class="form-control">
                 <label for="price">Price</label>
