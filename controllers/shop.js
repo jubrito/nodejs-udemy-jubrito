@@ -124,14 +124,17 @@ exports.getOrders = (req, res, next) => {
 function readInvoiceBelongedToTheUser(orderId, res) {
     const invoiceName = 'invoice-' + orderId + '.pdf';
     const invoicePath = path.join('data', 'invoices', invoiceName);
-    fs.readFile(invoicePath, (err, fileDataAsBuffer) => {
-        if (err) {
-            return next(err);
-        }
-        res.setHeader('Content-Type', 'application/pdf'); // open the pdf on browser instead of downloading it
-        res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName +'"') // how the content should be served to the client (inline = on the browser)
-        res.send(fileDataAsBuffer);
-    })
+    const file = fs.createReadStream(invoicePath); // read in the file step by step in different chunks
+    res.setHeader(
+         // open the pdf on browser instead of downloading it
+        'Content-Type', 'application/pdf'
+    );
+    res.setHeader(
+        // how the content should be served to the client (inline = on the browser)
+        'Content-Disposition', 
+        'inline; filename="' + invoiceName +'"'
+    )
+    file.pipe(res); // response will be streamed to the browser that will be streamed to the client on the fly
 }
 
 exports.getInvoice = (req, res, next) => {
