@@ -2,6 +2,7 @@ const fs = require('fs');
 const Product = require('../models/product');
 const Order = require('../models/order');
 const path = require('path');
+const PDFDocument = require('pdfkit');
 
 exports.getIndex = (req, res, next) => {
     Product.find().then(products => {
@@ -121,7 +122,29 @@ exports.getOrders = (req, res, next) => {
         });
 }
 
-function readInvoiceBelongedToTheUser(orderId, res) {
+function storesPDFOnTheServerAndSendItToTheUser(newPDFDocument, invoicePath, res) {
+    newPDFDocument.pipe(fs.createWriteStream(invoicePath));
+    newPDFDocument.pipe(res);
+}
+function createAndReadInvoiceToAuthenticatedUser(orderId, res) {
+    const invoiceName = 'invoice-' + orderId + '.pdf';
+    const invoicePath = path.join('data', 'invoices', invoiceName);
+    const newPDFDocument = new PDFDocument();
+    res.setHeader(
+        // open the pdf on browser instead of downloading it
+       'Content-Type', 'application/pdf'
+    );
+    res.setHeader(
+        // how the content should be served to the client (inline = on the browser)
+        'Content-Disposition',
+        'inline; filename="' + invoiceName +'"'
+    )
+
+    storesPDFOnTheServerAndSendItToTheUser(newPDFDocument, invoicePath, res);
+    newPDFDocument.text('Hello pdf');
+    newPDFDocument.end();
+}
+function readExistingPdfInvoiceBelongedToTheUser(orderId, res) {
     const invoiceName = 'invoice-' + orderId + '.pdf';
     const invoicePath = path.join('data', 'invoices', invoiceName);
     const file = fs.createReadStream(invoicePath); // read in the file step by step in different chunks
@@ -146,6 +169,7 @@ exports.getInvoice = (req, res, next) => {
         if (order.user.userId.toString() !== req.user._id.toString()) {
             return next(new Error('Unauthorized'));
         }
-        readInvoiceBelongedToTheUser(orderId, res);
+        // readExistingPdfInvoiceBelongedToTheUser(orderId, res);
+        createAndReadInvoiceToAuthenticatedUser(orderId, res);
     })
 }
