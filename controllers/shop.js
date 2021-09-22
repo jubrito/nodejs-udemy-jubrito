@@ -8,8 +8,11 @@ exports.getIndex = (req, res, next) => {
             pageTitle: 'Shop',
             path: '/',
         });
-    }).catch(error => {
-        console.log(error)
+    }).catch(err => {
+        console.log(err);
+        const error = new Error(err)
+        error.httpStatusCode = 500;
+        return next(error);
     });
 }
 exports.getCart = (req, res, next) => {
@@ -23,7 +26,12 @@ exports.getCart = (req, res, next) => {
                 products: products,
             })
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 }
 exports.postCart = (req, res, next) => {
     const productId = req.body.productId;
@@ -34,7 +42,12 @@ exports.postCart = (req, res, next) => {
         .then(result => {
             res.redirect('/cart');
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err);
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
+        })
 }
 
 exports.postCartDeleteItem = (req, res, next) => {
@@ -44,7 +57,12 @@ exports.postCartDeleteItem = (req, res, next) => {
         .then(result => {
             res.redirect('/cart');
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
+        });
     
 }
 
@@ -74,7 +92,12 @@ exports.postCreateOrder = (req, res, next) => {
         .then(result => {
             res.redirect('/orders');
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
+        });
     
 }
 
@@ -82,12 +105,16 @@ exports.getOrders = (req, res, next) => {
     Order
         .find({"user.userId": req.user})
         .then(orders => {
-            console.log(orders)
             res.render('shop/orders', {
                 path: '/orders',
                 pageTitle: 'Orders',
                 orders: orders,
             })
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 }

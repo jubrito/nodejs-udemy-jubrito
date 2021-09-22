@@ -62,7 +62,10 @@ app.set('views', 'views');
 
 //  PARSE (TO URL ENCODED DATA) - REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
+/* Statically serving a folder (requests to the files to that folder will be handled automatically and the files will be returned)
+serving the public folder with the express static middleware */
 app.use(express.static(path.join(__dirname, 'public'))); 
+app.use('/images', express.static(path.join(__dirname, 'images'))); 
 
 app.use(
     multer({
@@ -132,5 +135,10 @@ mongoose
     .then(connectionResult => {
         app.listen(8080);
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        console.log(err);
+        const error = new Error(err)
+        error.httpStatusCode = 500;
+        return next(error);
+    });
 

@@ -60,7 +60,7 @@ exports.postAddProduct = (req, res, next) => {
             }
         )
     }
-    const imagePath = image.path;
+    const imagePath = '/' + image.path;
     const product = new Product({
         title: title,
         price: price,
@@ -114,6 +114,23 @@ exports.postEditProduct = (req, res, next) => {
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
     const errors = validationResult(req);
+    if (!image) {
+        return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
+            'admin/edit-product', { 
+                pageTitle: 'Add Product', 
+                path: '/admin/edit-product',
+                editIsEnabled: false,
+                hasError: true,
+                errorMessage: 'Attached file is not a valid image',
+                product: {
+                    title: title,
+                    price: price,
+                    description: description,
+                },
+                validationErrors: []
+            }
+        )
+    }
     if (!errors.isEmpty()) {
         return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
             'admin/edit-product', { 
@@ -136,6 +153,7 @@ exports.postEditProduct = (req, res, next) => {
         .findById(existingId)
         .then(product => {
             const userHasPermission = product.userId.toString() === req.user._id.toString();
+            const imagePath = '/' + image.path;
             if (!userHasPermission) {
                 return res.redirect('/');
             }
@@ -143,7 +161,7 @@ exports.postEditProduct = (req, res, next) => {
             product.price = updatedPrice;
             product.description = updatedDescription;
             if (image) {
-                product.imagePath = image.path;
+                product.imagePath = imagePath;
             }
             return product
                 .save()
