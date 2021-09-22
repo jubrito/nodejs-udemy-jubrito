@@ -3,6 +3,7 @@ const Product = require('../models/product');
 const Order = require('../models/order');
 const path = require('path');
 const PDFDocument = require('pdfkit');
+const product = require('../models/product');
 
 exports.getIndex = (req, res, next) => {
     Product.find().then(products => {
@@ -126,7 +127,26 @@ function storesPDFOnTheServerAndSendItToTheUser(newPDFDocument, invoicePath, res
     newPDFDocument.pipe(fs.createWriteStream(invoicePath));
     newPDFDocument.pipe(res);
 }
-function createAndReadInvoiceToAuthenticatedUser(orderId, res) {
+function writesOnPDF(newPDFDocument, order) {
+    newPDFDocument.fontSize(26).text('Invoice', {
+        underline: true
+    });
+    newPDFDocument.text('-------------------------------');
+    let totalPrice = 0;
+    order.products.forEach(productOrdered => {
+        totalPrice += productOrdered.quantity * productOrdered.product.price
+        newPDFDocument
+            .fontSize(14)
+            .text(
+                productOrdered.product.title + ' - ' + 
+                productOrdered.quantity + ' x ' + '$' + 
+                productOrdered.product.price
+            );
+    })
+    newPDFDocument.text('-');
+    newPDFDocument.fontSize(20).text('Total Price: $' + totalPrice);
+}
+function createAndReadInvoiceToAuthenticatedUser(orderId, res, order) {
     const invoiceName = 'invoice-' + orderId + '.pdf';
     const invoicePath = path.join('data', 'invoices', invoiceName);
     const newPDFDocument = new PDFDocument();
@@ -141,7 +161,7 @@ function createAndReadInvoiceToAuthenticatedUser(orderId, res) {
     )
 
     storesPDFOnTheServerAndSendItToTheUser(newPDFDocument, invoicePath, res);
-    newPDFDocument.text('Hello pdf');
+    writesOnPDF(newPDFDocument, order);
     newPDFDocument.end();
 }
 function readExistingPdfInvoiceBelongedToTheUser(orderId, res) {
@@ -170,6 +190,6 @@ exports.getInvoice = (req, res, next) => {
             return next(new Error('Unauthorized'));
         }
         // readExistingPdfInvoiceBelongedToTheUser(orderId, res);
-        createAndReadInvoiceToAuthenticatedUser(orderId, res);
+        createAndReadInvoiceToAuthenticatedUser(orderId, res, order);
     })
 }
