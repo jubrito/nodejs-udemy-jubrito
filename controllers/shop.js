@@ -130,6 +130,8 @@ exports.getInvoice = (req, res, next) => {
             console.log(err)
             return next(err);
         }
+        res.setHeader('Content-Type', 'application/pdf'); // open the pdf on browser instead of downloading it
+        res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName +'"') // how the content should be served to the client (inline = on the browser)
         res.send(fileDataAsBuffer);
     })
 }
