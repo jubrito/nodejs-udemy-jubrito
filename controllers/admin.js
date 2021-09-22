@@ -1,5 +1,6 @@
 const Product = require('../models/product');
 const { validationResult } = require('express-validator');
+const fileHelper = require('../util/file');
 
 const UNPROCESSABLE_ENTITY_ERROR = 422; // VALIDATION FAILED
 
@@ -161,6 +162,7 @@ exports.postEditProduct = (req, res, next) => {
             product.price = updatedPrice;
             product.description = updatedDescription;
             if (image) {
+                fileHelper.deleteFile(product.imageUrl);
                 product.imagePath = imagePath;
             }
             return product
@@ -178,8 +180,6 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
     Product.find({userId: req.user._id })
-        // .select('title price -_id')
-        // .populate('userId', 'name')
         .then(products => {
             res.render('admin/product-list', {
                 products: products,
@@ -197,9 +197,13 @@ exports.getProducts = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
     const productId = req.body.productId;
     Product
-        .deleteOne({
-            _id: productId,
-            userId: req.user._id
+        .findById(productId)
+        .then(product => {
+            if (!product) {
+                return next(new Error('Product not found'))
+            }
+            fileHelper.deleteFile(product.imagePath);
+            return Product.deleteOne({ _id: productId, userId: req.user._id });
         })
         .then(resultAfterProductIsDestroyed => {
             res.redirect('/admin/products');
