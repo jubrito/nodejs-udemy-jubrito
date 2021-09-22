@@ -121,17 +121,28 @@ exports.getOrders = (req, res, next) => {
         });
 }
 
-exports.getInvoice = (req, res, next) => {
-    const orderId = req.params.orderId;
+function readInvoiceBelongedToTheUser(orderId, res) {
     const invoiceName = 'invoice-' + orderId + '.pdf';
     const invoicePath = path.join('data', 'invoices', invoiceName);
     fs.readFile(invoicePath, (err, fileDataAsBuffer) => {
         if (err) {
-            console.log(err)
             return next(err);
         }
         res.setHeader('Content-Type', 'application/pdf'); // open the pdf on browser instead of downloading it
         res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName +'"') // how the content should be served to the client (inline = on the browser)
         res.send(fileDataAsBuffer);
+    })
+}
+
+exports.getInvoice = (req, res, next) => {
+    const orderId = req.params.orderId;
+    Order.findById(orderId).then(order => {
+        if (!order) {
+            return next(new Error('No order found'))
+        }
+        if (order.user.userId.toString() !== req.user._id.toString()) {
+            return next(new Error('Unauthorized'));
+        }
+        readInvoiceBelongedToTheUser(orderId, res);
     })
 }
