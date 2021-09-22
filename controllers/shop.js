@@ -1,5 +1,7 @@
+const fs = require('fs');
 const Product = require('../models/product');
 const Order = require('../models/order');
+const path = require('path');
 
 exports.getIndex = (req, res, next) => {
     Product.find().then(products => {
@@ -117,4 +119,17 @@ exports.getOrders = (req, res, next) => {
             error.httpStatusCode = 500;
             return next(error);
         });
+}
+
+exports.getInvoice = (req, res, next) => {
+    const orderId = req.params.orderId;
+    const invoiceName = 'invoice-' + orderId + '.pdf';
+    const invoicePath = path.join('data', 'invoices', invoiceName);
+    fs.readFile(invoicePath, (err, fileDataAsBuffer) => {
+        if (err) {
+            console.log(err)
+            return next(err);
+        }
+        res.send(fileDataAsBuffer);
+    })
 }
