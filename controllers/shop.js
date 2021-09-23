@@ -89,6 +89,27 @@ exports.postCartDeleteItem = (req, res, next) => {
     
 }
 
+exports.getCheckout = (req, res, next) => {
+    req.user.populate('cart.items.productId').then(user => {
+        const productsArrayPopulatedWithDetailedData = user.cart.items; // array with fields quantity and product id (detailed with product information thanks to populate)
+        let total = 0;
+        productsArrayPopulatedWithDetailedData.forEach(product => {
+            total += product.quantity * product.productId.price
+        })
+        res.render('shop/checkout', {
+            path: '/checkout',
+            pageTitle: 'Checkout',
+            products: productsArrayPopulatedWithDetailedData,
+            totalSum: total
+        })
+    }).catch(err => {
+        console.log(err);
+        const error = new Error(err)
+        error.httpStatusCode = 500;
+        return next(error);
+    })
+}
+
 exports.postCreateOrder = (req, res, next) => {
     req.user
         .populate('cart.items.productId')
