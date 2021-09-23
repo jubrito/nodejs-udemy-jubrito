@@ -2,7 +2,9 @@ const Product = require('../models/product');
 const { validationResult } = require('express-validator');
 const fileHelper = require('../util/file');
 
-const UNPROCESSABLE_ENTITY_ERROR = 422; // VALIDATION FAILED
+const HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY_ERROR = 422; // VALIDATION FAILED
+const HTTP_STATUS_CODE_OK = 200; // OK
+const HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR = 500;
 
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', { 
@@ -28,7 +30,7 @@ exports.postAddProduct = (req, res, next) => {
     const description = req.body.description;
     const errors = validationResult(req);
     if (!image) {
-        return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
+        return res.status(HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY_ERROR).render(
             'admin/edit-product', { 
                 pageTitle: 'Add Product', 
                 path: '/admin/add-product',
@@ -45,7 +47,7 @@ exports.postAddProduct = (req, res, next) => {
         )
     }
     if (!errors.isEmpty()) {
-        return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
+        return res.status(HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY_ERROR).render(
             'admin/edit-product', { 
                 pageTitle: 'Add Product', 
                 path: '/admin/add-product',
@@ -116,7 +118,7 @@ exports.postEditProduct = (req, res, next) => {
     const updatedDescription = req.body.description;
     const errors = validationResult(req);
     if (!image) {
-        return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
+        return res.status(HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY_ERROR).render(
             'admin/edit-product', { 
                 pageTitle: 'Add Product', 
                 path: '/admin/edit-product',
@@ -133,7 +135,7 @@ exports.postEditProduct = (req, res, next) => {
         )
     }
     if (!errors.isEmpty()) {
-        return res.status(UNPROCESSABLE_ENTITY_ERROR).render(
+        return res.status(HTTP_STATUS_CODE_UNPROCESSABLE_ENTITY_ERROR).render(
             'admin/edit-product', { 
                 pageTitle: 'Add Product', 
                 path: '/admin/edit-product',
@@ -194,8 +196,8 @@ exports.getProducts = (req, res, next) => {
         })
 };
 
-exports.postDeleteProduct = (req, res, next) => {
-    const productId = req.body.productId;
+exports.deleteProduct = (req, res, next) => {
+    const productId = req.params.productId;
     Product
         .findById(productId)
         .then(product => {
@@ -206,11 +208,13 @@ exports.postDeleteProduct = (req, res, next) => {
             return Product.deleteOne({ _id: productId, userId: req.user._id });
         })
         .then(resultAfterProductIsDestroyed => {
-            res.redirect('/admin/products');
+            res.status(HTTP_STATUS_CODE_OK).json({
+                message: 'Success!'
+            });
         })
         .catch(err => {
-            const error = new Error(err)
-            error.httpStatusCode = 500;
-            return next(error);
+            res.status(HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR).json({
+                message: 'Deleting product failed'
+            });
         });
 }
