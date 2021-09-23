@@ -3,21 +3,27 @@ const Product = require('../models/product');
 const Order = require('../models/order');
 const path = require('path');
 const PDFDocument = require('pdfkit');
-const product = require('../models/product');
+
+const ITEMS_PER_PAGE = 2;
 
 exports.getIndex = (req, res, next) => {
-    Product.find().then(products => {
-        res.render('shop/index', {
-            products: products,
-            pageTitle: 'Shop',
-            path: '/',
+    const page = req.query.page;
+    Product
+        .find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE)
+        .then(products => {
+            res.render('shop/index', {
+                products: products,
+                pageTitle: 'Shop',
+                path: '/',
         });
-    }).catch(err => {
-        console.log(err);
-        const error = new Error(err)
-        error.httpStatusCode = 500;
-        return next(error);
-    });
+        }).catch(err => {
+            console.log(err);
+            const error = new Error(err)
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 }
 exports.getCart = (req, res, next) => {
     req.user
