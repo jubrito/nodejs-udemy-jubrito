@@ -117,7 +117,7 @@ form {
 .mobile-nav__item a.active,
 .mobile-nav__item button:hover,
 .mobile-nav__item button:active {
-  background: #00695c;
+  background: #4f0891;
   color: white;
   border-radius: 3px;
 }
@@ -199,8 +199,8 @@ form {
   padding: 0.25rem 1rem;
   text-decoration: none;
   font: inherit;
-  border: 1px solid #00695c;
-  color: #00695c;
+  border: 1px solid #4f0891;
+  color: #4f0891;
   background: white;
   border-radius: 3px;
   cursor: pointer;
@@ -208,7 +208,7 @@ form {
 
 .btn:hover,
 .btn:active {
-  background-color: #00695c;
+  background-color: #4f0891;
   color: white;
 }
 
@@ -238,6 +238,22 @@ form {
   border-color: red;
   color: red;
   background-color: #ffadad;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 2rem;
+}
+.pagination a {
+  text-decoration: none;
+  color: #4f0891;
+  padding: 0.5rem;
+  border: 1px solid #4f0891;
+  margin: 0 0.5rem;
+}
+.pagination a:hover, a:active {
+  background-color: #4f0891;
+  color: white;
 }
 
 @media (min-width: 768px) {
