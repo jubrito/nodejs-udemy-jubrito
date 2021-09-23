@@ -247,11 +247,12 @@ form {
 .pagination a {
   text-decoration: none;
   color: #4f0891;
-  padding: 0.5rem;
+  padding: 0.5rem 0.6rem;
   border: 1px solid #4f0891;
   margin: 0 0.5rem;
+  border-radius: 3px;
 }
-.pagination a:hover, a:active {
+.pagination a:hover, a:active, a.active {
   background-color: #4f0891;
   color: white;
 }

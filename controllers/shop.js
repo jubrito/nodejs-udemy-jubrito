@@ -4,10 +4,10 @@ const Order = require('../models/order');
 const path = require('path');
 const PDFDocument = require('pdfkit');
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 1;
 
 exports.getIndex = (req, res, next) => {
-    const page = req.query.page;
+    const page = +req.query.page || 1;
     let totalNumberOfProducts;
     Product
         .find()
