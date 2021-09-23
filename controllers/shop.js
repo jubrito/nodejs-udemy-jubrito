@@ -24,7 +24,7 @@ exports.getIndex = (req, res, next) => {
                 products: products,
                 pageTitle: 'Shop',
                 path: '/',
-                totalNumberOfProducts: totalNumberOfProducts,
+                currentPage: page,
                 hasNextPage: ITEMS_PER_PAGE * page < totalNumberOfProducts,
                 hasPreviousPage: page > 1,
                 nextPage: page + 1,
