@@ -1,0 +1,46 @@
+{
+  "name": "node-udemy",
+  "version": "1.0.0",
+  "description": "Complete Node.js Guide",
+  "main": "app.js",
+  "assignments": "studies/assignments/3/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jubrito/NodejsUdemy.git"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Juliana Witzke de Brito",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jubrito/NodejsUdemy/issues"
+  },
+  "homepage": "https://github.com/jubrito/NodejsUdemy#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^3.1.0",
+    "csurf": "^1.11.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.0.2",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.12.1",
+    "mongodb": "^4.1.0",
+    "mongoose": "^6.0.5",
+    "multer": "^1.4.3",
+    "mysql2": "^2.2.5",
+    "nodemailer": "^6.6.3",
+    "pdfkit": "^0.12.3",
+    "pug": "^3.0.2",
+    "sequelize": "^6.6.5"
+  }
+}
