@@ -126,7 +126,7 @@ app.use((error, req, res, next) => {
         .render('500_internal-error', {
             pageTitle: 'Error!',
             path: '/500',
-            isAuthenticated: req.session.isLoggedIn
+            isAuthenticated: req.session.isAuthenticated
         });
 });
 

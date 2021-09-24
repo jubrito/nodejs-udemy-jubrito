@@ -13,6 +13,5 @@ exports.get500 = (req, res, next) => {
         .render('500_internal-error', {
             pageTitle: 'Error!',
             path: '/500',
-            isAuthenticated: req.session.isLoggedIn
         });
 };

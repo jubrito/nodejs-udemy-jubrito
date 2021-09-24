@@ -13,8 +13,7 @@ const deleteProduct = (deleteButton) => {
         return result.json();
     })
     .then(data => {
-        console.log(data);
-        productElement.parentnode.removeChid(productElement);
+        productElement.parentNode.removeChild(productElement);
     })
     .catch(err => {console.log(err)})
 }
