@@ -13,9 +13,9 @@ exports.getPosts = (req, res, next) => {
 }
 
 exports.postPosts = (req, res, next) => {
-    console.log('postou mana')
     const title = req.body.title;
     const content = req.body.content;
+    console.log(title, content);
     res
         .status(STATUS_SUCCESS_RESOURCE_WAS_CREATED)
         .json({
@@ -23,3 +23,4 @@ exports.postPosts = (req, res, next) => {
             post: { id: new Date().toISOString(), title: title, content: content }
         });
 }
+
