@@ -60,7 +60,7 @@ const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-//  PARSE (TO URL ENCODED DATA) - REQUEST BODY MIDDLEWARE 
+//  Parse incoming requests bodies (that hold data in the format of x www-form-url-encoded, a form) (PARSE TO URL ENCODED DATA) - REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
 /* Statically serving a folder (requests to the files to that folder will be handled automatically and the files will be returned)
 serving the public folder with the express static middleware */

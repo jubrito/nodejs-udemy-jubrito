@@ -4,4 +4,6 @@ const router = express.Router();
 
 router.get('/posts', feedController.getPosts);
 
+router.post('/posts', feedController.postPosts);
+
 module.exports = router;
