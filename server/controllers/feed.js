@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator');
+const Post = require('../models/post')
 const STATUS_SUCCESS = 200;
 const STATUS_SUCCESS_RESOURCE_WAS_CREATED = 201;
 const STATUS_VALIDATION_FAILED_ERROR = 422;
@@ -32,17 +33,24 @@ exports.postPosts = (req, res, next) => {
     }
     const title = req.body.title;
     const content = req.body.content;
-    res
-        .status(STATUS_SUCCESS_RESOURCE_WAS_CREATED)
-        .json({
-            message: 'Post created successfully',
-            post: { 
-                _id: new Date().toISOString(), 
-                title: title, 
-                content: content,
-                creator: { name: 'Ju' },
-                createdAt: new Date() 
-            }
-        });
+    const post = new Post({
+        title: title, 
+        content: content,
+        imageUrl: 'images/tiamat.jpg',
+        creator: { name: 'Ju' },
+    })
+    post
+        .save()
+        .then(result => {
+            console.log(result);
+            res
+                .status(STATUS_SUCCESS_RESOURCE_WAS_CREATED)
+                .json({
+                    message: 'Post created successfully',
+                    post: result
+                });
+        })
+        .catch(err => {console.log(err)}); // save it to the database
+    
 }
 

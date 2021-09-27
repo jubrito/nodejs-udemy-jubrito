@@ -130,6 +130,7 @@ class Feed extends Component {
         return res.json();
       })
       .then(resData => {
+        console.log(resData);
         const post = {
           _id: resData.post._id,
           title: resData.post.title,
