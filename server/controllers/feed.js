@@ -3,6 +3,7 @@ const Post = require('../models/post')
 const STATUS_SUCCESS = 200;
 const STATUS_SUCCESS_RESOURCE_WAS_CREATED = 201;
 const STATUS_VALIDATION_FAILED_ERROR = 422;
+const STATUS_SERVER_SIDE_ERROR = 500;
 
 exports.getPosts = (req, res, next) => {
     res
@@ -24,12 +25,9 @@ exports.getPosts = (req, res, next) => {
 exports.postPosts = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res
-            .status(STATUS_VALIDATION_FAILED_ERROR)
-            .json({ 
-                message: 'Validation failed, entered data is not valid',
-                errors: errors.array()
-            })
+        const error = new Error('Validation failed, entered data is not valid')
+        error.statusCode = STATUS_VALIDATION_FAILED_ERROR;
+        throw error; //  THROWING ERROR because it is inside synchronous code
     }
     const title = req.body.title;
     const content = req.body.content;
@@ -50,7 +48,12 @@ exports.postPosts = (req, res, next) => {
                     post: result
                 });
         })
-        .catch(err => {console.log(err)}); // save it to the database
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = STATUS_SERVER_SIDE_ERROR;
+            }
+            next(err); // NOT THROWING ERROR because the promise chain is async 
+        }); 
     
 }
 

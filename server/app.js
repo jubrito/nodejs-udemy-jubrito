@@ -1,6 +1,7 @@
 const express = require('express');
 const feedRoutes = require('./routes/feed');
 const mongoose = require('mongoose');
+const path = require('path');
 const app = express();
 const USERNAME_MONGODB = 'juliana';
 const PASSWORD_MONGODB = 'ar6tE3vMlcpFT4OW';
@@ -15,6 +16,15 @@ app.use(function addHeadersToEveryRequestMiddleware (req, res, next) {
     next();
 })
 app.use('/feed', feedRoutes);
+// Statically serving images
+app.use('/images', express.static(path.join(__dirname,'images')));
+// Error Handling Middleware
+app.use((errorThrownOrPassedThroughNext, req, res, next) => {
+    console.log(errorThrownOrPassedThroughNext);
+    const statusCode = errorThrownOrPassedThroughNext.statusCode || 500;
+    const messagePassedViaErrorConstructor = errorThrownOrPassedThroughNext.message; 
+    res.status(statusCode).json({message: messagePassedViaErrorConstructor})
+})
 
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
