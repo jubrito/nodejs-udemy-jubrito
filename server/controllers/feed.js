@@ -26,7 +26,13 @@ exports.postPosts = (req, res, next) => {
         .status(STATUS_SUCCESS_RESOURCE_WAS_CREATED)
         .json({
             message: 'Post created successfully',
-            post: { id: new Date().toISOString(), title: title, content: content }
+            post: { 
+                _id: new Date().toISOString(), 
+                title: title, 
+                content: content,
+                creator: { name: 'Ju' },
+                createdAt: new Date() 
+            }
         });
 }
 
