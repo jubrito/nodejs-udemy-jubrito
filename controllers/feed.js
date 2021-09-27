@@ -6,8 +6,14 @@ exports.getPosts = (req, res, next) => {
         .status(STATUS_SUCCESS)
         .json({
             posts: [{
+                _id: 1,
                 title: 'First Post',
-                content: 'Yay'
+                content: 'Yay',
+                imageUrl: 'images/tiamat.jpg',
+                creator: {
+                    name: 'Juliana'
+                },
+                createdAt: new Date()
             }]
         })
 }
