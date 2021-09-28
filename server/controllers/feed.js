@@ -5,36 +5,42 @@ const STATUS_SUCCESS_RESOURCE_WAS_CREATED = 201;
 const STATUS_VALIDATION_FAILED_ERROR = 422;
 const STATUS_SERVER_SIDE_ERROR = 500;
 
+function handleErrorsOnAsyncCodeUsingNext(error, next, errorStatusCode) {
+    if (!error.statusCode) {
+        error.statusCode = errorStatusCode;
+    }
+    next(error);
+}
+
+function throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(error, errorMessage, errorStatusCode) {
+    const err = new Error(errorMessage);
+    err.statusCode = errorStatusCode;
+    throw error; 
+}
+
+
 exports.getPosts = (req, res, next) => {
-    res
-        .status(STATUS_SUCCESS)
-        .json({
-            posts: [{
-                _id: 1,
-                title: 'First Post',
-                content: 'Yay',
-                imageUrl: 'images/tiamat.jpg',
-                creator: {
-                    name: 'Juliana'
-                },
-                createdAt: new Date()
-            }]
+    Post
+        .find()
+        .then(posts => {
+            res.status(STATUS_SUCCESS).json({ message: 'Fetched posts successfully', posts: posts })
+        })
+        .catch(err => {
+            handleErrorsOnAsyncCodeUsingNext(err, next);
         })
 }
 
 exports.postPosts = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        const error = new Error('Validation failed, entered data is not valid')
-        error.statusCode = STATUS_VALIDATION_FAILED_ERROR;
-        throw error; //  THROWING ERROR because it is inside synchronous code
+        throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(err, 'Validation failed, entered data is not valid', STATUS_VALIDATION_FAILED_ERROR);
     }
     const title = req.body.title;
     const content = req.body.content;
     const post = new Post({
         title: title, 
         content: content,
-        imageUrl: 'images/tiamat.jpg',
+        imageUrl: '/images/tiamat.jpg',
         creator: { name: 'Ju' },
     })
     post
@@ -49,11 +55,22 @@ exports.postPosts = (req, res, next) => {
                 });
         })
         .catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = STATUS_SERVER_SIDE_ERROR;
-            }
-            next(err); // NOT THROWING ERROR because the promise chain is async 
+            handleErrorsOnAsyncCodeUsingNext(err, next, STATUS_SERVER_SIDE_ERROR);
         }); 
     
 }
 
+exports.getPost = (req, res, next) => {
+    const postId = req.params.postId;
+    Post
+        .findById(postId)
+        .then(post => {
+            if (!post) {
+                throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(err, next, STATUS_SERVER_SIDE_ERROR);
+            }
+            res.status(STATUS_SUCCESS).json({ message: 'Post fetched', post: post})
+        })
+        .catch(err => {
+            handleErrorsOnAsyncCodeUsingNext(err, next);
+        })
+}

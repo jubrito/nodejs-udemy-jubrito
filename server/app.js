@@ -7,6 +7,7 @@ const USERNAME_MONGODB = 'juliana';
 const PASSWORD_MONGODB = 'ar6tE3vMlcpFT4OW';
 const DATABASE_I_WANT_TO_CONNECT = 'messages';
 const CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER = `mongodb+srv://${USERNAME_MONGODB}:${PASSWORD_MONGODB}@clusterbackend0.luzfp.mongodb.net/${DATABASE_I_WANT_TO_CONNECT}`;
+// mongodb+srv://juliana:ar6tE3vMlcpFT4OW@clusterbackend0.luzfp.mongodb.net/messages?retryWrites=true&w=majority
 
 app.use(express.json()); // parse incoming requests (json data)
 app.use(function addHeadersToEveryRequestMiddleware (req, res, next) {

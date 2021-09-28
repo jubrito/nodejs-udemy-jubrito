@@ -259,7 +259,7 @@ class Feed extends Component {
                   onStartEdit={this.startEditPostHandler.bind(this, post._id)}
                   onDelete={this.deletePostHandler.bind(this, post._id)}
                 />
-              ))}
+                ))}
             </Paginator>
           )}
         </section>
