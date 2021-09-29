@@ -12,9 +12,9 @@ function handleErrorsOnAsyncCodeUsingNext(error, next, errorStatusCode) {
     next(error);
 }
 
-function throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(error, errorMessage, errorStatusCode) {
-    const err = new Error(errorMessage);
-    err.statusCode = errorStatusCode;
+function throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(errorMessage, errorStatusCode) {
+    const error = new Error(errorMessage);
+    error.statusCode = errorStatusCode;
     throw error; 
 }
 
@@ -33,8 +33,14 @@ exports.getPosts = (req, res, next) => {
 exports.postPosts = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(err, 'Validation failed, entered data is not valid', STATUS_VALIDATION_FAILED_ERROR);
+        throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Validation failed, entered data is not valid', STATUS_VALIDATION_FAILED_ERROR);
     }
+    // if (!req.file) {
+    //     throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('No image provided', STATUS_VALIDATION_FAILED_ERROR);
+    // }
+    // const imageUrl = req.file.path;
+    // console.log('imageUrl')
+    // console.log(imageUrl)
     const title = req.body.title;
     const content = req.body.content;
     const post = new Post({
@@ -66,7 +72,7 @@ exports.getPost = (req, res, next) => {
         .findById(postId)
         .then(post => {
             if (!post) {
-                throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(err, next, STATUS_SERVER_SIDE_ERROR);
+                throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(next, STATUS_SERVER_SIDE_ERROR);
             }
             res.status(STATUS_SUCCESS).json({ message: 'Post fetched', post: post})
         })

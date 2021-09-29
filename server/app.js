@@ -59,10 +59,7 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
 })
 //  Multer (upload of a single image)
 app.use(
-    multer({
-        storage: multerFileStorage, 
-        fileFilter: multerFileFilter
-    }).single('image')
+    multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image')
 );
 
 mongoose
