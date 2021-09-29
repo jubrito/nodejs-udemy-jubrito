@@ -39,17 +39,16 @@ const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
         typeOfFileIsAccepted
     )
 }
-
-app.use(express.json()); // parse incoming requests (json data)
+// Parse incoming requests (json data)
+app.use(express.json()); 
 app.use(function addHeadersToEveryRequestMiddleware (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');  // all domains should be able to access our server
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE'); // origins can use http methods
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');  // clients can send requests that hold extra authorization data on the header and defines the content type of the request
     next();
 })
-app.use('/feed', feedRoutes);
 // Statically serving images
-app.use('/images', express.static(path.join(__dirname,'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 // Error Handling Middleware
 app.use((errorThrownOrPassedThroughNext, req, res, next) => {
     console.log(errorThrownOrPassedThroughNext);
@@ -61,6 +60,7 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
 app.use(
     multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image')
 );
+app.use('/feed', feedRoutes);
 
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)

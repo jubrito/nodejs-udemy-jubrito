@@ -35,18 +35,16 @@ exports.postPosts = (req, res, next) => {
     if (!errors.isEmpty()) {
         throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Validation failed, entered data is not valid', STATUS_VALIDATION_FAILED_ERROR);
     }
-    // if (!req.file) {
-    //     throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('No image provided', STATUS_VALIDATION_FAILED_ERROR);
-    // }
-    // const imageUrl = req.file.path;
-    // console.log('imageUrl')
-    // console.log(imageUrl)
+    if (!req.file) {
+        throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('No image provided', STATUS_VALIDATION_FAILED_ERROR);
+    }
+    const imageUrl = req.file.path;
     const title = req.body.title;
     const content = req.body.content;
     const post = new Post({
         title: title, 
         content: content,
-        imageUrl: '/images/tiamat.jpg',
+        imageUrl: imageUrl,
         creator: { name: 'Ju' },
     })
     post
