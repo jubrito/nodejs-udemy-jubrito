@@ -3,11 +3,42 @@ const feedRoutes = require('./routes/feed');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
+const multer = require('multer');
 const USERNAME_MONGODB = 'juliana';
 const PASSWORD_MONGODB = 'ar6tE3vMlcpFT4OW';
 const DATABASE_I_WANT_TO_CONNECT = 'messages';
 const CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER = `mongodb+srv://${USERNAME_MONGODB}:${PASSWORD_MONGODB}@clusterbackend0.luzfp.mongodb.net/${DATABASE_I_WANT_TO_CONNECT}`;
-// mongodb+srv://juliana:ar6tE3vMlcpFT4OW@clusterbackend0.luzfp.mongodb.net/messages?retryWrites=true&w=majority
+const errorMessage = undefined;
+const destinationFolder = 'images';
+let uniqueFileName = '';
+const snapShotOfTheCurrentDate = new Date().toISOString();
+const multerFileStorage = multer.diskStorage({
+    destination: (req, fileData, callbackOnceIsDone) => {
+        callbackOnceIsDone(
+            errorMessage,
+            destinationFolder
+        )
+    },
+    filename: (req, fileData, callbackOnceIsDone) => {
+        uniqueFileName = snapShotOfTheCurrentDate + '-' + fileData.originalname;
+        callbackOnceIsDone(
+            errorMessage,
+            uniqueFileName
+        )
+    }
+});
+const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
+    let typeOfFileIsAccepted;
+    if (fileData.mimetype === 'image/png' || fileData.mimetype === 'image/jpg' || fileData.mimetype === 'image/jpeg') {
+        typeOfFileIsAccepted = true;
+    } else {
+        typeOfFileIsAccepted = false;
+    }
+    callbackOnceIsDone(
+        errorMessage,
+        typeOfFileIsAccepted
+    )
+}
 
 app.use(express.json()); // parse incoming requests (json data)
 app.use(function addHeadersToEveryRequestMiddleware (req, res, next) {
@@ -26,6 +57,13 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
     const messagePassedViaErrorConstructor = errorThrownOrPassedThroughNext.message; 
     res.status(statusCode).json({message: messagePassedViaErrorConstructor})
 })
+//  Multer (upload of a single image)
+app.use(
+    multer({
+        storage: multerFileStorage, 
+        fileFilter: multerFileFilter
+    }).single('image')
+);
 
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
