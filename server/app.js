@@ -55,7 +55,8 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
     console.log(errorThrownOrPassedThroughNext);
     const statusCode = errorThrownOrPassedThroughNext.statusCode || 500;
     const messagePassedViaErrorConstructor = errorThrownOrPassedThroughNext.message; 
-    res.status(statusCode).json({message: messagePassedViaErrorConstructor})
+    const errorsArray = error.errorsArray;
+    res.status(statusCode).json({message: messagePassedViaErrorConstructor, errorsArray: errorsArray })
 })
 //  Multer (upload of a single image)
 app.use(
