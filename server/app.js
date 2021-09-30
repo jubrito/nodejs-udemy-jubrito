@@ -20,7 +20,7 @@ const multerFileStorage = multer.diskStorage({
         )
     },
     filename: (req, fileData, callbackOnceIsDone) => {
-        uniqueFileName = snapShotOfTheCurrentDate + '-' + fileData.originalname;
+        uniqueFileName = snapShotOfTheCurrentDate + '__' + Math.random().toString() + '__' + fileData.originalname;
         callbackOnceIsDone(
             errorMessage,
             uniqueFileName

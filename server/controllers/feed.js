@@ -120,6 +120,27 @@ exports.updatePost = (req, res, next) => {
         })
 }
 
+exports.deletePost = (req, res, next) => {
+    const postId = req.params.postId;
+    Post
+        .findById(postId)
+        .then(post => {
+            if (!post) {
+                throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Could not find post', STATUS_VALIDATION_FAILED_ERROR);
+            }
+            // Check logged in user
+            clearImage(post.imageUrl);
+            return Post.findById(postId).remove();
+        })
+        .then(postWasRemoved => {
+            console.log(postWasRemoved);
+            res.status(STATUS_SUCCESS).json({ message: 'Post was deleted' })
+        })
+        .catch(err => {
+            handleErrorsOnAsyncCodeUsingNext(err, next);
+        });
+}
+
 const clearImage = filePath => {
     filePath = path.join(__dirname, '..', filePath);
     fs.unlink(filePath, err => console.log(err));
