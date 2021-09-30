@@ -1,5 +1,6 @@
 const express = require('express');
 const feedRoutes = require('./routes/feed');
+const authRoutes = require('./routes/auth');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
@@ -61,6 +62,7 @@ app.use(
     multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image')
 );
 app.use('/feed', feedRoutes);
+app.use('/auth', authRoutes);
 
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
