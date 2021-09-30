@@ -22,10 +22,25 @@ function throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(errorMessage, err
 
 
 exports.getPosts = (req, res, next) => {
+    const currentPage = req.query.page || 1;
+    const perPage = 2;
+    let totalItems;
     Post
         .find()
+        .countDocuments()
+        .then(numberOfItens => {
+            totalItems = numberOfItens;
+            return Post
+                .find()
+                .skip((currentPage - 1) * perPage)
+                .limit(perPage);
+        })
         .then(posts => {
-            res.status(STATUS_SUCCESS).json({ message: 'Fetched posts successfully', posts: posts })
+            res.status(STATUS_SUCCESS).json({ 
+                message: 'Fetched posts successfully', 
+                posts: posts, 
+                totalItems: totalItems
+            })
         })
         .catch(err => {
             handleErrorsOnAsyncCodeUsingNext(err, next);
