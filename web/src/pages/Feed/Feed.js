@@ -125,16 +125,12 @@ class Feed extends Component {
       body: formData
     })
       .then(res => {
-        console.log('res')
-        console.log(res)
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Creating or editing a post failed!');
         }
         return res.json();
       })
       .then(resData => {
-        console.log('resData')
-        console.log(resData)
         const post = {
           _id: resData.post._id,
           title: resData.post.title,

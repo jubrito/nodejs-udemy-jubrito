@@ -101,9 +101,9 @@ exports.updatePost = (req, res, next) => {
         .then(post => {
             if (!post) {
                 throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Could not find post', STATUS_VALIDATION_FAILED_ERROR);
-                if (imageUrl !== post.imageUrl) {
-                    clearImage(post.imageUrl);
-                }
+            }
+            if (imageUrl !== post.imageUrl) {
+                clearImage(post.imageUrl);
             }
             post.title = title;
             post.content - content;
@@ -122,5 +122,5 @@ exports.updatePost = (req, res, next) => {
 
 const clearImage = filePath => {
     filePath = path.join(__dirname, '..', filePath);
-    fs.unlink(file, err => console.log(err));
+    fs.unlink(filePath, err => console.log(err));
 }
