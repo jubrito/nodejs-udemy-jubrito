@@ -29,7 +29,9 @@ router.put(
             .isLength({ min: 5 })
             .not().isEmpty(),
     ],
-    authController.getSignUp
+    authController.signUp
 );
+
+router.post('/login', authController.login);
 
 module.exports = router;
