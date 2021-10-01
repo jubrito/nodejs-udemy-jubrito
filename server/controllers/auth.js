@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const { validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
+const jsonwebtoken = require('jsonwebtoken');
 
 exports.signUp = (req, res, next) => {
     const errors = validationResult(req);
@@ -40,7 +41,7 @@ exports.login = (req, res, next) => {
     const password = req.body.password;
     let userFoundOnTheDatabaseWithLoginEmail;
     User
-        .findOne({ email: email})
+        .findOne({ email: email })
         .then(user => {
             if (!user) {
                 const error = new Error('A user with this email could not be found');
@@ -56,9 +57,20 @@ exports.login = (req, res, next) => {
                 error.statusCode = 401;
                 throw error;
             }
-
+            const privateKeyForAuthentication = 'privateKeyICreatedWhichIsUsedForSigningUpAndIsOnlyKnownToTheServerSoItCantBeFakeOnTheClient';
+            const jsonToken = jsonwebtoken.sign(
+                {
+                    email: userFoundOnTheDatabaseWithLoginEmail.email,
+                    userId: userFoundOnTheDatabaseWithLoginEmail._id.toString()
+                }, 
+                privateKeyForAuthentication,
+                { expiresIn: '1h'}
+            );
+            console.log('jsonToken')
+            console.log(jsonToken)
+            res.status(200).json({ token: jsonToken, userId: userFoundOnTheDatabaseWithLoginEmail._id.toString() })
         })
-        .err(err => {
+        .catch(err => {
             if (!err.statusCode) {
                 err.statusCode = 500;
             }
