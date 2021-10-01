@@ -14,9 +14,16 @@ const postSchema = new Schema({
         type: String,
         required: true,
     },
+    // Without users:
+    // creator: {
+    //     type: Object,
+    //     reqiured: true
+    // }
+    // With users:
     creator: {
-        type: Object,
-        reqiured: true
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
     }
 }, {timestamps: true}) // created and updated at
 
