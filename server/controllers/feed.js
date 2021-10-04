@@ -21,33 +21,26 @@ function throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(errorMessage, err
     error.statusCode = errorStatusCode;
     throw error; 
 }
-
-
-exports.getPosts = (req, res, next) => {
+exports.getPosts = async (req, res, next) => {
     const currentPage = req.query.page || 1;
     const perPage = 2;
-    let totalItems;
-    Post
-        .find()
-        .countDocuments()
-        .then(numberOfItens => {
-            totalItems = numberOfItens;
-            return Post
-                .find()
-                .skip((currentPage - 1) * perPage)
-                .limit(perPage);
+    try {
+        const numberOfItens = await Post.find().countDocuments();
+        const posts = await Post.find()
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+        console.log('posts')
+        console.log(posts)
+        res.status(STATUS_SUCCESS).json({ 
+            message: 'Fetched posts successfully', 
+            posts: posts, 
+            totalItems: numberOfItens
         })
-        .then(posts => {
-            res.status(STATUS_SUCCESS).json({ 
-                message: 'Fetched posts successfully', 
-                posts: posts, 
-                totalItems: totalItems
-            })
-        })
-        .catch(err => {
-            handleErrorsOnAsyncCodeUsingNext(err, next);
-        })
+    } catch (err) {
+        handleErrorsOnAsyncCodeUsingNext(err, next);
+    }
 }
+
 
 exports.postPosts = (req, res, next) => {
     const errors = validationResult(req);
