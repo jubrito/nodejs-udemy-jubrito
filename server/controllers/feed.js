@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { validationResult } = require('express-validator');
 const Post = require('../models/post')
-const User = require('../models/user')
+const User = require('../models/user');
+const user = require('../models/user');
 const STATUS_SUCCESS = 200;
 const STATUS_SUCCESS_RESOURCE_WAS_CREATED = 201;
 const STATUS_VALIDATION_FAILED_ERROR = 422;
@@ -166,7 +167,14 @@ exports.deletePost = (req, res, next) => {
             return Post.findById(postId).remove();
         })
         .then(postWasRemoved => {
-            console.log(postWasRemoved);
+            return User.findById(req.userId);
+        })
+        .then(userMongooseModelFetchedFromDatabase => {
+            // clear the relation between user and posts removing the post from the user model once it is deleted
+            userMongooseModelFetchedFromDatabase.posts.pull(postId);
+            return userMongooseModelFetchedFromDatabase.save();
+        })
+        .then(result => {
             res.status(STATUS_SUCCESS).json({ message: 'Post was deleted' })
         })
         .catch(err => {
