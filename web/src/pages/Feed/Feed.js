@@ -138,6 +138,8 @@ class Feed extends Component {
         return res.json();
       })
       .then(resData => {
+        console.log('resData')
+        console.log(resData)
         const post = {
           _id: resData.post._id,
           title: resData.post.title,
@@ -263,7 +265,7 @@ class Feed extends Component {
                 <Post
                   key={post._id}
                   id={post._id}
-                  author={post.creator.name}
+                  author={post.creator}
                   date={new Date(post.createdAt).toLocaleDateString('en-US')}
                   title={post.title}
                   image={post.imageUrl}

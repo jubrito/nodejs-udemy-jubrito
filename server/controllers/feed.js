@@ -76,12 +76,12 @@ exports.postPosts = (req, res, next) => {
             user.posts.push(post);
             return user.save();
         })
-        .then(result => {
+        .then(userUpdated => {
             res
                 .status(STATUS_SUCCESS_RESOURCE_WAS_CREATED)
                 .json({
                     message: 'Post created successfully',
-                    post: result,
+                    post: post,
                     creator: { _id: creator._id, name: creator.name }
                 });
         })
