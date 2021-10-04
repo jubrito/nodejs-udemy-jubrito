@@ -163,7 +163,7 @@ exports.deletePost = (req, res, next) => {
                 throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Not authorized', STATUS_FORBIDDEN);
             }
             clearImage(post.imageUrl);
-            return Post.findById(postId).remove();
+            return Post.findByIdAndDelete(postId);
         })
         .then(postWasRemoved => {
             return User.findById(req.userId);
