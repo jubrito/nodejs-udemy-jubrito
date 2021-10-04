@@ -66,8 +66,6 @@ exports.login = (req, res, next) => {
                 privateKeyForAuthentication,
                 { expiresIn: '1h'}
             );
-            console.log('jsonToken')
-            console.log(jsonToken)
             res.status(200).json({ token: jsonToken, userId: userFoundOnTheDatabaseWithLoginEmail._id.toString() })
         })
         .catch(err => {
@@ -76,4 +74,52 @@ exports.login = (req, res, next) => {
             }
             next(err);
         });
+}
+
+exports.getUserStatus = (req, res, next) => {
+    const userId = req.userId;
+    User
+        .findById(userId)
+        .then(user => {
+            if (!user) {
+                const error = new Error('User not found');
+                error.statusCode = 404;
+                throw error;
+            }
+            res.status(200).json({ userId: userId, status: user.status })
+            return user.status;
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+exports.updateUserStatus = (req, res, next) => {
+    const userId = req.userId;
+    const status = req.body.status;
+    User
+        .findById(userId)
+        .then(user => {
+            if (!user) {
+                const error = new Error('User not found');
+                error.statusCode = 404;
+                throw error;
+            }
+            user.status = status;
+            return user.save();
+        })
+        .then(result => {
+            console.log('result');
+            console.log(result);
+            res.status(200).json({ message: 'Status updated' })
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+                next(err);
+            }
+        })
 }
