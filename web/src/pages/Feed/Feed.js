@@ -131,7 +131,7 @@ class Feed extends Component {
       editLoading: true
     });
     let url = 'http://localhost:8080/feed/post';
-    let method = 'PUT';
+    let method = 'POST';
     const formData = new FormData();
     formData.append('image', postData.image);
     formData.append('content', postData.content);
