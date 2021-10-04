@@ -3,7 +3,6 @@ const path = require('path');
 const { validationResult } = require('express-validator');
 const Post = require('../models/post')
 const User = require('../models/user');
-const user = require('../models/user');
 const STATUS_SUCCESS = 200;
 const STATUS_SUCCESS_RESOURCE_WAS_CREATED = 201;
 const STATUS_VALIDATION_FAILED_ERROR = 422;
