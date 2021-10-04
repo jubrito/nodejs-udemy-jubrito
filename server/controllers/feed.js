@@ -7,6 +7,7 @@ const STATUS_SUCCESS = 200;
 const STATUS_SUCCESS_RESOURCE_WAS_CREATED = 201;
 const STATUS_VALIDATION_FAILED_ERROR = 422;
 const STATUS_SERVER_SIDE_ERROR = 500;
+const STATUS_FORBIDDEN = 403;
 
 function handleErrorsOnAsyncCodeUsingNext(error, next, errorStatusCode) {
     if (!error.statusCode) {
@@ -124,8 +125,12 @@ exports.updatePost = (req, res, next) => {
     Post
         .findById(postId)
         .then(post => {
+            const userIsTryingToUpdateAPostCreatedBySomeoneElse = post.creator.toString() !== req.userId;
             if (!post) {
                 throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Could not find post', STATUS_VALIDATION_FAILED_ERROR);
+            }
+            if (userIsTryingToUpdateAPostCreatedBySomeoneElse) {
+                throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Not authorized', STATUS_FORBIDDEN);
             }
             if (imageUrl !== post.imageUrl) {
                 clearImage(post.imageUrl);
@@ -153,7 +158,10 @@ exports.deletePost = (req, res, next) => {
             if (!post) {
                 throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Could not find post', STATUS_VALIDATION_FAILED_ERROR);
             }
-            // Check logged in user
+            const userIsTryingToUpdateAPostCreatedBySomeoneElse = post.creator.toString() !== req.userId;
+            if (userIsTryingToUpdateAPostCreatedBySomeoneElse) {
+                throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Not authorized', STATUS_FORBIDDEN);
+            }
             clearImage(post.imageUrl);
             return Post.findById(postId).remove();
         })
