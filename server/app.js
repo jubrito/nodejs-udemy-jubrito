@@ -68,6 +68,11 @@ app.use('/auth', authRoutes);
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
     .then(result => {
-        app.listen(8080);
+        const nodeHttpServer = app.listen(8080);
+        const socketIoConnection = require('socket.io')(nodeHttpServer)
+        socketIoConnection.on('connection', socketConnectionBetweenServerAndClientExecutedForEveryNewClient => {
+            console.log('Client connected');
+        })
+
     })
     .catch(err => { console.log(err)});
