@@ -69,12 +69,7 @@ mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
     .then(result => {
         const nodeHttpServer = app.listen(8080);
-        const socketIoConnection = require('socket.io')(nodeHttpServer, {
-            cors: {
-                origin: "http://localhost:3000",
-                methods: ["GET", "POST"]
-            }
-        });
+        const socketIoConnection = require('./socket').init(nodeHttpServer);
         socketIoConnection.on('connection', socketConnectionBetweenServerAndClientExecutedForEveryNewClient => {
             console.log('Client connected');
         })
