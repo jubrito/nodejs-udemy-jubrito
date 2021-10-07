@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { validationResult } = require('express-validator');
+const socketIoConnection = require('../socket');
 const Post = require('../models/post')
 const User = require('../models/user');
 const STATUS_SUCCESS = 200;
@@ -118,6 +119,12 @@ exports.updatePost = async (req, res, next) => {
         post.content - content;
         post.imageUrl = imageUrl;
         const newPost = await post.save();
+        const eventName = 'posts';
+        const dataIWantToSentToAllConnectedUsers = {
+            action: 'create',
+            post: post
+        };
+        socketIoConnection.getSocketIoConnection().emit(eventName, dataIWantToSentToAllConnectedUsers);
         return res.status(STATUS_SUCCESS).json({ message: 'Post updated', post: newPost })
     } catch(err) {
         handleErrorsOnAsyncCodeUsingNext(err, next);
