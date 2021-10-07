@@ -63,6 +63,12 @@ exports.postPosts = async (req, res, next) => {
         const user = await User.findById(req.userId);
         user.posts.push(post);
         const userUpdated = await user.save();
+        const eventName = 'posts';
+        const dataIWantToSentToAllConnectedUsers = {
+            action: 'create',
+            post: postCreated
+        };
+        socketIoConnection.getSocketIoConnection().emit(eventName, dataIWantToSentToAllConnectedUsers);
         res
             .status(STATUS_SUCCESS_RESOURCE_WAS_CREATED)
             .json({
@@ -104,8 +110,8 @@ exports.updatePost = async (req, res, next) => {
         throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('No file uploaded', STATUS_VALIDATION_FAILED_ERROR);
     }
     try {
-        const post = await Post.findById(postId);
-        const userIsTryingToUpdateAPostCreatedBySomeoneElse = post.creator.toString() !== req.userId;
+        const post = await Post.findById(postId).populate('creator');
+        const userIsTryingToUpdateAPostCreatedBySomeoneElse = post.creator._id.toString() !== req.userId;
         if (!post) {
             throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock('Could not find post', STATUS_VALIDATION_FAILED_ERROR);
         }
@@ -121,7 +127,7 @@ exports.updatePost = async (req, res, next) => {
         const newPost = await post.save();
         const eventName = 'posts';
         const dataIWantToSentToAllConnectedUsers = {
-            action: 'create',
+            action: 'update',
             post: post
         };
         socketIoConnection.getSocketIoConnection().emit(eventName, dataIWantToSentToAllConnectedUsers);
