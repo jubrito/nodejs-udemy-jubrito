@@ -154,12 +154,25 @@ exports.deletePost = async (req, res, next) => {
         await Post.findByIdAndDelete(postId);
         const userMongooseModelFetchedFromDatabase = await User.findById(req.userId);
         // clear the relation between user and posts removing the post from the user model once it is deleted
-        userMongooseModelFetchedFromDatabase.posts.pull(postId);
-        await userMongooseModelFetchedFromDatabase.save();
-        res.status(STATUS_SUCCESS).json({ message: 'Post was deleted' })
+        // userMongooseModelFetchedFromDatabase.posts.pull(postId);
+        // await userMongooseModelFetchedFromDatabase.save();
+        clearRelationBetween(userMongooseModelFetchedFromDatabase, userMongooseModelFetchedFromDatabase.posts, postId )
+
+        const channelName = 'posts';
+        const whatHappensToMyChannelInsideOfTheDataPackageBeingEmitted = {
+            action: 'delete',
+            post: postId
+        }
+        socketIoConnection.getSocketIoConnection().emit(channelName, whatHappensToMyChannelInsideOfTheDataPackageBeingEmitted);
+        res.status(STATUS_SUCCESS).json({ message: 'Post was deleted' });
     } catch(err) {
         handleErrorsOnAsyncCodeUsingNext(err, next);
     };
+}
+
+const clearRelationBetween =  async (modelWhereTheRelationIsStored, modelWithFieldDataWhereIsStored, referenceToBeRemoved) => {
+    modelWithFieldDataWhereIsStored.pull(referenceToBeRemoved);
+    await modelWhereTheRelationIsStored.save();
 }
 
 const clearImage = filePath => {
