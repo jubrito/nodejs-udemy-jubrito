@@ -25,10 +25,12 @@ function throwErrorsOnSyncOrAsyncPassingToTheClosestCatchBlock(errorMessage, err
 exports.getPosts = async (req, res, next) => {
     const currentPage = req.query.page || 1;
     const perPage = 2;
+    const descendingWay = -1;
     try {
         const numberOfItens = await Post.find().countDocuments();
         const posts = await Post.find().populate('creator')
         .skip((currentPage - 1) * perPage)
+        .sort({ createdAt: descendingWay })
         .limit(perPage);
         res.status(STATUS_SUCCESS).json({ 
             message: 'Fetched posts successfully', 
