@@ -1,10 +1,11 @@
 const express = require('express');
-const feedRoutes = require('./routes/feed');
-const authRoutes = require('./routes/auth');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 const multer = require('multer');
+const { graphqlHTTP } = require('express-graphql');
+const graphqlSchema = require('./graphql/schema');
+const graphqlResolvers = require('./graphql/resolvers');
 const USERNAME_MONGODB = 'juliana';
 const PASSWORD_MONGODB = 'ar6tE3vMlcpFT4OW';
 const DATABASE_I_WANT_TO_CONNECT = 'messages';
@@ -62,6 +63,10 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
 app.use(
     multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image')
 );
+app.use('/graphql', graphqlHTTP({
+    schema: graphqlSchema,
+    rootValue: graphqlResolvers
+}));
 
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
