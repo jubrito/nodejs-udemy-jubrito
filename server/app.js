@@ -62,17 +62,10 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
 app.use(
     multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image')
 );
-app.use('/feed', feedRoutes);
-app.use('/auth', authRoutes);
 
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
     .then(result => {
-        const nodeHttpServer = app.listen(8080);
-        const socketIoConnection = require('./socket').init(nodeHttpServer);
-        socketIoConnection.on('connection', socketConnectionBetweenServerAndClientExecutedForEveryNewClient => {
-            console.log('Client connected via socket.io');
-        })
-
+        app.listen(8080);
     })
     .catch(err => { console.log(err)});
