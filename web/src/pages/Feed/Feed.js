@@ -46,6 +46,7 @@ class Feed extends Component {
       this.setState({ postsLoading: true, posts: [] });
     }
     let page = this.state.postPage;
+    const itemsPerPage = 3;
     if (direction === 'next') {
       page++;
       this.setState({ postPage: page });
@@ -57,7 +58,7 @@ class Feed extends Component {
     const graphqlQuery = {
       query: `
         {
-          loadPosts {
+          loadPosts(currentPage: ${page}, itemsPerPage: ${itemsPerPage}) {
             posts {
               _id
               title
@@ -84,8 +85,6 @@ class Feed extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log('resData')
-        console.log(resData)
         if (resData.errors) {
           throw new Error('Fetching posts failed');
         }
@@ -96,7 +95,7 @@ class Feed extends Component {
               imagePath: postModificated.imageUrl // only the path of the file without http://localhost:8080
             }
           }),
-          totalPosts: resData.data.loadPosts.totalItems,
+          totalPosts: resData.data.loadPosts.totalPosts,
           postsLoading: false
         });
       })
@@ -204,6 +203,7 @@ class Feed extends Component {
             );
             updatedPosts[postIndex] = post;
           } else {
+            updatedPosts.pop();
             updatedPosts.unshift(post);
           }
           return {

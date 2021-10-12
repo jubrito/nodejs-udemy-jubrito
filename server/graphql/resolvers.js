@@ -104,18 +104,26 @@ module.exports = {
             updatedAt: newPost.updatedAt.toISOString(),
         }
     },
-    loadPosts: async function (args, req) {
+    loadPosts: async function ({ currentPage, itemsPerPage }, req) {
         if (!req.isAuth) {
             const error = new Error('Not authenticated');
             error.statusCode = 401;
             throw error;
+        }
+        if (!currentPage) {
+            currentPage = 1;
+        }
+        if (!itemsPerPage) {
+            itemsPerPage = 2;
         }
         const descendingWay = -1;
         const totalPosts = await Post.find().countDocuments();
         const posts = await Post
             .find()
             .populate('creator')
-            .sort({ createdAt: descendingWay });
+            .sort({ createdAt: descendingWay })
+            .skip((currentPage - 1) * itemsPerPage)
+            .limit(itemsPerPage);
         return { posts: posts.map(post => {
             return {
                 ...post._doc,
