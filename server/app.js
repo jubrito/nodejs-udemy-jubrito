@@ -69,12 +69,12 @@ app.use(
         schema: graphqlSchema,
         rootValue: graphqlResolvers,
         graphiql: true, // special tool to play around your graphql api when accessing a route on the browser only if you have a query on the model
-        formatError(err) {
+        customFormatErrorFn(err) {
             if (!err.originalError) {
                 return err;
             }
             const data = err.originalError.data;
-            const message = err.message || 'An error occured!';
+            const message = err.message || 'An error occurred!';
             const statusCode = err.originalError.statusCode || 500;
             return { message: message, statusCode: statusCode, data: data }
         }
