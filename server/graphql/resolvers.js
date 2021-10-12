@@ -64,6 +64,11 @@ module.exports = {
         return { token: jsonToken, userId: userId }
     },
     createPost: async function ({ postInput }, req) {
+        if (!req.isAuth) {
+            const error = new Error ('Not authenticated');
+            error.statusCode = 401;
+            throw error;
+        }
         const errors = [];
         if (validator.isEmpty(postInput.title) || validator.isLength(postInput.title, { min: 5 })) {
             errors.push({ message: 'Title is invalid'})
@@ -77,13 +82,20 @@ module.exports = {
             error.statusCode = 422;
             throw error;
         }
+        const user = User.findById(req.userId);
+        if (!user) {
+            const error = new Error('Invalid user');
+            error.statusCode = 401;
+            throw error;
+        }
         const post = new Post ({
             title: postInput.title,
             content: postInput.content,
             imageUrl: postInput.imageUrl,
+            creator: user
         });
-        // TO DO: add user as creator
         const newPost = await post.save();
+        user.posts.push(newPost);
         return { 
             ...newPost._doc, 
             _id: createPost._id.toString(),

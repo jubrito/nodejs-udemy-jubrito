@@ -125,33 +125,40 @@ class Feed extends Component {
 
   // when clicking the button 'ACCEPT' after creating a new post
   finishEditHandler = postData => {
+    const graphqlQuery = {
+      query: `
+        {
+          createPost(title: "${postData.title}", content: "${postData.content}", imageUrl: "test") {
+            post
+          }
+        }
+      `
+    }
     this.setState({
       editLoading: true
     });
-    let url = 'http://localhost:8080/feed/post';
+    let url = 'http://localhost:8080/graphql';
     let method = 'POST';
     const formData = new FormData();
     formData.append('image', postData.image);
     formData.append('content', postData.content);
     formData.append('title', postData.title);
     if (this.state.editPost) {
-      url = 'http://localhost:8080/feed/post/' + this.state.editPost._id;
-      method = 'PUT';
+      url = 'http://localhost:8080/graphql/' + this.state.editPost._id;
     }
     fetch(url, {
       method: method,
       headers: {
         'Authorization': 'Bearer ' + this.props.token
       },
-      body: formData
+      body: JSON.stringify(graphqlQuery)
     })
       .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Creating or editing a post failed!');
-        }
         return res.json();
       })
       .then(resData => {
+        console.log('resData');
+        console.log(resData);
         this.setState(prevState => {
           return {
             isEditing: false,

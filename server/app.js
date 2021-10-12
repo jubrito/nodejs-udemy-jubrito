@@ -6,6 +6,7 @@ const multer = require('multer');
 const { graphqlHTTP } = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolvers = require('./graphql/resolvers');
+const auth = require('./middlewares/auth');
 const USERNAME_MONGODB = 'juliana';
 const PASSWORD_MONGODB = 'ar6tE3vMlcpFT4OW';
 const DATABASE_I_WANT_TO_CONNECT = 'messages';
@@ -74,6 +75,7 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
 app.use(
     multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image')
 );
+app.use(auth);
 app.use(
     '/graphql', 
     graphqlHTTP({
