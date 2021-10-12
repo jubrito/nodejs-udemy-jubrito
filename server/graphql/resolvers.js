@@ -9,10 +9,11 @@ module.exports = {
         if (!validator.isEmail(userInput.email)) {
             errors.push({message: 'E-mail is invalid'});
         }
-        if (validator.isEmpty(userInput.password) || validator.isLength(userInput.password, { min: 5 })) {
+        if (validator.isEmpty(userInput.password) || !validator.isLength(userInput.password, { min: 5 })) {
             errors.push({ message: 'Password is too short'});
         }
-        if (userAlreadyExists(userInput.email)) {
+        ;
+        if (await userAlreadyExists(userInput.email)) {
             const error = new Error('User exists already!');
             throw error;
         }
@@ -64,5 +65,6 @@ module.exports = {
 }
 
 async function userAlreadyExists(email) {
-    return await User.findOne({ email: email });
+    const user = await User.findOne({ email: email });
+    return user;
 }
