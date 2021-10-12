@@ -3,10 +3,7 @@ const bcrypt = require('bcryptjs');
 
 module.exports = {
     createUser: async function ({ userInput }, req) {
-        // const email = userInput.email;
-        // refactors here separating into findIfUserAlreadyExists function
-        const existingUser = await User.findOne({ email: userInput.email });
-        if (existingUser) {
+        if (userAlreadyExists(userInput.email)) {
             const error = new Error('User exists already!');
             throw error;
         }
@@ -24,4 +21,8 @@ module.exports = {
             _id: idConvertedFromObjectId
         };
     }
+}
+
+async function userAlreadyExists(email) {
+    return await User.findOne({ email: email });
 }
