@@ -52,7 +52,7 @@ app.use(function addHeadersToEveryRequestAndHandlesOptionsRequestsMiddleware (re
     );
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-    // assuringOptionsRequestsNeverAccessGraphqlEndpointsButStillGetValidResponse
+    // Assuring that Options Requests will never access Graphql endpoints but still get valid response
     // Prevents 'OPTIONS 405 (Method not allowed)' error when the browser sends an options request before it sends the post, patch, put, delete or so on request since GraphQL only accepts POSTSs
     if (req.method === 'OPTIONS') {
       return res.sendStatus(200);
