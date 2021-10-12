@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Post = require('../models/post');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const jsonwebtoken = require('jsonwebtoken');
@@ -61,6 +62,34 @@ module.exports = {
             { expiresIn: '1h' }
         );
         return { token: jsonToken, userId: userId }
+    },
+    createPost: async function ({ postInput }, req) {
+        const errors = [];
+        if (validator.isEmpty(postInput.title) || validator.isLength(postInput.title, { min: 5 })) {
+            errors.push({ message: 'Title is invalid'})
+        }
+        if (validator.isEmpty(postInput.content) || validator.isLength(postInput.content, { min: 5 })) {
+            errors.push({ message: 'Content is invalid'})
+        }
+        if (errors.lenght > 0) {
+            const error = new Error('Invalid input');
+            error.data = errors;
+            error.statusCode = 422;
+            throw error;
+        }
+        const post = new Post ({
+            title: postInput.title,
+            content: postInput.content,
+            imageUrl: postInput.imageUrl,
+        });
+        // TO DO: add user as creator
+        const newPost = await post.save();
+        return { 
+            ...newPost._doc, 
+            _id: createPost._id.toString(),
+            createdAt: this.createPost.createdAt.toISOString(),
+            updatedAt: this.createPost.updatedAt.toISOString(),
+        }
     }
 }
 
