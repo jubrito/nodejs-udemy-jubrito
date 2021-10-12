@@ -11,14 +11,14 @@ module.exports = {
         if (validator.isEmpty(userInput.password) || validator.isLength(userInput.password, { min: 5 })) {
             errors.push({ message: 'Password is too short'});
         }
+        if (userAlreadyExists(userInput.email)) {
+            const error = new Error('User exists already!');
+            throw error;
+        }
         if (errors.length > 0) {
             const error = new Error('Invalid input');
             error.data = errors;
             error.statusCode = 422;
-            throw error;
-        }
-        if (userAlreadyExists(userInput.email)) {
-            const error = new Error('User exists already!');
             throw error;
         }
         const saltRoundsToHashPassword = 12;
