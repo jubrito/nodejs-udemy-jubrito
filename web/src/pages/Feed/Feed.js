@@ -54,26 +54,49 @@ class Feed extends Component {
       page--;
       this.setState({ postPage: page });
     }
-    fetch('http://localhost:8080/graphql' + page, {
+    const graphqlQuery = {
+      query: `
+        {
+          loadPosts {
+            posts {
+              _id
+              title
+              imageUrl
+              creator {
+                name
+              }
+              createdAt
+            }
+            totalPosts
+          }
+        }
+      `
+    }
+    fetch('http://localhost:8080/graphql', {
+      method: 'POST',
       headers: {
-        Authorization: 'Bearer ' + this.props.token
-      }
+        Authorization: 'Bearer ' + this.props.token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(graphqlQuery)
     })
       .then(res => {
-        if (res.status !== 200) {
-          throw new Error('Failed to fetch posts.');
-        }
         return res.json();
       })
       .then(resData => {
+        console.log('resData')
+        console.log(resData)
+        if (resData.errors) {
+          throw new Error('Fetching posts failed');
+        }
         this.setState({
-          posts: resData.posts.map(postModificated => {
+          posts: resData.data.loadPosts.posts.map(postModificated => {
             return {
               ...postModificated,
               imagePath: postModificated.imageUrl // only the path of the file without http://localhost:8080
             }
           }),
-          totalPosts: resData.totalItems,
+          totalPosts: resData.data.loadPosts.totalItems,
           postsLoading: false
         });
       })
@@ -160,20 +183,35 @@ class Feed extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log('resData');
-        console.log(resData);
         if (resData.errors && resData.errors[0].status === 422) {
           throw new Error ('Validation failed');
         }
         if (resData.errors) {
           throw new Error('Creating a post failed');
         }
+        const post = {
+          _id: resData.data.createPost._id,
+          title: resData.data.createPost.title,
+          content: resData.data.createPost.content,
+          creator: resData.data.createPost.creator,
+          createdAt: resData.data.createPost.createdAt,
+        }
         this.setState(prevState => {
+          let updatedPosts = [...prevState.posts];
+          if (prevState.editPost) {
+            const postIndex = prevState.posts.findIndex(
+              p => p._id === prevState.editPost._id
+            );
+            updatedPosts[postIndex] = post;
+          } else {
+            updatedPosts.unshift(post);
+          }
           return {
+            posts: updatedPosts,
             isEditing: false,
             editPost: null,
             editLoading: false
-          };
+          }
         });
       })
       .catch(err => {

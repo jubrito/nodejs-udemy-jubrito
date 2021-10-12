@@ -49,7 +49,7 @@ module.exports = buildSchema(`
 
     type RootQuery {
         login(email: String!, password: String!): AuthData!
-        posts: PostData!
+        loadPosts: PostData!
     }
 
     schema {

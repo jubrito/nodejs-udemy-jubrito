@@ -104,7 +104,7 @@ module.exports = {
             updatedAt: newPost.updatedAt.toISOString(),
         }
     },
-    posts: async function (req) {
+    loadPosts: async function (args, req) {
         if (!req.isAuth) {
             const error = new Error('Not authenticated');
             error.statusCode = 401;
@@ -116,8 +116,6 @@ module.exports = {
             .find()
             .populate('creator')
             .sort({ createdAt: descendingWay });
-        console.log(posts.length)
-        console.log(posts.length)
         return { posts: posts.map(post => {
             return {
                 ...post._doc,
