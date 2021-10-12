@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
+const jsonwebtoken = require('jsonwebtoken');
 
 module.exports = {
     createUser: async function ({ userInput }, req) {
@@ -34,6 +35,31 @@ module.exports = {
             ...createdUser._doc, // user data without mongoose metadata
             _id: idConvertedFromObjectId
         };
+    },
+    login: async function ({ email, password }) {
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            const error = new Error('User not found');
+            error.statusCode = 401;
+            throw error;
+        }
+        const passwordMatched = await bcrypt.compare(password, user.password);
+        if (!passwordMatched) {
+            const error = new Error('Password is incorrect');
+            error.statusCode = 401;
+            throw error;
+        }
+        const privateKeyForAuthentication = 'privateKeyICreatedWhichIsUsedForSigningUpAndIsOnlyKnownToTheServerSoItCantBeFakeOnTheClient';
+        const userId = user._id.toString();
+        const jsonToken = jsonwebtoken.sign(
+            {
+                userId: userId,
+                email: user.email
+            }, 
+            privateKeyForAuthentication,
+            { expiresIn: '1h' }
+        );
+        return { token: jsonToken, userId: userId }
     }
 }
 
