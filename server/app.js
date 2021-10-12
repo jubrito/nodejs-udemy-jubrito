@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const multer = require('multer');
 const { graphqlHTTP } = require('express-graphql');
@@ -71,11 +72,28 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
     const errorsArray = errorThrownOrPassedThroughNext.errorsArray;
     res.status(statusCode).json({message: messagePassedViaErrorConstructor, errorsArray: errorsArray })
 })
-//  Multer (upload of a single image)
+/*  Multer 
+    Takes the multipart-form-data requests, extracts a file and stores it on a folder. In this the file extracted is single image and it will be stored on the images folder)
+    It populates the file object with info about the extracted file
+    */
 app.use(
     multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image')
 );
 app.use(auth);
+app.put('/upload', (req, res, next) => {
+    if (!req.isAuth) {
+        throw new Error('Not authenticated');
+    }
+    if (!req.file) {
+        return res.status(200).json({ message: 'No file provided' });
+    }
+    const oldPathWasPassedWithTheIncomingRequest = req.body.oldPath;
+    const pathWhereMulterStoredTheImage = req.file.path ;
+    if (oldPathWasPassedWithTheIncomingRequest) {
+        clearImage(oldPathWasPassedWithTheIncomingRequest)
+    }
+    return res.status(201).json({ message: 'File stored', filePath: pathWhereMulterStoredTheImage })
+})
 app.use(
     '/graphql', 
     graphqlHTTP({
@@ -100,3 +118,8 @@ mongoose
         app.listen(8080);
     })
     .catch(err => { console.log(err)});
+
+const clearImage = filePath => {
+    filePath = path.join(__dirname, '..', filePath);
+    fs.unlink(filePath, err => console.log(err));
+}
