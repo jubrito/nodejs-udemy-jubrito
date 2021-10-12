@@ -63,10 +63,14 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
 app.use(
     multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image')
 );
-app.use('/graphql', graphqlHTTP({
-    schema: graphqlSchema,
-    rootValue: graphqlResolvers
-}));
+app.use(
+    '/graphql', 
+    graphqlHTTP({
+        schema: graphqlSchema,
+        rootValue: graphqlResolvers,
+        graphiql: true // special tool to play around your graphql api when accessing a route on the browser only if you have a query on the model
+    })
+);
 
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
