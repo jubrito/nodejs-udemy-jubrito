@@ -103,6 +103,29 @@ module.exports = {
             createdAt: newPost.createdAt.toISOString(),
             updatedAt: newPost.updatedAt.toISOString(),
         }
+    },
+    posts: async function (req) {
+        if (!req.isAuth) {
+            const error = new Error('Not authenticated');
+            error.statusCode = 401;
+            throw error;
+        }
+        const descendingWay = -1;
+        const totalPosts = await Post.find().countDocuments();
+        const posts = await Post
+            .find()
+            .populate('creator')
+            .sort({ createdAt: descendingWay });
+        console.log(posts.length)
+        console.log(posts.length)
+        return { posts: posts.map(post => {
+            return {
+                ...post._doc,
+                _id: post._id.toString(),
+                createdAt: post.createdAt.toISOString(),
+                updatedAt: post.updatedAt.toISOString(),
+            }
+        }), totalPosts: totalPosts };
     }
 }
 
