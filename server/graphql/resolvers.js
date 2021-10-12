@@ -13,6 +13,8 @@ module.exports = {
         }
         if (errors.length > 0) {
             const error = new Error('Invalid input');
+            error.data = errors;
+            error.statusCode = 422;
             throw error;
         }
         if (userAlreadyExists(userInput.email)) {
