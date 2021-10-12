@@ -127,9 +127,16 @@ class Feed extends Component {
   finishEditHandler = postData => {
     const graphqlQuery = {
       query: `
-        {
-          createPost(title: "${postData.title}", content: "${postData.content}", imageUrl: "test") {
-            post
+        mutation {
+          createPost(postInput: {title: "${postData.title}", content: "${postData.content}", imageUrl: "test"}) {
+            _id
+            title
+            content
+            imageUrl
+            creator {
+              name
+            }
+            createdAt
           }
         }
       `
@@ -137,19 +144,15 @@ class Feed extends Component {
     this.setState({
       editLoading: true
     });
-    let url = 'http://localhost:8080/graphql';
-    let method = 'POST';
     const formData = new FormData();
     formData.append('image', postData.image);
     formData.append('content', postData.content);
     formData.append('title', postData.title);
-    if (this.state.editPost) {
-      url = 'http://localhost:8080/graphql/' + this.state.editPost._id;
-    }
-    fetch(url, {
-      method: method,
+    fetch('http://localhost:8080/graphql', {
+      method: 'POST',
       headers: {
-        'Authorization': 'Bearer ' + this.props.token
+        'Authorization': 'Bearer ' + this.props.token,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(graphqlQuery)
     })
@@ -159,6 +162,12 @@ class Feed extends Component {
       .then(resData => {
         console.log('resData');
         console.log(resData);
+        if (resData.errors && resData.errors[0].status === 422) {
+          throw new Error ('Validation failed');
+        }
+        if (resData.errors) {
+          throw new Error('Creating a post failed');
+        }
         this.setState(prevState => {
           return {
             isEditing: false,

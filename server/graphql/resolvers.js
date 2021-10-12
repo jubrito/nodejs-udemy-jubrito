@@ -82,7 +82,7 @@ module.exports = {
             error.statusCode = 422;
             throw error;
         }
-        const user = User.findById(req.userId);
+        const user = await User.findById(req.userId);
         if (!user) {
             const error = new Error('Invalid user');
             error.statusCode = 401;
@@ -96,11 +96,12 @@ module.exports = {
         });
         const newPost = await post.save();
         user.posts.push(newPost);
+        await user.save();
         return { 
             ...newPost._doc, 
-            _id: createPost._id.toString(),
-            createdAt: this.createPost.createdAt.toISOString(),
-            updatedAt: this.createPost.updatedAt.toISOString(),
+            _id: newPost._id.toString(),
+            createdAt: newPost.createdAt.toISOString(),
+            updatedAt: newPost.updatedAt.toISOString(),
         }
     }
 }
