@@ -44,22 +44,22 @@ const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
 // Parse incoming requests (json data)
 app.use(express.json()); 
 
-function assuringOptionsRequestsNeverAccessGraphqlEndpointsButStillGetValidResponse (req, res, next) {
-    // Prevents 'OPTIONS 405 (Method not allowed)' error when the browser sends an options request before it sends the post, patch, put, delete or so on request since GraphQL only accepts POSTSs
-    if (req.headers === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-}
+app.use(function addHeadersToEveryRequestAndHandlesOptionsRequestsMiddleware (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'OPTIONS, GET, POST, PUT, PATCH, DELETE'
+    );
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-app.use(
-    async function addHeadersToEveryRequestAndHandlesOptionsRequestsMiddleware (req, res, next) {
-        res.setHeader('Access-Control-Allow-Origin', '*');  // all domains should be able to access our server
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE'); // origins can use http methods
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');  // clients can send requests that hold extra authorization data on the header and defines the content type of the request
-        await assuringOptionsRequestsNeverAccessGraphqlEndpointsButStillGetValidResponse(req, res, next);
-        next();
+    // assuringOptionsRequestsNeverAccessGraphqlEndpointsButStillGetValidResponse
+    // Prevents 'OPTIONS 405 (Method not allowed)' error when the browser sends an options request before it sends the post, patch, put, delete or so on request since GraphQL only accepts POSTSs
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200);
     }
-)
+    next();
+  });
+
 // Statically serving images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 // Error Handling Middleware
