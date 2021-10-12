@@ -167,7 +167,7 @@ class Feed extends Component {
         const graphqlQuery = {
           query: `
             mutation {
-              createPost(postInput: {title: "${postData.title}", content: "${postData.content}", imageUrl: "${postData.imageUrl}"}) {
+              createPost(postInput: {title: "${postData.title}", content: "${postData.content}", imageUrl: "${imageUrl}"}) {
                 _id
                 title
                 content
