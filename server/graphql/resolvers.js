@@ -70,11 +70,12 @@ module.exports = {
             throw error;
         }
         const errors = [];
-        if (validator.isEmpty(postInput.title) || validator.isLength(postInput.title, { min: 5 })) {
-            errors.push({ message: 'Title is invalid'})
+        const minLenght = 5;
+        if (validator.isEmpty(postInput.title) || validator.isLength(postInput.title, { min: minLenght })) {
+            errors.push({ message: `Title must be at least ${minLenght} characters long`})
         }
-        if (validator.isEmpty(postInput.content) || validator.isLength(postInput.content, { min: 5 })) {
-            errors.push({ message: 'Content is invalid'})
+        if (validator.isEmpty(postInput.content) || validator.isLength(postInput.content, { min: minLenght })) {
+            errors.push({ message: `Content must be at least ${minLenght} characters long`})
         }
         if (errors.lenght > 0) {
             const error = new Error('Invalid input');
@@ -156,6 +157,54 @@ module.exports = {
             createdAt: post.createdAt.toISOString(),
             updatedAt: post.updatedAt.toISOString(),
         }
+    },
+    updatePost: async function ({ id, postInput }, req) {
+        if (!req.isAuth) {
+            const error = new Error('Not authenticated');
+            error.statusCode = 401;
+            throw error;
+        }
+        const post = await Post.findById(id).populate('creator');
+        if (!post) {
+            const error = new Error ('Could not find post');
+            error.statusCode = 404;
+            throw error;
+        }
+        const userIsAllowedToEditPost = post.creator._id.toString() === req.userId.toString();
+        if (!userIsAllowedToEditPost) {
+            const error = new Error('Not authorized');
+            error.statusCode = 403;
+            throw error;
+        }
+        const errors = [];
+        const minLenght = 5;
+        if (validator.isEmpty(postInput.title) || validator.isLength(postInput.title, { min: minLenght })) {
+            errors.push({ message: `Title must be at least ${minLenght} characters long`})
+        }
+        if (validator.isEmpty(postInput.content) || validator.isLength(postInput.content, { min: minLenght })) {
+            errors.push({ message: `Content must be at least ${minLenght} characters long`})
+        }
+        if (errors.lenght > 0) {
+            const error = new Error('Invalid input');
+            error.data = errors;
+            error.statusCode = 422;
+            throw error;
+        }
+        post.title = postInput.title;
+        post.content = postInput.content;
+        post.imageUrl = postInput.imageUrl;
+        if (postInput.imageUrl !== 'undefined'){
+            post.imageUrl = postInput.imageUrl;
+        }
+        const updatedPost = await post.save();
+        console.log('updatedPost')
+        console.log(updatedPost)
+        return {
+            ...updatedPost._doc,
+            _id: updatedPost._id.toString(),
+            createdAt: updatedPost.createdAt.toISOString(),
+            updatedAt: updatedPost.updatedAt.toISOString(),
+        };
     }
 }
 
