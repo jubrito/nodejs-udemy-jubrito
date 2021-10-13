@@ -44,8 +44,6 @@ class SinglePost extends Component {
         if (resData.errors) {
           throw new Error('Could not find post');
         }
-        console.log('resData')
-        console.log(resData)
         this.setState({
           title: resData.data.loadPost.title,
           author: resData.data.loadPost.creator.name,

@@ -1,13 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const fs = require('fs');
 const app = express();
 const multer = require('multer');
 const { graphqlHTTP } = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolvers = require('./graphql/resolvers');
 const auth = require('./middlewares/auth');
+const { clearImage }= require('./util/helpers');
 const USERNAME_MONGODB = 'juliana';
 const PASSWORD_MONGODB = 'ar6tE3vMlcpFT4OW';
 const DATABASE_I_WANT_TO_CONNECT = 'messages';
@@ -66,7 +66,7 @@ app.use(function addHeadersToEveryRequestAndHandlesOptionsRequestsMiddleware (re
 app.use('/images', express.static(path.join(__dirname, 'images')));
 // Error Handling Middleware
 app.use((errorThrownOrPassedThroughNext, req, res, next) => {
-    console.log(errorThrownOrPassedThroughNext);
+    // console.log(errorThrownOrPassedThroughNext);
     const statusCode = errorThrownOrPassedThroughNext.statusCode || 500;
     const messagePassedViaErrorConstructor = errorThrownOrPassedThroughNext.message; 
     const errorsArray = errorThrownOrPassedThroughNext.errorsArray;
@@ -118,8 +118,3 @@ mongoose
         app.listen(8080);
     })
     .catch(err => { console.log(err)});
-
-const clearImage = filePath => {
-    filePath = path.join(__dirname, '..', filePath);
-    fs.unlink(filePath, err => console.log(err));
-}

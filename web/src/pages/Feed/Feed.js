@@ -122,7 +122,6 @@ class Feed extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
       })
       .catch(this.catchError);
   };
@@ -200,7 +199,6 @@ class Feed extends Component {
             `
           }
         }
-        console.log(JSON.stringify(graphqlQuery))
         return fetch('http://localhost:8080/graphql', {
           method: 'POST',
           headers: {
@@ -214,7 +212,6 @@ class Feed extends Component {
         return res.json()
       })
       .then(resData => {
-        console.log(resData)
         if (resData.errors && resData.errors[0].status === 422) {
           throw new Error ('Validation failed');
         }
@@ -237,7 +234,6 @@ class Feed extends Component {
           creator: resData.data[responseDataField].creator,
           createdAt: resData.data[responseDataField].createdAt,
         }
-        console.log(post)
         this.setState(prevState => {
           let updatedPosts = [...prevState.posts];
           if (prevState.editPost) {
@@ -274,19 +270,28 @@ class Feed extends Component {
 
   deletePostHandler = postId => {
     this.setState({ postsLoading: true });
-    fetch('http://localhost:8080/feed/post/' + postId, {
-      method: 'DELETE',
+    const graphqlQuery = {
+      query: `
+        mutation {
+          deletePost(id: "${postId}")
+        }
+      `
+    }
+    fetch('http://localhost:8080/graphql', {
+      method: 'POST',
+      body: JSON.stringify(graphqlQuery),
       headers: {
-        'Authorization': 'Bearer ' + this.props.token
+        'Authorization': 'Bearer ' + this.props.token,
+        'Content-Type': 'application/json'
       }
     })
       .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Deleting a post failed!');
-        }
         return res.json();
       })
       .then(resData => {
+        if (resData.errors) {
+          throw new Error ('Deleting the post failed');
+        }
         this.loadPosts();
       })
       .catch(err => {
