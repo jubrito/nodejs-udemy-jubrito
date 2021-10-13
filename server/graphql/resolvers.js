@@ -282,6 +282,33 @@ module.exports = {
             }
             throw err;
         }
+    },
+    user: async function (args, req) {
+        if (!req.isAuth) {
+            const error = new Error('Not authenticated');
+            error.statusCode = 401;
+            throw error;
+        }
+        try {
+            const user = await User.findById(req.userId);
+            if (!user) {
+                const error = new Error('User not found');
+                error.statusCode = 404;
+                throw error;
+            }
+            return { 
+                ...user._doc,
+                _id: user._id.toString(),
+             };
+        } catch(err) {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            throw err;
+        }
+    },
+    updateStatus: async function ({status}, req) {
+
     }
 }
 

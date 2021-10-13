@@ -75,7 +75,7 @@ app.use((errorThrownOrPassedThroughNext, req, res, next) => {
 /*  Multer 
     Takes the multipart-form-data requests, extracts a file and stores it on a folder. In this the file extracted is single image and it will be stored on the images folder)
     It populates the file object with info about the extracted file
-    */
+*/
 app.use(
     multer({storage: multerFileStorage, fileFilter: multerFileFilter}).single('image')
 );
