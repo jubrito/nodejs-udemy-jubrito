@@ -88,9 +88,9 @@ app.put('/upload', (req, res, next) => {
         return res.status(200).json({ message: 'No file provided' });
     }
     const oldPathWasPassedWithTheIncomingRequest = req.body.oldPath;
-    const pathWhereMulterStoredTheImage = req.file.path ;
+    const pathWhereMulterStoredTheImage = req.file.path;
     if (oldPathWasPassedWithTheIncomingRequest) {
-        clearImage(oldPathWasPassedWithTheIncomingRequest)
+        clearImage(oldPathWasPassedWithTheIncomingRequest);
     }
     return res.status(201).json({ message: 'File stored', filePath: pathWhereMulterStoredTheImage })
 })

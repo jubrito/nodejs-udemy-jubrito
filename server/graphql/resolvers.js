@@ -132,6 +132,30 @@ module.exports = {
                 updatedAt: post.updatedAt.toISOString(),
             }
         }), totalPosts: totalPosts };
+    },
+    loadPost: async function({ postId }, req) {
+        if (!req.isAuth) {
+            const error = new Error('Not authenticated');
+            error.statusCode = 401;
+            throw error;
+        }
+        if (!postId) {
+            const error = new Error('Could not find post');
+            error.code = 404;
+            throw error;
+        }
+        const post = await Post.findById(postId).populate('creator');
+        if (!post) {
+            const error = new Error('Could not find post');
+            error.code = 404;
+            throw error;
+        }
+        return {
+            ...post._doc,
+            _id: post._id.toString(),
+            createdAt: post.createdAt.toISOString(),
+            updatedAt: post.updatedAt.toISOString(),
+        }
     }
 }
 

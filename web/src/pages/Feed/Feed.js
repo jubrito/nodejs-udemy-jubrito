@@ -162,9 +162,10 @@ class Feed extends Component {
       },
       body: formData
     })
+      .then(res => res.json())
       .then(fileResData => {
         const imageUrl = fileResData.filePath;
-        const graphqlQuery = {
+        let graphqlQuery = {
           query: `
             mutation {
               createPost(postInput: {title: "${postData.title}", content: "${postData.content}", imageUrl: "${imageUrl}"}) {
@@ -183,14 +184,14 @@ class Feed extends Component {
         return fetch('http://localhost:8080/graphql', {
           method: 'POST',
           headers: {
-            'Authorization': 'Bearer ' + this.props.token,
+            Authorization: 'Bearer ' + this.props.token,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(graphqlQuery)
         })
       })
       .then(res => {
-        return res.json();
+        return res.json()
       })
       .then(resData => {
         if (resData.errors && resData.errors[0].status === 422) {
@@ -202,7 +203,7 @@ class Feed extends Component {
         const post = {
           _id: resData.data.createPost._id,
           title: resData.data.createPost.title,
-          imagePath: resData.data.createPost.imageUrl,
+          imageUrl: resData.data.createPost.imageUrl,
           content: resData.data.createPost.content,
           creator: resData.data.createPost.creator,
           createdAt: resData.data.createPost.createdAt,
