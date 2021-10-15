@@ -203,7 +203,6 @@ module.exports = {
             throw error;
         }
         try {
-
             const post = await Post.findById(id).populate('creator');
             if (!post) {
                 const error = new Error ('Post not found');
