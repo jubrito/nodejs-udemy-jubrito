@@ -13,11 +13,9 @@ const errorController = require('./controllers/error');
 const User = require('./models/user');
 const multer = require('multer');
 
+console.log(process.env.NODE_ENV)
 const app = express();
-const USERNAME_MONGODB = 'juliana';
-const PASSWORD_MONGODB = 'ar6tE3vMlcpFT4OW';
-const DATABASE_I_WANT_TO_CONNECT = 'shop';
-const CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER = `mongodb+srv://${USERNAME_MONGODB}:${PASSWORD_MONGODB}@clusterbackend0.luzfp.mongodb.net/${DATABASE_I_WANT_TO_CONNECT}`;
+const CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@clusterbackend0.luzfp.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`; // process = object globally available part of the node core runtime
 const store = new MongoDBStore({
     uri: CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER,
     collection: 'sessions',
@@ -133,7 +131,7 @@ app.use((error, req, res, next) => {
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER+'?retryWrites=true&w=majority')
     .then(connectionResult => {
-        app.listen(8080);
+        app.listen(process.env.PORT || 3000);
     })
     .catch(err => {
         console.log(err);
