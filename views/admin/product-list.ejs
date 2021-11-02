@@ -30,7 +30,7 @@
                                 Edit
                             </a>
                             <input type="hidden" name="productId" value="<%= product._id %>" />
-                            <button type="button" class="btn" onclick=deleteProduct(this)>
+                            <button type="button" class="btn" id="delete-product" >
                                 Delete
                             </button>
                             <input type="hidden" name="_csrf" value="<%= csrfToken  %>" /> 

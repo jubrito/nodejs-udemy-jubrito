@@ -1,4 +1,6 @@
-const deleteProduct = (deleteButton) => {
+const deleteButton = document.getElementById("delete-product")
+
+const deleteProduct = () => {
     const productId = deleteButton.parentNode.querySelector('[name=productId]').value;
     const csrfToken = deleteButton.parentNode.querySelector('[name=_csrf]').value;
     const productElement = deleteButton.closest('article');
@@ -17,3 +19,5 @@ const deleteProduct = (deleteButton) => {
     })
     .catch(err => {console.log(err)})
 }
+
+deleteButton.addEventListener("click", deleteProduct);
