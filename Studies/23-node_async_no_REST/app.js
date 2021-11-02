@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const mongoose = require('mongoose');
 const expressSession = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(expressSession);
@@ -9,13 +10,13 @@ const multer = require('multer');
 const helmet = require('helmet');
 const compression = require('compression');
 const adminRoutes = require('./routes/admin');
+const morgan = require('morgan');
 const productRoutes = require('./routes/product');
 const authRoutes = require('./routes/auth');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 const { compress } = require('pdfkit');
-
 
 
 console.log(process.env.NODE_ENV)
@@ -69,6 +70,14 @@ app.use(helmet());
 Nodejs express middleware that serves optimized assets 
 */
 app.use(compression());
+/* Morgan 
+Simplify logging request data */
+const whichDataIsBeingLoggedAndHowIsFormatted = 'combined';
+const appendNewDataAtTheEndOfTheFileNotOverwriting = 'a';
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
+    flags: appendNewDataAtTheEndOfTheFileNotOverwriting
+});
+app.use(morgan(whichDataIsBeingLoggedAndHowIsFormatted, { stream: accessLogStream }));
 //  Parse incoming requests bodies (that hold data in the format of x www-form-url-encoded, a form) (PARSE TO URL ENCODED DATA) - REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
 /* Statically serving a folder (requests to the files to that folder will be handled automatically and the files will be returned)
