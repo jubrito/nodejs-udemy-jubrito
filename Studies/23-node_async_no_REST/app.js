@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const https = require('https');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const expressSession = require('express-session');
@@ -28,7 +29,8 @@ const store = new MongoDBStore({
     // expires
 });
 const csrfProtectionMiddleware = csrf();
-
+const privateKey = fs.readFileSync('server.key');
+const certificate = fs.readFileSync('server.cert');
 const errorMessage = undefined;
 const destinationFolder = 'images';
 let uniqueFileName = '';
@@ -150,7 +152,13 @@ app.use((error, req, res, next) => {
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER+'?retryWrites=true&w=majority')
     .then(connectionResult => {
-        app.listen(process.env.PORT || 3000);
+        https.createServer(
+            {
+                key: privateKey,
+                cert: certificate
+            }, 
+            app
+        ).listen(process.env.PORT || 3000);
     })
     .catch(err => {
         console.log(err);
