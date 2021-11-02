@@ -8,7 +8,6 @@ const MongoDBStore = require('connect-mongodb-session')(expressSession);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
-const multerS3 = require('multer-s3');
 const aws = require('aws-sdk')
 const helmet = require('helmet');
 const compression = require('compression');
@@ -30,40 +29,38 @@ const store = new MongoDBStore({
     // other options: expires
 });
 const csrfProtectionMiddleware = csrf();
-if (!usingHerokuOnDeploymentMode) {
-    const privateKey = fs.readFileSync('server.key');
-    const certificate = fs.readFileSync('server.cert');
-    const errorMessage = undefined;
-    const destinationFolder = 'images';
-    let uniqueFileName = '';
-    const snapShotOfTheCurrentDate = new Date().toISOString();
-    const multerFileStorage = multer.diskStorage({
-        destination: (req, fileData, callbackOnceIsDone) => {
-            callbackOnceIsDone(
-                errorMessage,
-                destinationFolder
-            )
-        },
-        filename: (req, fileData, callbackOnceIsDone) => {
-            uniqueFileName = snapShotOfTheCurrentDate + '-' + fileData.originalname;
-            callbackOnceIsDone(
-                errorMessage,
-                uniqueFileName
-            )
-        }
-    });
-    const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
-        let typeOfFileIsAccepted;
-        if (fileData.mimetype === 'image/png' || fileData.mimetype === 'image/jpg' || fileData.mimetype === 'image/jpeg') {
-            typeOfFileIsAccepted = true;
-        } else {
-            typeOfFileIsAccepted = false;
-        }
+const privateKey = fs.readFileSync('server.key');
+const certificate = fs.readFileSync('server.cert');
+const errorMessage = undefined;
+const destinationFolder = 'images';
+let uniqueFileName = '';
+const snapShotOfTheCurrentDate = new Date().toISOString();
+const multerFileStorage = multer.diskStorage({
+    destination: (req, fileData, callbackOnceIsDone) => {
         callbackOnceIsDone(
             errorMessage,
-            typeOfFileIsAccepted
+            destinationFolder
+        )
+    },
+    filename: (req, fileData, callbackOnceIsDone) => {
+        uniqueFileName = snapShotOfTheCurrentDate + '-' + fileData.originalname;
+        callbackOnceIsDone(
+            errorMessage,
+            uniqueFileName
         )
     }
+});
+const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
+    let typeOfFileIsAccepted;
+    if (fileData.mimetype === 'image/png' || fileData.mimetype === 'image/jpg' || fileData.mimetype === 'image/jpeg') {
+        typeOfFileIsAccepted = true;
+    } else {
+        typeOfFileIsAccepted = false;
+    }
+    callbackOnceIsDone(
+        errorMessage,
+        typeOfFileIsAccepted
+    )
 }
 
 app.set('view engine', 'ejs');
@@ -90,31 +87,14 @@ serving the public folder with the express static middleware */
 app.use(express.static(path.join(__dirname, 'public'))); 
 app.use('/images', express.static(path.join(__dirname, 'images'))); 
 
-if (usingHerokuOnDeploymentMode) {
-    var s3 = new aws.S3({ /* ... */ });
-    var upload = multer({
-        storage: multerS3({
-          s3: s3,
-          bucket: 'some-bucket',
-          metadata: function (req, file, cb) {
-            cb(null, {fieldName: file.fieldname});
-          },
-          key: function (req, file, cb) {
-            cb(null, Date.now().toString())
-          }
-        })
-      });
-    app.post('/upload', upload.array('photos', 3), function(req, res, next) {
-    res.send('Successfully uploaded ' + req.files.length + ' files!')
-    })
-} else {
-    app.use(
-        multer({
-            storage: multerFileStorage, 
-            fileFilter: multerFileFilter
-        }).single('image')
-    );
-}
+
+app.use(
+    multer({
+        storage: multerFileStorage, 
+        fileFilter: multerFileFilter
+    }).single('image')
+);
+
 // session middleware to be used for every incoming request.
 app.use(expressSession({
     secret: 'this text will be used for signing the hash which secretly stores our ID in the cookie.',
