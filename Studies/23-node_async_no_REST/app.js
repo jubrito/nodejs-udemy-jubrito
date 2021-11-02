@@ -7,12 +7,14 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
 const helmet = require('helmet');
+const compression = require('compression');
 const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 const authRoutes = require('./routes/auth');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
+const { compress } = require('pdfkit');
 
 
 
@@ -63,6 +65,10 @@ app.set('views', 'views');
 /* Helmet 
 Secure node express applications: Set headers to responses following best practices */
 app.use(helmet());
+/* Compression
+Nodejs express middleware that serves optimized assets 
+*/
+app.use(compression());
 //  Parse incoming requests bodies (that hold data in the format of x www-form-url-encoded, a form) (PARSE TO URL ENCODED DATA) - REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
 /* Statically serving a folder (requests to the files to that folder will be handled automatically and the files will be returned)
