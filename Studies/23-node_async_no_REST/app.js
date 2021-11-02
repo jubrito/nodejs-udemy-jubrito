@@ -19,8 +19,9 @@ const errorController = require('./controllers/error');
 const User = require('./models/user');
 const { compress } = require('pdfkit');
 
+const usingHeroku = true;
 
-console.log(process.env.NODE_ENV)
+console.log(process.env.NODE_ENV);
 const app = express();
 const CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@clusterbackend0.luzfp.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`; // process = object globally available part of the node core runtime
 const store = new MongoDBStore({
@@ -29,8 +30,10 @@ const store = new MongoDBStore({
     // expires
 });
 const csrfProtectionMiddleware = csrf();
-const privateKey = fs.readFileSync('server.key');
-const certificate = fs.readFileSync('server.cert');
+if (!usingHeroku) {
+    const privateKey = fs.readFileSync('server.key');
+    const certificate = fs.readFileSync('server.cert');
+}
 const errorMessage = undefined;
 const destinationFolder = 'images';
 let uniqueFileName = '';
@@ -152,13 +155,10 @@ app.use((error, req, res, next) => {
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER+'?retryWrites=true&w=majority')
     .then(connectionResult => {
-        https.createServer(
-            {
-                key: privateKey,
-                cert: certificate
-            }, 
-            app
-        ).listen(process.env.PORT || 3000);
+        !usingHeroku 
+        ? https.createServer({ key: privateKey, cert: certificate }, app)
+        : app
+        .listen(process.env.PORT || 3000);
     })
     .catch(err => {
         console.log(err);
