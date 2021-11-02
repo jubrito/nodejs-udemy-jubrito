@@ -5,13 +5,16 @@ const expressSession = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(expressSession);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const multer = require('multer');
+const helmet = require('helmet');
 const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 const authRoutes = require('./routes/auth');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
-const multer = require('multer');
+
+
 
 console.log(process.env.NODE_ENV)
 const app = express();
@@ -57,7 +60,9 @@ const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
-
+/* Helmet 
+Secure node express applications: Set headers to responses following best practices */
+app.use(helmet());
 //  Parse incoming requests bodies (that hold data in the format of x www-form-url-encoded, a form) (PARSE TO URL ENCODED DATA) - REQUEST BODY MIDDLEWARE 
 app.use(express.urlencoded({ extended: false }));
 /* Statically serving a folder (requests to the files to that folder will be handled automatically and the files will be returned)
@@ -71,7 +76,6 @@ app.use(
         fileFilter: multerFileFilter
     }).single('image')
 );
-
 // session middleware to be used for every incoming request.
 app.use(expressSession({
     secret: 'this text will be used for signing the hash which secretly stores our ID in the cookie.',
