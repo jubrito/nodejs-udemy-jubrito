@@ -19,7 +19,7 @@ const errorController = require('./controllers/error');
 const User = require('./models/user');
 const { compress } = require('pdfkit');
 
-const usingHeroku = true;
+const usingHerokuOnDeploymentMode = true;
 
 console.log(process.env.NODE_ENV);
 const app = express();
@@ -30,7 +30,7 @@ const store = new MongoDBStore({
     // expires
 });
 const csrfProtectionMiddleware = csrf();
-if (!usingHeroku) {
+if (!usingHerokuOnDeploymentMode) {
     const privateKey = fs.readFileSync('server.key');
     const certificate = fs.readFileSync('server.cert');
 }
@@ -155,7 +155,7 @@ app.use((error, req, res, next) => {
 mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER+'?retryWrites=true&w=majority')
     .then(connectionResult => {
-        !usingHeroku 
+        !usingHerokuOnDeploymentMode 
         ? https.createServer({ key: privateKey, cert: certificate }, app)
         : app
         .listen(process.env.PORT || 3000);
