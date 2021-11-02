@@ -1,0 +1,54 @@
+{
+  "name": "node-udemy",
+  "version": "1.0.0",
+  "description": "Complete Node.js Guide",
+  "main": "app.js",
+  "assignments": "studies/assignments/3/app.js",
+  "engines": {
+    "node": "14.17.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production MONGO_USER=juliana MONGO_PASSWORD=ar6tE3vMlcpFT4OW MONGO_DEFAULT_DATABASE=shop STRIPE_KEY=sk_test_51JcwckHD46cEBk2nJuf5mtFyIS8U4T7KsBzU0ukDXjPfOcoIhdAylnfIBjqsVcrC8UJQT03ez1IPI36kNBy5GuCl0011IBaah5 node app.js",
+    "start:dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jubrito/NodejsUdemy.git"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Juliana Witzke de Brito",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jubrito/NodejsUdemy/issues"
+  },
+  "homepage": "https://github.com/jubrito/NodejsUdemy#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^3.1.1",
+    "csurf": "^1.11.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.0.2",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.12.1",
+    "helmet": "^4.6.0",
+    "mongodb": "^4.1.0",
+    "mongoose": "^6.0.5",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.3",
+    "mysql2": "^2.2.5",
+    "nodemailer": "^6.6.3",
+    "pdfkit": "^0.12.3",
+    "pug": "^3.0.2",
+    "sequelize": "^6.6.5",
+    "stripe": "^8.176.0"
+  }
+}
