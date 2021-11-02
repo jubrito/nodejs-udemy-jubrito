@@ -8,6 +8,8 @@ const MongoDBStore = require('connect-mongodb-session')(expressSession);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
+const multerS3 = require('multer-s3');
+const aws = require('aws-sdk')
 const helmet = require('helmet');
 const compression = require('compression');
 const adminRoutes = require('./routes/admin');
@@ -19,51 +21,49 @@ const errorController = require('./controllers/error');
 const User = require('./models/user');
 const { compress } = require('pdfkit');
 
-const usingHerokuOnDeploymentMode = true;
-
-console.log(process.env.NODE_ENV);
+const usingHerokuOnDeploymentMode = process.env.HEROKU_DEPLOYMENT_MODE;
 const app = express();
 const CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@clusterbackend0.luzfp.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`; // process = object globally available part of the node core runtime
 const store = new MongoDBStore({
     uri: CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER,
     collection: 'sessions',
-    // expires
+    // other options: expires
 });
 const csrfProtectionMiddleware = csrf();
 if (!usingHerokuOnDeploymentMode) {
     const privateKey = fs.readFileSync('server.key');
     const certificate = fs.readFileSync('server.cert');
-}
-const errorMessage = undefined;
-const destinationFolder = 'images';
-let uniqueFileName = '';
-const snapShotOfTheCurrentDate = new Date().toISOString();
-const multerFileStorage = multer.diskStorage({
-    destination: (req, fileData, callbackOnceIsDone) => {
+    const errorMessage = undefined;
+    const destinationFolder = 'images';
+    let uniqueFileName = '';
+    const snapShotOfTheCurrentDate = new Date().toISOString();
+    const multerFileStorage = multer.diskStorage({
+        destination: (req, fileData, callbackOnceIsDone) => {
+            callbackOnceIsDone(
+                errorMessage,
+                destinationFolder
+            )
+        },
+        filename: (req, fileData, callbackOnceIsDone) => {
+            uniqueFileName = snapShotOfTheCurrentDate + '-' + fileData.originalname;
+            callbackOnceIsDone(
+                errorMessage,
+                uniqueFileName
+            )
+        }
+    });
+    const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
+        let typeOfFileIsAccepted;
+        if (fileData.mimetype === 'image/png' || fileData.mimetype === 'image/jpg' || fileData.mimetype === 'image/jpeg') {
+            typeOfFileIsAccepted = true;
+        } else {
+            typeOfFileIsAccepted = false;
+        }
         callbackOnceIsDone(
             errorMessage,
-            destinationFolder
-        )
-    },
-    filename: (req, fileData, callbackOnceIsDone) => {
-        uniqueFileName = snapShotOfTheCurrentDate + '-' + fileData.originalname;
-        callbackOnceIsDone(
-            errorMessage,
-            uniqueFileName
+            typeOfFileIsAccepted
         )
     }
-});
-const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
-    let typeOfFileIsAccepted;
-    if (fileData.mimetype === 'image/png' || fileData.mimetype === 'image/jpg' || fileData.mimetype === 'image/jpeg') {
-        typeOfFileIsAccepted = true;
-    } else {
-        typeOfFileIsAccepted = false;
-    }
-    callbackOnceIsDone(
-        errorMessage,
-        typeOfFileIsAccepted
-    )
 }
 
 app.set('view engine', 'ejs');
@@ -90,12 +90,31 @@ serving the public folder with the express static middleware */
 app.use(express.static(path.join(__dirname, 'public'))); 
 app.use('/images', express.static(path.join(__dirname, 'images'))); 
 
-app.use(
-    multer({
-        storage: multerFileStorage, 
-        fileFilter: multerFileFilter
-    }).single('image')
-);
+if (usingHerokuOnDeploymentMode) {
+    var s3 = new aws.S3({ /* ... */ });
+    var upload = multer({
+        storage: multerS3({
+          s3: s3,
+          bucket: 'some-bucket',
+          metadata: function (req, file, cb) {
+            cb(null, {fieldName: file.fieldname});
+          },
+          key: function (req, file, cb) {
+            cb(null, Date.now().toString())
+          }
+        })
+      });
+    app.post('/upload', upload.array('photos', 3), function(req, res, next) {
+    res.send('Successfully uploaded ' + req.files.length + ' files!')
+    })
+} else {
+    app.use(
+        multer({
+            storage: multerFileStorage, 
+            fileFilter: multerFileFilter
+        }).single('image')
+    );
+}
 // session middleware to be used for every incoming request.
 app.use(expressSession({
     secret: 'this text will be used for signing the hash which secretly stores our ID in the cookie.',
@@ -112,6 +131,7 @@ app.use(flash());
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isAuthenticated;
     res.locals.csrfToken = req.csrfToken();
+    res.locals.session - req.session;
     next();
 })
 
@@ -132,7 +152,8 @@ app.use((req, res, next) => {
     .catch(err => {
         next(new Error(err));
     });
-})
+});
+
 
 app.use('/admin', adminRoutes); 
 app.use(productRoutes); 
@@ -167,3 +188,4 @@ mongoose
         return next(error);
     });
 
+console.log(process.env.NODE_ENV);
