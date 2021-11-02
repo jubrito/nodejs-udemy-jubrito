@@ -8,7 +8,6 @@ const MongoDBStore = require('connect-mongodb-session')(expressSession);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
-const aws = require('aws-sdk')
 const helmet = require('helmet');
 const compression = require('compression');
 const adminRoutes = require('./routes/admin');
