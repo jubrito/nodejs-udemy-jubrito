@@ -6,10 +6,10 @@ const User = require('../models/user');
 const AuthController = require('../controllers/auth');
 
 
+const emptyNextFunction = () => {};
 describe('Login', async function () { // done = function to be called once is done to handle async 
     const emptyResponse = {};
-    const emptyNextFunction = () => {};
-    it('should thrown an error with default statuscode 500 if accessing the database fails', function () {
+    it('should thrown an error with default statuscode 500 if accessing the database fails', async function () {
         sinon.stub(User, 'findOne');
         User.findOne.throws();
         const req = {
@@ -42,11 +42,31 @@ describe('User Status', function () {
            password: 'tester',
            name: 'Test',
            posts: [],
+           _id: '5c0f66b97af55031b34728a'
        });
        return user.save();
     })
-    .then(userCreated => {
-
+    .then(async (userCreated) => {
+        const req = {userId: '5c0f66b97af55031b34728a'};
+        const res = {
+            statusCode: 500,
+            userStatus: undefined,
+            status: function(statusCode) {
+                this.statusCode = statusCode;
+                return this; // returns response object and allows calling .json on it
+            },
+            json: function(data) {
+                this.userStatus = data.status;
+            }
+        };
+        await AuthController
+            .getUserStatus(req, res, emptyNextFunction)
+            .then(() => {
+                console.log('res.statusCode')
+                console.log(res.statusCode)
+                expect(res.statusCode).to.be.equal(200);
+                expect(res.userStatus).to.be.equal('New user default status')
+            })
     })
     .catch(err => { console.log(err)});
     })

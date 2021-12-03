@@ -4,7 +4,7 @@
   "description": "Security flaw on payment: if a user hits '/checkout/success' it can place an order without paying",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --timeout 5000",
     "start": "nodemon app.js"
   },
   "repository": {
