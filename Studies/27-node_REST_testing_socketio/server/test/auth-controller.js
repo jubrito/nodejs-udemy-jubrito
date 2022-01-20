@@ -42,12 +42,12 @@ describe('User Status', function () {
            password: 'tester',
            name: 'Test',
            posts: [],
-           _id: '5c0f66b97af55031b34728a'
+           _id: '55153a8014829a865bbf700d'
        });
        return user.save();
     })
     .then(async (userCreated) => {
-        const req = {userId: '5c0f66b97af55031b34728a'};
+        const req = {userId: '55153a8014829a865bbf700d'};
         const res = {
             statusCode: 500,
             userStatus: undefined,
@@ -63,9 +63,15 @@ describe('User Status', function () {
             .getUserStatus(req, res, emptyNextFunction)
             .then(() => {
                 expect(res.statusCode).to.be.equal(200);
-                expect(res.userStatus).to.be.equal('New user default status')
+                expect(res.userStatus).to.be.equal('New user default status');
+                cleanUpTest();
             })
     })
     .catch(err => { console.log(err)});
     })
 });
+
+function cleanUpTest() {
+    User.deleteMany({});
+    mongoose.disconnect();
+}
