@@ -72,6 +72,7 @@ describe('User Status', function () {
 });
 
 function cleanUpTest() {
-    User.deleteMany({});
-    mongoose.disconnect();
+    User.deleteMany({}).then(() => {
+        mongoose.disconnect();
+    });
 }
