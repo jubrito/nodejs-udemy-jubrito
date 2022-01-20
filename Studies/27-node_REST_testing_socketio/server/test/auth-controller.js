@@ -32,7 +32,7 @@ describe('User Status', function () {
     it('should send a response with a valid user status for an existing user', async function () {
     const USERNAME_MONGODB = 'juliana';
     const PASSWORD_MONGODB = 'ar6tE3vMlcpFT4OW';
-    const DATABASE_I_WANT_TO_CONNECT = 'test-messages';
+    const DATABASE_I_WANT_TO_CONNECT = 'test-messages'; // TEST DATABASE, NEVER PRODUCTION DATABASE
     const CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER = `mongodb+srv://${USERNAME_MONGODB}:${PASSWORD_MONGODB}@clusterbackend0.luzfp.mongodb.net/${DATABASE_I_WANT_TO_CONNECT}`;
     await mongoose
     .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
