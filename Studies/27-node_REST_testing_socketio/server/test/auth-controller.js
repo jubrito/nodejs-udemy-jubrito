@@ -62,8 +62,6 @@ describe('User Status', function () {
         await AuthController
             .getUserStatus(req, res, emptyNextFunction)
             .then(() => {
-                console.log('res.statusCode')
-                console.log(res.statusCode)
                 expect(res.statusCode).to.be.equal(200);
                 expect(res.userStatus).to.be.equal('New user default status')
             })
