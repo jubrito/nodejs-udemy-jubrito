@@ -78,6 +78,7 @@ exports.postPosts = async (req, res, next) => {
                 post: post,
                 creator: { _id: user._id, name: user.name }
             });
+        return userUpdated;
     } catch(err) {
         handleErrorsOnAsyncCodeUsingNext(err, next, STATUS_SERVER_SIDE_ERROR);
     }
