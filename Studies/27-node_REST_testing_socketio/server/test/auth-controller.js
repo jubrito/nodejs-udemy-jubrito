@@ -9,26 +9,6 @@ const AuthController = require('../controllers/auth');
 const emptyNextFunction = () => {};
 describe('Auth Controller - Login', async function () {
     const emptyResponse = {};
-    it('should thrown an error with default statuscode 500 if accessing the database fails', async function () {
-        sinon.stub(User, 'findOne');
-        User.findOne.throws();
-        const req = {
-            body: {
-                email: 'test@test.com',
-                password: 'tester'
-            }
-        }
-        await AuthController
-            .login(req, emptyResponse, emptyNextFunction)
-            .then(result => {
-                expect(result).to.be.an('error');
-                expect(result).to.have.property('statusCode', 500);
-            })
-        User.findOne.restore();
-    })
-});
-
-describe('Auth Controller - User Status', function () {
     before(async function() {
         const USERNAME_MONGODB = 'juliana';
         const PASSWORD_MONGODB = 'Q1YDy6wD9O1iQeBn';
@@ -47,8 +27,26 @@ describe('Auth Controller - User Status', function () {
             return user.save();
         })
     })
+    
+    it('should thrown an error with default statuscode 500 if accessing the database fails on Login', async function () {
+        sinon.stub(User, 'findOne');
+        User.findOne.throws();
+        const req = {
+            body: {
+                email: 'test@test.com',
+                password: 'tester'
+            }
+        }
+        await AuthController
+            .login(req, emptyResponse, emptyNextFunction)
+            .then(result => {
+                expect(result).to.be.an('error');
+                expect(result).to.have.property('statusCode', 500);
+            })
+        User.findOne.restore();
+    })
 
-    it('should send a response with a valid user status for an existing user', async function () {
+    it('should send a response with a valid user status for an existing user - User Status', async function () {
         const req = {userId: '55153a8014829a865bbf700d'};
         const res = {
             statusCode: 500,
