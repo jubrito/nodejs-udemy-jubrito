@@ -7,7 +7,7 @@ const AuthController = require('../controllers/auth');
 
 
 const emptyNextFunction = () => {};
-describe('Login', async function () {
+describe('Auth Controller - Login', async function () {
     const emptyResponse = {};
     it('should thrown an error with default statuscode 500 if accessing the database fails', async function () {
         sinon.stub(User, 'findOne');
@@ -28,7 +28,7 @@ describe('Login', async function () {
     })
 });
 
-describe('User Status', function () {
+describe('Auth Controller - User Status', function () {
     before(async function() {
         const USERNAME_MONGODB = 'juliana';
         const PASSWORD_MONGODB = 'Q1YDy6wD9O1iQeBn';
@@ -46,14 +46,6 @@ describe('User Status', function () {
             });
             return user.save();
         })
-    })
-
-    after(async function() {
-        User
-            .deleteMany({})
-            .then(() => {
-                mongoose.disconnect();
-            });
     })
 
     it('should send a response with a valid user status for an existing user', async function () {
@@ -76,5 +68,13 @@ describe('User Status', function () {
                 expect(res.userStatus).to.be.equal('New user default status');
             })
     });
+
+    after(async function() {
+        User
+            .deleteMany({})
+            .then(() => {
+                return mongoose.disconnect();
+            });
+    })
 });
 
