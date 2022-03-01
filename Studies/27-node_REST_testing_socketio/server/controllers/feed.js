@@ -64,7 +64,7 @@ exports.postPosts = async (req, res, next) => {
         const postCreated = await post.save();
         const user = await User.findById(req.userId);
         user.posts.push(post);
-        const userUpdated = await user.save();
+        const updatedUser = await user.save();
         const eventName = 'posts';
         const dataIWantToSentToAllConnectedUsers = {
             action: 'create',
@@ -78,7 +78,7 @@ exports.postPosts = async (req, res, next) => {
                 post: post,
                 creator: { _id: user._id, name: user.name }
             });
-        return userUpdated;
+        return updatedUser;
     } catch(err) {
         handleErrorsOnAsyncCodeUsingNext(err, next, STATUS_SERVER_SIDE_ERROR);
     }
