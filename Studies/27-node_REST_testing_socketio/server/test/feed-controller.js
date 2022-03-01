@@ -8,6 +8,7 @@ const FeedController = require('../controllers/feed');
 
 const emptyNextFunction = () => {};
 describe('Feed Controller', function () {
+    let userId;
     before(async function() {
         const USERNAME_MONGODB = 'juliana';
         const PASSWORD_MONGODB = 'Q1YDy6wD9O1iQeBn';
@@ -23,7 +24,9 @@ describe('Feed Controller', function () {
                 posts: [],
                 _id: '55153a8014829a865bbf700d'
             });
-            return user.save();
+            return user.save().then(user => {
+                userId = user._id.toString();
+            });
         })
     })
 
@@ -36,13 +39,19 @@ describe('Feed Controller', function () {
             file: {
                 path: 'anyrandompath'
             },
-            userId: '55153a8014829a865bbf700d'
+            userId: userId
         };
-        const res = { status: function() {}, json: function() {} };
+        const res = { 
+            status: function() {
+                return this; // returns a reference to the entire object which has reference to json (since we access it by res.status().json)
+            }, 
+            json: function() {} 
+        };
 
         FeedController
             .postPosts((req, res, emptyNextFunction))
             .then((updatedUser) => {
+                console.log('updatedUser')
                 console.log(updatedUser)
                 expect(updatedUser).to.have.property('posts');
                 expect(updatedUser.posts).to.have.length(1);
@@ -67,7 +76,7 @@ describe('Feed Controller', function () {
     });
 
     after(async function() {
-        User
+        await User
             .deleteMany({})
             .then(() => {
                 return mongoose.disconnect();

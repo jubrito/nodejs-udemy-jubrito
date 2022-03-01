@@ -18,16 +18,16 @@ describe('Auth Controller - Login', async function () {
         .connect(CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER)
         .then(mongooseConnection => {
             const user = new User({
-                email: 'test@test.com',
+                email: 'testAuthControllerLogin@test.com',
                 password: 'tester',
-                name: 'Test',
+                name: 'Test Auth Controller Login',
                 posts: [],
                 _id: '55153a8014829a865bbf700d'
             });
             return user.save();
         })
     })
-    
+
     it('should thrown an error with default statuscode 500 if accessing the database fails on Login', async function () {
         sinon.stub(User, 'findOne');
         User.findOne.throws();
@@ -68,7 +68,7 @@ describe('Auth Controller - Login', async function () {
     });
 
     after(async function() {
-        User
+        await User
             .deleteMany({})
             .then(() => {
                 return mongoose.disconnect();
