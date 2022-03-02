@@ -52,10 +52,12 @@ describe('Feed Controller', function () {
         await FeedController
             .postPosts(req, res, emptyNextFunction)
             .then(async () => {
-                await User.findById(userId).then(updatedUser => {
-                    expect(updatedUser).to.have.property('posts');
-                    expect(updatedUser.posts).to.have.length(1);
-                })
+                await User
+                    .findById(userId)
+                    .then(updatedUser => {
+                        expect(updatedUser).to.have.property('posts');
+                        expect(updatedUser.posts).to.have.length(1);
+                    })
             })
     });
 
