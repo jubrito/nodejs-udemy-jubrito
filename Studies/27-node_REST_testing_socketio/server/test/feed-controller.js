@@ -37,7 +37,7 @@ describe('Feed Controller', function () {
                 content: 'Content of new Test Post'
             },
             file: {
-                path: 'anyrandompath'
+                path: 'abc'
             },
             userId: userId
         };
@@ -48,31 +48,15 @@ describe('Feed Controller', function () {
             json: function() {} 
         };
 
-        FeedController
-            .postPosts((req, res, emptyNextFunction))
-            .then((updatedUser) => {
-                console.log('updatedUser')
-                console.log(updatedUser)
-                expect(updatedUser).to.have.property('posts');
-                expect(updatedUser.posts).to.have.length(1);
+        
+        await FeedController
+            .postPosts(req, res, emptyNextFunction)
+            .then(async () => {
+                await User.findById(userId).then(updatedUser => {
+                    expect(updatedUser).to.have.property('posts');
+                    expect(updatedUser.posts).to.have.length(1);
+                })
             })
-        // const res = {
-        //     statusCode: 500,
-        //     userStatus: undefined,
-        //     status: function(statusCode) {
-        //         this.statusCode = statusCode;
-        //         return this; // returns response object and allows calling .json on it
-        //     },
-        //     json: function(data) {
-        //         this.userStatus = data.status;
-        //     }
-        // };
-        // await AuthController
-        //     .getUserStatus(req, res, emptyNextFunction)
-        //     .then(() => {
-        //         expect(res.statusCode).to.be.equal(200);
-        //         expect(res.userStatus).to.be.equal('New user default status');
-        //     })
     });
 
     after(async function() {
