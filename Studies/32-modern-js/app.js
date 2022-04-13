@@ -3,12 +3,12 @@
 import express from 'express';
 
 /* Import without { } because responseHandler is exported through export.default */
-import responseHandlerWithExportDefault from './response-handler.js';
-import { responseHandlerExportedDirectly } from './responseHandlerExportedDirectly.js';
+import responseHandlerWithExportDefault_WithPromises from './response-handler.js';
+import { responseHandlerExportedDirectly_WithCallback } from './responseHandlerExportedDirectly.js';
 
 const app = express();
 
-app.get('/module-exports', responseHandlerWithExportDefault);
-app.get('/export-const-directly', responseHandlerExportedDirectly);
+app.get('/module-exports', responseHandlerWithExportDefault_WithPromises);
+app.get('/export-const-directly', responseHandlerExportedDirectly_WithCallback);
 
 app.listen(3000);

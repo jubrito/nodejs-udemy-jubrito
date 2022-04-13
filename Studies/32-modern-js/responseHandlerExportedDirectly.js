@@ -1,7 +1,7 @@
 import fs from 'fs';
 // const fs = require('fs');
 
-export const responseHandlerExportedDirectly = (req, res, next) => {
+export const responseHandlerExportedDirectly_WithCallback = (req, res, next) => {
     fs.readFile('my-page.html', 'utf8', (err, data) => {
       res.send(data);
     });
