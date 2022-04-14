@@ -14,11 +14,18 @@
     <h2>Imports with and without curly brackets {}</h2>
     <ul>
       <li>
-        <p>If we export using <b>'module.exports = something'</b> you can import it directly. E.g: <b>import something from 'somewhere'.</b></p>
+        <p>If we export using <b>'module.exports = something'</b> you can import it directly. E.g: <b>import something from 'somewhere'.</b> <i>Check 'responseHandlerWithExportDefault_WithPromises' function</i></p>
       </li>
       <li>
-        <p> Exporting the const directly like <b>'export const something = true'</b> makes it necessary to add curly brackets on the import E.g: <b>import { something } from 'somewhere'</b></p>
+        <p> Exporting the const directly like <b>'export const something = true'</b> makes it necessary to add curly brackets on the import E.g: <b>import { something } from 'somewhere'</b>. <i>Check 'responseHandlerExportedDirectly_WithCallback' function.</i></p>
       </li>
+    </ul>
+    <h2>Using Global Variables</h2>
+    <p>Global variables only work with commonJs, not with ES Modules (unless you create the __filename and __dirname consts making them available). <i>Check 'responseUsingGlobalVariables' function</i></p>
+    <ul>
+      <li><b>import.meta.url</b>: globally available variable which gives you the path to this file name</li>
+      <li><b>fileURLToPath()</b>: function that converts that URL to a path with which the path package then is able to work</li>
+      <li><b>dirname()</b>: function that takes such a path to the current file to give you the path to the current folder in which this file sits</li>
     </ul>
   </body>
 </html>
