@@ -7,7 +7,7 @@ const router = Router();
 let todos: Todo[] = [];
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({ todos: todos })
+    res.status(200).json({ todos: todos });
 })
 
 router.post('/todo', (req, res, next) => {
@@ -15,6 +15,7 @@ router.post('/todo', (req, res, next) => {
         id: new Date().toISOString(),
         text: req.body.text
     }
+    todos.push(newTodo);
     return res.status(201).json({ message: 'Added todo', todo: newTodo, todos: todos })
 })
 
