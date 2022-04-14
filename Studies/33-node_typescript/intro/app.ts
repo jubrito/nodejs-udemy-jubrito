@@ -2,7 +2,14 @@ const num1Element = document.getElementById('num1') as HTMLInputElement;
 const num2Element = document.getElementById('num2') as HTMLInputElement;
 const buttonElement = document.querySelector('button')!;
 
-const numResults: number[] = [];
+
+/** Generics
+ * A generic type simply is a type that interacts with another type, and an array is a great example.
+*/
+type shortcut = number[];
+type longerForm = Array<number>; // shortcut = longerForm
+const numResults: shortcut = [];
+const alternativeNumResults: longerForm = [];
 const textResults: string[] = [];
 
 /**
@@ -43,5 +50,14 @@ buttonElement.addEventListener('click', () => {
 })
 
 console.log(add(1, 6));
-
 // console.log(add('1', '6')); // will trigger 'Argument of type string is not assignable to type number
+
+const myPromise = new Promise<String>((resolve, reject) => { // 
+    setTimeout(() => {
+        resolve('It worked! Adding the Generic Type <Strings> allows handling the result as a string (e.g: adding .split())');
+    }, 1000);
+});
+
+myPromise.then((result) => {
+    console.log(result.split('!')); // A promise is a generic type because it eventually resolves to a value, and the value it resolves to, that's the generic type for the promise.
+})
