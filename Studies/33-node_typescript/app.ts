@@ -5,6 +5,10 @@ const buttonElement = document.querySelector('button')!;
 const numResults: number[] = [];
 const textResults: string[] = [];
 
+/**
+ * Type Aliases vs Interface
+ * If you're just defining the structure of an object, you can use either of the two. Using interfaces is a bit more common but it's not a must to. Interfaces can however also be used to force classes to implement certain methods or functionalities.
+ */
 type NumOrString = number | string;
 interface ResultObject { val: number; timestamp: Date };
 
