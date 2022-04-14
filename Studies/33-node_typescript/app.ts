@@ -5,11 +5,14 @@ const buttonElement = document.querySelector('button')!;
 const numResults: number[] = [];
 const textResults: string[] = [];
 
+type NumOrString = number | string;
+interface ResultObject { val: number; timestamp: Date };
+
 function add(num1: number, num2: number) {
     return num1 + num2;
 }
 
-function addWithUnion(num1: number | string, num2: number | string) {
+function addWithUnion(num1: NumOrString, num2: NumOrString) {
     if (typeof num1 === 'number' && typeof num2 === 'number') {
         return num1 + num2;
     } else if (typeof num1 === 'string' && typeof num2 === 'string') {
@@ -18,7 +21,7 @@ function addWithUnion(num1: number | string, num2: number | string) {
     return +num1 + +num2;
 }
 
-function printResult(resultObject: { val: number; timestamp: Date }) {
+function printResult(resultObject: ResultObject) {
     console.log(resultObject.val);
 }
 
