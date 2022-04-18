@@ -17,4 +17,4 @@ fs
         console.log("We now don't need to specify any permissions we wanna assign to that execution process (like we did with Deno). Instead by default as I mentioned before, node scripts, scripts executed with node by default, have full read and write access.")
     })
 
-// Run this with node app.js
+// Run this with node writeFile_node.js

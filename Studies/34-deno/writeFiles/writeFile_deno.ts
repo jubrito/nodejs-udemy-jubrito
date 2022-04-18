@@ -11,4 +11,4 @@ Deno
         console.log("Deno embraces modern JavaScript features like Promises. Therefore writeFile does not take a call back to let us know once it's done. Instead here, we now can call then or a catch because writeFile returns a promise.")
     });
 
-// Run this with deno run app.ts
+// Run this with deno run writeFile_deno.ts
