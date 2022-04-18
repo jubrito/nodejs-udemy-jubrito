@@ -1,6 +1,6 @@
 let message: string;
 
-message = "This is a test and should be stored in a file! If we try to write a file with Deno, writeFile wants two main arguments here, it wants a path to the file, including the file name and the data that should be written to the file. And the data should be a Uint8Array, which is a strange data type, but which is actually a core data type built into JavaScript, which in the end is an array full of bytes. Now, we will be able to convert our text to bytes. So it's no problem that we have no bytes right now, but that we only have a string";
+message = "This is a test and should be stored in a file! \r\nIf we try to write a file with Deno, writeFile wants two main arguments here, it wants a path to the file, including the file name and the data that should be written to the file. And the data should be a Uint8Array, which is a strange data type, but which is actually a core data type built into JavaScript, which in the end is an array full of bytes. Now, we will be able to convert our text to bytes. So it's no problem that we have no bytes right now, but that we only have a string";
 
 const fileName = 'message.txt';
 const encoder = new TextEncoder();
