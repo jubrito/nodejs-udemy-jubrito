@@ -1,8 +1,8 @@
 import { Application } from "https://deno.land/x/oak/mod.ts";
 import todosRoutes from './routes/todos.ts'; // Deno requires the file extention when importing
-import {
-    StatusCodes,
-  } from "https://deno.land/x/https_status_codes/mod.ts"
+import { connectToDb } from '../helpers/db_client.ts';
+
+connectToDb();
 const app = new Application();
 
 app.use(async (ctx, next) => {
@@ -23,8 +23,6 @@ app.use(async function handleCORS (ctx, next) {
     ctx.response.headers.set('Access-Control-Allow-Headers', 'Content-Type'); // PUT and POSTs headers (content-type) are application/json, the data attached to this request will be in the Json format, so Oak will automatically parse that when we try to access the request body
     await next();
 })
-
-
 
 /* We need to call the routes method on Deno and allow methods to make sure Deno and Oak will properly handle incoming requests to our routes */
 app.use(todosRoutes.routes());
