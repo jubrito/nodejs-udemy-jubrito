@@ -33,7 +33,7 @@ const Todos = () => {
   };
 
   const deleteTodoHandler = async (todoId) => {
-    const response = await fetch('http://localhost:8000/todos/' + todoId, {
+    const response = await fetch('http://localhost:8000/todo/' + todoId, {
       method: 'DELETE',
     });
     const data = await response.json();
@@ -50,7 +50,7 @@ const Todos = () => {
     event.preventDefault();
     setEditedTodo(null);
     setEnteredText('');
-    let url = 'http://localhost:8000/todos';
+    let url = 'http://localhost:8000/todo';
     let method = 'POST';
     if (editedTodo) {
       url = url + '/' + editedTodo.id;

@@ -46,6 +46,7 @@ const multerFileFilter = (req, fileData, callbackOnceIsDone) => {
 // Parse incoming requests (json data)
 app.use(express.json()); 
 
+//CORS
 app.use(function addHeadersToEveryRequestAndHandlesOptionsRequestsMiddleware (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(

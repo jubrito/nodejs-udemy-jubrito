@@ -9,6 +9,10 @@ interface Todo {
 
 let todos: Todo[] = [];
 
+router.post('/', (ctx) => {
+    console.log('oi?')
+})
+
 router.get('/todos', (ctx) => {
     /** Oak will
      *  Automatically send responses and 
@@ -36,8 +40,7 @@ router.put('/todo/:todoId', async (ctx) => {
 });
 router.delete('/todo/:todoId', (ctx) => {
     const todoId = ctx.params.todoId;
-    const todoIndex = todos.findIndex(todo => todo.id === todoId);
-    todos.filter(todo => todo.id !== todoId);
+    todos = todos.filter(todo => todo.id !== todoId);
     ctx.response.body = { message: 'Deleted todo', todos: todos };
 });
 
