@@ -5,7 +5,6 @@ import {
     ObjectId
   } from "https://deno.land/x/mongo@v0.29.3/mod.ts";
 
-
 const router = new Router();
 
 interface Todo {
@@ -17,8 +16,6 @@ interface TodoOnDatabase {
     _id: ObjectId, 
     text: string
 }
-
-let todos: Todo[] = [];
 
 router.get('/todos', async (ctx) => {
     /** Oak will
@@ -47,17 +44,17 @@ router.post('/todo', async (ctx) => {
 });
 router.put('/todo/:todoId', async (ctx) => {
     const data = await ctx.request.body().value;
-    const todoId = ctx.params.todoId!;
+    const todoId = ctx.params.todoId!; // ! = will never be undefined
 
     const filter = { _id: new ObjectId(todoId) };
     const updateInstructions = { $set: { text: data.text }}
-    const todo = await getDb().collection('todos').updateOne(filter, updateInstructions);
-    ctx.response.body = { message: "Updated todo", todo: todo };
+    await getDb().collection('todos').updateOne(filter, updateInstructions);
+    ctx.response.body = { message: "Updated todo" };
 });
-router.delete('/todo/:todoId', (ctx) => {
-    const todoId = ctx.params.todoId;
-    todos = todos.filter(todo => todo.id !== todoId);
-    ctx.response.body = { message: 'Deleted todo', todos: todos };
+router.delete('/todo/:todoId', async (ctx) => {
+    const todoId = ctx.params.todoId!; // ! = will never be undefined
+    await getDb().collection('todos').deleteOne({ _id: new ObjectId(todoId)});
+    ctx.response.body = { message: 'Deleted todo' };
 });
 
 export default router;
