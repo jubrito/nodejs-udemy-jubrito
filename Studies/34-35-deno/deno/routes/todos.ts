@@ -1,6 +1,7 @@
 import { Router } from "https://deno.land/x/oak/mod.ts";
 import { getDb } from '../../helpers/db_client.ts';
 import {
+    Document,
     ObjectId
   } from "https://deno.land/x/mongo@v0.29.3/mod.ts";
 
@@ -26,14 +27,11 @@ router.get('/todos', async (ctx) => {
      */
 
     // if 'todos' collection doesn't exist, MongoDB will create it
-    const todos = await getDb().collection('todos') .find();
-    const transformedTodos = todos.map((todo: any) => {
-        console.log('todo', todo)
-        return {
-            id: todo._id.toString(), // $oid property provided by mongo library that holds the generated id as string
-            text: todo.text
-        }
-    })
+    const todos = await getDb().collection('todos').find().toArray();
+    const transformedTodos = todos.map((todo: Document) => ({
+        id: todo._id.toString(), // $oid property provided by mongo library that holds the generated id as string
+        text: todo.text,
+    }))
     ctx.response.body = { todos: transformedTodos }; 
 });
 router.post('/todo', async (ctx) => {
