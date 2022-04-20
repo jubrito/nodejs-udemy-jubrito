@@ -1,17 +1,17 @@
 import {
     MongoClient,
     Database
-  } from "https://deno.land/x/mongo@LATEST_VERSION/mod.ts";
+  } from "https://deno.land/x/mongo@v0.29.3/mod.ts";
 
 let db: Database;
 
-export function connectToDb() {
+export async function connectToDb() {
   const client = new MongoClient();
-  const username = 'juliana';
-  const password = 'ar6tE3vMlcpFT4OW';
+  const username = 'jubrito';
+  const password = 'MS6HwYNd2pFsbkuX';
   const databaseIWantToConnect = 'deno-todos';
-  const connectionStringFromMongodbWebsiteCluster = `mongodb+srv://${username}:${password}@clusterbackend0.luzfp.mongodb.net?retryWrites=true&w=majority`;
-  client.connectWithUri(connectionStringFromMongodbWebsiteCluster);
+  const connectionStringFromMongodbWebsiteCluster = `mongodb+srv://${username}:${password}@clusterbackend0.luzfp.mongodb.net/${databaseIWantToConnect}?authMechanism=SCRAM-SHA-1`;
+  await client.connect(connectionStringFromMongodbWebsiteCluster);
   db = client.database(databaseIWantToConnect); 
 }
 
