@@ -130,46 +130,7 @@ $ npm run start
 ```
 Acesse [http://localhost:3000](http://localhost:3000) - (a aplicação será aberta na porta:3000) 
 
-
-### Mobile 
-
-Instale o aplicativo **<kbd>[Expo](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en)</kbd>** no seu celular
-
-Instale globalmente a dependência **Expo-cli**
-
-```sh
-# Executar comandos do Expo pelo terminal:
-$ npm install -g expo-cli 
-
-# Acesse a pasta do mobile no cmd/terminal
-$ cd mobile
-```
-
-Altere a constante *IPAddress* do arquivo <kbd>[api.ts](./mobile/src/services/api.ts)</kbd> em mobile **substituindo o endereço de IPv4 exemplo para o da sua máquina.**
-
-```sh
-# Execute o em modo de desenvolvimento:
-$ npm run start
-```
-
-Abra o aplicativo do Expo no modo **LAN**, faça o scan do QRCode e abra o projeto no seu smartphone.
-
-
-## **:octocat: COMO CONTRIBUIR**
-
-  - Faça um **[fork](https://help.github.com/pt/github/getting-started-with-github/fork-a-repo)** do repositório;
-  - Acesse sua página GitHub e faça um **clone** do seu fork;
-  - Crie uma *branch* com o nome da sua feature: `git chechout -b feature/minhaFeature`;
-  - Realize e salve as alterações;
-  <!-- - Instale as dependências do *commitlint* na raíz do projeto para a verificação dos commits: `npm install` ou `yarn`; -->
-  - *Commite* suas alterações de acordo com as [convenções de commit](https://www.conventionalcommits.org/pt-br/v1.0.0-beta.4/), 
-  - Faça um *push* para a sua *branch*: `git push origin feature/minhaFeature`;
-  - Abra um *pull request* no repositório onde o *fork* foi feito. Após o *merge* suas alterações irão fazer parte do projeto;
-  - Após o *merge* da sua pull request for feito, sua *branch* poderá ser deletada.
-
-
-
 ## **:page_facing_up: LICENÇA**
 Licença MIT &rarr; **<kbd>[LICENSE](https://github.com/Rocketseat/nlw-01-booster/blob/master/LICENSE.md)</kbd>**
 
-Projeto Open Source desenvolvido durante a NLW - Next Level Week, [RocketSeat](https://rocketseat.com.br/)
+
