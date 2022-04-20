@@ -9,8 +9,6 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 const shopRoutes = require('./routes/shop');
-const errorController = require('./controllers/error');
-
 const database = require('./util/database'); // connection pool
 
 // Get back promises when executing queries with execute
@@ -31,7 +29,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminRoutes); 
 app.use(productRoutes); 
 app.use(shopRoutes); 
-
-app.use(errorController.get404);
 
 app.listen(8080); 
