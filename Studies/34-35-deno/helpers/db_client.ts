@@ -10,7 +10,7 @@ export async function connectToDb() {
   const username = 'jubrito';
   const password = 'MS6HwYNd2pFsbkuX';
   const databaseIWantToConnect = 'deno-todos';
-  const connectionStringFromMongodbWebsiteCluster = `mongodb+srv://${username}:${password}@clusterbackend0.luzfp.mongodb.net/${databaseIWantToConnect}?authMechanism=SCRAM-SHA-1`;
+  const connectionStringFromMongodbWebsiteCluster = `mongodb+srv://${username}:${password}@clusterbackend0.luzfp.mongodb.net?authMechanism=SCRAM-SHA-1`;
   await client.connect(connectionStringFromMongodbWebsiteCluster);
   db = client.database(databaseIWantToConnect); 
 }
