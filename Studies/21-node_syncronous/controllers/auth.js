@@ -131,7 +131,7 @@ exports.postSignup = (req, res, next) => {
             oldInputs: {
                 email: email,
                 password: password,
-                confirmPassword: req.body.confirmPassword,
+                confirmPassword: confirmPassword
             },
             validationErrors: errors.array()
         }); 

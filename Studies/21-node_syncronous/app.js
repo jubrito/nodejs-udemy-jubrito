@@ -15,7 +15,7 @@ const multer = require('multer');
 
 const app = express();
 const USERNAME_MONGODB = 'jubrito';
-const PASSWORD_MONGODB = 'mongoDbPassword';
+const PASSWORD_MONGODB = 'MS6HwYNd2pFsbkuX';
 const DATABASE_I_WANT_TO_CONNECT = 'shop';
 const CONNECTION_STRING_FROM_MONGODB_WEBSITE_CLUSTER = `mongodb+srv://${USERNAME_MONGODB}:${PASSWORD_MONGODB}@clusterbackend0.luzfp.mongodb.net/${DATABASE_I_WANT_TO_CONNECT}`;
 const store = new MongoDBStore({
@@ -80,6 +80,7 @@ app.use(expressSession({
     resave: false, // session will only be saved when the session changes, it won't be saved on every request done on every response sent
     saveUninitialized: false, // ensure that no session gets saved for a request where it doesn't need to be saved because nothing was cahnged about it
     store: store,
+    cookie: { secure: false }, //  cookie will be set on Https only.
     // cookie: {maxAge}
 }))
 
@@ -126,7 +127,7 @@ app.use((error, req, res, next) => {
         .render('500_internal-error', {
             pageTitle: 'Error!',
             path: '/500',
-            isAuthenticated: req.session.isLoggedIn
+            isAuthenticated: req.session.isAuthenticated
         });
 });
 
