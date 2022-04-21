@@ -232,3 +232,7 @@ form {
     display: none;
   }
 }
+
+img{
+  max-width: 360px;
+}
