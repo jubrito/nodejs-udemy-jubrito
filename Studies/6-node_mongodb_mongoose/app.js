@@ -35,7 +35,7 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 const username = 'juliana';
-const password = 'ar6tE3vMlcpFT4OW';
+const password = 'mongoDbPassword';
 const databaseIWantToConnect = 'shop';
 const connectionStringFromMongodbWebsiteCluster = `mongodb+srv://${username}:${password}@clusterbackend0.luzfp.mongodb.net/${databaseIWantToConnect}?retryWrites=true&w=majority`;
 
