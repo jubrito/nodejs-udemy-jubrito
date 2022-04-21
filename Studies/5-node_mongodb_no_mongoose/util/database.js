@@ -1,8 +1,8 @@
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
 
-const username = 'juliana';
-const password = 'ar6tE3vMlcpFT4OW';
+const username = 'jubrito';
+const password = 'mongoDbPassword';
 const databaseIWantToConnect = 'shop';
 const connectionStringFromMongodbWebsiteCluster = `mongodb+srv://${username}:${password}@clusterbackend0.luzfp.mongodb.net/${databaseIWantToConnect}?retryWrites=true&w=majority`;
 let _storedConnectionWithDatabase; // underscore signs that this will only be used internally in this file
