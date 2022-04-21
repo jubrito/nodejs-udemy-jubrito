@@ -18,8 +18,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); 
 
 app.use((req, res, next) => {
-    User.findById('6112b2841a0f930bf2374076')
+    User.findById('6143a4463b3a7cf405ad7aed')
         .then(user => {
+            console.log(user);
             /*  User model with methods and variables registered and accesible as middleware */
             req.user = new User(user.username, user.email, user.cart, user._id); 
             next();
