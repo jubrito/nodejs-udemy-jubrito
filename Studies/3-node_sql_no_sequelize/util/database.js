@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const hostOrIpAddresss = 'localhost';
 const schemaCreatedOnMySql = 'nodejs_udemy';
 const rootUsername = 'root';
-const rootPassword = 'passwordICreatedForMysql';
+const rootPassword = 'juju2009';
 
 const connectionPool = mysql.createPool({
     host: hostOrIpAddresss,
