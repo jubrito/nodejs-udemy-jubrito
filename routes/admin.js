@@ -36,7 +36,7 @@ router.post(
     isAuth, 
     [
         body('title', 'Enter a valid title using at least 2 characters or numbers')
-            .isAlphanumeric()
+            .isString()
             .isLength({ min: 2 })
             .trim(),
         body('price', 'Enter a valid price')
