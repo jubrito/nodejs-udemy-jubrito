@@ -40,9 +40,9 @@ exports.getIndex = (req, res, next) => {
 }
 exports.getCart = (req, res, next) => {
     req.user
-        .populate('cart.items.productId') //fetch data for a path (cart.items.productId)
-        .then(user => {
-            const products = user.cart.items;
+    .populate('cart.items.productId') //fetch data for a path (cart.items.productId)
+    .then(user => {
+        const products = user.cart.items;
             res.render('shop/cart', {
                 path: '/cart',
                 pageTitle: 'Cart',
@@ -50,7 +50,6 @@ exports.getCart = (req, res, next) => {
             })
         })
         .catch(err => {
-            console.log(err);
             const error = new Error(err)
             error.httpStatusCode = 500;
             return next(error);
