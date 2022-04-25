@@ -134,7 +134,7 @@ class App extends Component {
       `,
       variables: {
         email: emailEnteredByUser,
-        name: passwordEnteredByUser,
+        name: nameEnteredByUser,
         password: passwordEnteredByUser,
       }
     }
