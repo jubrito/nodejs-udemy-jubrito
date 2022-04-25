@@ -11,6 +11,7 @@
 </p>
 
 <p align="center">
+  <a href="#open_file_folder-course-content">Course Content</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#computer-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#hammer-tools">Tools</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#woman_technologist-running-the-application">Running the application</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -22,6 +23,28 @@
   </br></br>
   <img alt="Aplicação Mobile" src="./ecoleta-mobile.gif" width="300">
 </div> -->
+
+
+## **:open_file_folder: COURSE CONTENT**
+All the course content can be found at Studies folder
+
+
+###### **1. Node Basic**
+How the web works, Creating a Node Server, Node Lifecycle & event loop, Requests, Responses & Responses headers, Routing/redirecting requests, Request body parsing, Event Driven code execution, Blocking/Non-blocking code, Node Modules system.
+
+###### **2. Node MVC**
+App using MVC Software Design Pattern.
+**2.1 Improved Development Workflow and Debugging:** NPM Scripts, 3rd party packages vs Global features vs Core modules, Nodemon, Error Types, Syntax & Runtime & Logical errors.
+**2.2 Express.js:** Middlewares, Handling different routes, Parsing incoming requests, Express router, 404 error pages, Paths filtering, Serving files statically, Navigation.
+**2.3 Dynamic Content & Template Engines**: Views, Sharing data across requests & users, Pug/Express Handlebars/Ejs Template Engines.
+**2.4 Model View Controller (MVC)**: Controllers, Storing/fetching data through models.
+
+###### **1. Node SQL — No sequelize**
+
+**Assignments**
+Pure Node Requests, Express and Middlewares, Routes and Static Files, and App set/get and Template Engines.
+
+
 
 ## **:computer: TECHNOLOGIES**
 
