@@ -7,15 +7,12 @@
 </div>
 
 <p align="center">
-<strong>Node JS & Deno.js</strong>, build REST APIs with Node.js, GraphQL APIs, add Authentication, use MongoDB, SQL & much more! 
+<strong>Node JS & Deno.js</strong> — REST APIs, GraphQL APIs, Authentication, MongoDB, SQL & more! 
 </p>
 
 <p align="center">
-  <a href="#open_file_folder-course-content">Course Content</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#computer-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#hammer-tools">Tools</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#woman_technologist-running-the-application">Running the application</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <!-- <a href="#page_facing_up-licença">Licença</a> -->
+  <a href="#open_file_folder-course-content">Course/App Content</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#computer-technologies">Technologies</a>
 </p>
 
 <!-- <div align="center">
@@ -215,67 +212,3 @@ All the course content can be found at Studies folder
   - **[Express-graphql](https://www.npmjs.com/package/express-graphql):** server to parse incoming requests
   - **[Validator](https://www.npmjs.com/package/validator):** validates inputs on the resolvers
   
-  <kbd>[package.json](./server/package.json)</kbd>
-
-## **:woman_technologist: RODANDO A APLICAÇÃO** 
-
-Requisitos: [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/), Editor ([VSCode](https://code.visualstudio.com/))
-
-```sh
-# Encontre o seu endereço IPv4 
-$ ipconfig
-
-# Clone este repositório
-$ git clone https://github.com/jubrito/ecoleta
-
-# Acesse a pasta do projeto no cmd/terminal
-$ cd ecoleta
-
-```
-
-Altere a constante *IPAddress do arquivo* <kbd>[UserIPAddress.ts](./UserIPAddress.ts)</kbd> no diretório raíz **substituindo o endereço de IPv4 exemplo para o da sua máquina**.
-
-### Server (Back-end)
-
-```sh
-# Acesse a pasta do server no cmd/terminal
-$ cd server
-
-# Instale as dependências do server
-$ npm install
-
-# Execute a aplicação em modo de desenvolvimento
-$ npm run dev
-```
-
-Acesse [http://localhost:3333](http://localhost:3333) (o servidor inciará na porta:3333)  
-
-```sh
-# Instanciando o banco de dados:
-$ npm run knex:migrate
-
-# Povoando o banco de dados (seeds):
-$ npm run knex:seed
-
-```
-
-
-### Web (Front-end)
-
-```sh
-# Acesse a pasta do website no cmd/terminal
-$ cd web
-
-# Instalando as dependências do website
-$ npm install
-
-# Execute a aplicação em modo de desenvolvimento
-$ npm run start
-
-```
-Acesse [http://localhost:3000](http://localhost:3000) - (a aplicação será aberta na porta:3000) 
-
-## **:page_facing_up: LICENÇA**
-Licença MIT &rarr; **<kbd>[LICENSE](https://github.com/Rocketseat/nlw-01-booster/blob/master/LICENSE.md)</kbd>**
-
-
