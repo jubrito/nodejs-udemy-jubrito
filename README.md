@@ -28,84 +28,145 @@
 ## **:open_file_folder: COURSE CONTENT**
 All the course content can be found at Studies folder
 
+<details>
+  <summary>1. Node Basic</summary>
+  How the web works, Creating a Node Server, Node Lifecycle & event loop, Requests, Responses & Responses headers, Routing/redirecting requests, Request body parsing, Event Driven code execution, Blocking/Non-blocking code, Node Modules system.
+</details>
 
-###### **1. Node Basic**
-How the web works, Creating a Node Server, Node Lifecycle & event loop, Requests, Responses & Responses headers, Routing/redirecting requests, Request body parsing, Event Driven code execution, Blocking/Non-blocking code, Node Modules system.
+<details>
+  <summary>2. Node MVC Software Design Pattern</summary>
 
-###### **2. Node MVC**
-App using MVC Software Design Pattern.
+  **2.1 Improved Development Workflow and Debugging:** NPM Scripts, 3rd party packages vs Global features vs Core modules, Nodemon, Error Types, Syntax & Runtime & Logical errors.
 
-**2.1 Improved Development Workflow and Debugging:** NPM Scripts, 3rd party packages vs Global features vs Core modules, Nodemon, Error Types, Syntax & Runtime & Logical errors.
+  **2.2 Express.js:** Middlewares, Handling different routes, Parsing incoming requests, Express router, 404 error pages, Paths filtering, Serving files statically, Navigation.
 
-**2.2 Express.js:** Middlewares, Handling different routes, Parsing incoming requests, Express router, 404 error pages, Paths filtering, Serving files statically, Navigation.
+  **2.3 Dynamic Content & Template Engines**: Views, Sharing data across requests & users, Pug/Express Handlebars/Ejs Template Engines.
 
-**2.3 Dynamic Content & Template Engines**: Views, Sharing data across requests & users, Pug/Express Handlebars/Ejs Template Engines.
+  **2.4 Model View Controller (MVC)**: Controllers, Storing/fetching data through models.
 
-**2.4 Model View Controller (MVC)**: Controllers, Storing/fetching data through models.
+  **2.5 Enhancing the App**: Navigation, Routes and Data Storage.
 
-**2.5 Enhancing the App**: Navigation, Routes and Data Storage.
+  **2.6 Dynamic Routes & Advanced Models**: Extracting dynamic params, Using IDs on paths, Passing data on requests, Query Params, HTTP Methods.
+</details>
 
-**2.6 Dynamic Routes & Advanced Models**: Extracting dynamic params, Using IDs on paths, Passing data on requests, Query Params, HTTP Methods.
+<details>
+  <summary>3. Node SQL & NoSQL</summary>
 
-###### **3. Node SQL & NoSQL**
-**3.1 SQL**: Choosing databases, SQL vs NoSQL, SQL for retrieving data & fetching products
+    **3.1 SQL**: Choosing databases, SQL vs NoSQL, SQL for retrieving data & fetching products
 
-**3.2 Sequelize**: Synching JS Definitions to the database, inserting data, Model creation, One-To-Many relationships, Managing users and models.
+    **3.2 Sequelize**: Synching JS Definitions to the database, inserting data, Model creation, One-To-Many relationships, Managing users and models.
 
-**3.3 NoSQL & MongoDB**: Relations in NoSQL, Database connections, MongoDB Compass, Storing users, Relational data.
+    **3.3 NoSQL & MongoDB**: Relations in NoSQL, Database connections, MongoDB Compass, Storing users, Relational data.
 
-**3.4 Mongoose**: MongoDB Server connection with Mongoose, Schemas, Saving data though Mongoose, Fetching Relations, Clearing data.
+    **3.4 Mongoose**: MongoDB Server connection with Mongoose, Schemas, Saving data though Mongoose, Fetching Relations, Clearing data.
+</details>
 
-###### **4. Session and Cookies**
-**4.1 Cookies**: Request Driven Login Solutions, Setting/manipulating/configuring/deleting cookies.
+<details>
+  <summary>4. Session and Cookies</summary>
 
-**4.2 Sessions**: Session Middlewares, Using MongoDB to store sessions, Connecting Sessions and Cookies.
+  **4.1 Cookies**: Request Driven Login Solutions, Setting/manipulating/configuring/deleting cookies.
 
-**Assignments**
-Pure Node Requests, Express and Middlewares, Routes and Static Files, and App set/get and Template Engines.
+  **4.2 Sessions**: Session Middlewares, Using MongoDB to store sessions, Connecting Sessions and Cookies.
+</details>
 
-###### **5. Authentication**
-**5.1 Basic Authentication**: Authentication Flow, Encrypting passwords, Sign up/Sign in, Route protection, CSRF Attacks,  Tokens and Protection, Providing user feedback, Flash messages.
+<details>
+  <summary>5. Authentication</summary>
 
-**5.2 Advanced Authentiction**: Resetting passwords, Token logic, Updating passwords, Protection to Post Actions, Limiting editing to posts that user created.
-###### **6. Emails**
-**6.1 Nodemailer**: Sending emails using Nodemailer and SendGrid, Understanding limitations for large scale apps
-##### **7. Validation**
-Basic and custom validation, Validating Errors and Login, Checking for field equality, Async validation, Conditional CSS classes, Sanitazing Data, Validating product manipulation (adding/editing).
-##### **8. Error Handling**
-Type of errors, Throwing errors, Returning error pages,Express.js Error handling middleware, Status Codes
-##### **9. File Upload & Download**
-File Picker, Handling multipart form data, Handling file uploads with multer, Adjusting filename & filepaths, Filtering files by mimetype, Storing file data in the database, Serving images statically, Downloading files with Authentication, Setting file Type headers, Restricting file access, Streaming Data vs Preloading Data, PDFKit for pdf generation, Deleting files.
-##### **10. Pagination**
-Retrieving chunk of data, Skip & Limit with SQL, Preparing pagination data on the server, Dynamic pagination buttons, Re-using pagination logic & controls.
-##### **11. Async Requests**
-Client Side JS Code, JSON Data Format, Sending & Handling background requests, Manipulating the DOM.
-##### **12. Payments**
-How payments work, checkout page, Using Stripe to enable payment.
-##### **13. REST APIs**
-**13.1 Basics**: Why to use REST APIs, Accessing data, Routing & HTTP Methods, Route setups, Sending requests & responses and working with Postman, Clients & CORS errors, HTTP Methods.
+  **5.1 Basic Authentication**: Authentication Flow, Encrypting passwords, Sign up/Sign in, Route protection, CSRF Attacks,  Tokens and Protection, Providing user feedback, Flash messages.
 
-**13.1 Practical Application**: Frontend setup, Planning the API, Fetching lists of posts, Endpoints creation, Server side validation, Storing posts, Static Images & Error Handling, Image names & windows, HTTP Methods, Signup validation, Logging in & Creating JSON Web Tokens (JWTs), Validating Tokens, Adding Auth Middleware to all routes, COnnecting Posts & Users, Authorization checks, Clearing relations.
-##### **14. Async/Await** 
-Transforming Then/Catch into Async/Await, Top-level await
-##### **15. Websockets & Socket.io**
-Setting up socket.io on the sever, Establishing a connection from the client, Realtime potentials, Sharing the IO Instance across files, Syncrhonizing POST additions, Updating/deleting posts on all connected clients, Sorting correctly.
+  **5.2 Advanced Authentiction**: Resetting passwords, Token logic, Updating passwords, Protection to Post Actions, Limiting editing to posts that user created.
+</details>
 
-##### **16. GraphQL**
-Setup & Queries, Mutation Schemas, Mutation resolvers, Input validation, Handling errors, Extracting data from auth token, Pagination, Uploading images, Managin user status, Using variables.  
-##### **17. Deployment**
-Deploying different kinds of apps, Deployment preparatins, Environment variables, Production API Keys, Secure response headers with Helmet, Compressing assets, Request logging, Setting up a SSL erver, Hosting providers, Deploying APIs
-##### **18. Testing Node.js applications**
-Why and how to test, Testing auth middleware, Organizing multiple tests, What not to test, Testing controllers, Testing asyncrhonous code, Using stubs, Testing code with an active database, Cleaning up, Hooks, Testing code that requires authentication.
-##### **19. Node.js as a Build tool & NPM**
-Npm & Nodejs, Versioning in package.json, Build tools, Using Node.js in build processes.
-##### **20. Modern Javascript & Nodejs**
-ES Modules, Core Modules & Promises
-##### **21. NodeJS & Typescript**
-Why Typescript, Typescript setup, Assigning types, Type inference & type casting, Union Types, Object & Array types, Type Aliases & Interfaces, Generics, Typescript with Express, REST Routes with Typescript, Testing the API, Improving project structure.
-##### **22. Deno**
-**22.1 Introduction**: Deno setup, Deno runtime (namespace) API, Deno Permissions, Deno vs Node, How deno features are organized, Deno standard library, Creating a webserver, Oak framework with Deno, Module URLs, Deno & Node REST APIs.
-**22.2 Deno, CRUD & Databases (MongoDB)**: Handling CORS errors, Connecting Deno to Mongodb, Using MondoDB CLient Module, Deno MongoDB CRUD Operations.
+<details>
+  <summary>6. Emails</summary>
+  
+  **6.1 Nodemailer**: Sending emails using Nodemailer and SendGrid, Understanding limitations for large scale apps
+</details>
+
+<details>
+  <summary>7. Validation</summary>
+  Basic and custom validation, Validating Errors and Login, Checking for field equality, Async validation, Conditional CSS classes, Sanitazing Data, Validating product manipulation (adding/editing).
+</details>
+
+<details>
+  <summary>8. Error Handling</summary>
+  Type of errors, Throwing errors, Returning error pages,Express.js Error handling middleware, Status Codes
+</details>
+
+<details>
+  <summary>9. File Upload & Download</summary>
+  File Picker, Handling multipart form data, Handling file uploads with multer, Adjusting filename & filepaths, Filtering files by mimetype, Storing file data in the database, Serving images statically, Downloading files with Authentication, Setting file Type headers, Restricting file access, Streaming Data vs Preloading Data, PDFKit for pdf generation, Deleting files.
+</details>
+
+<details>
+  <summary>10. Pagination</summary>
+  Retrieving chunk of data, Skip & Limit with SQL, Preparing pagination data on the server, Dynamic pagination buttons, Re-using pagination logic & controls.
+</details>
+
+<details>
+  <summary>11. Async Requests</summary>
+  Client Side JS Code, JSON Data Format, Sending & Handling background requests, Manipulating the DOM.
+</details>
+
+<details>
+  <summary>12. Payments</summary>
+  How payments work, checkout page, Using Stripe to enable payment.
+</details>
+
+<details>
+  <summary>13. REST APIs</summary>
+
+  **13.1 Basics**: Why to use REST APIs, Accessing data, Routing & HTTP Methods, Route setups, Sending requests & responses and working with Postman, Clients & CORS errors, HTTP Methods.
+
+  **13.2 Practical Application**: Frontend setup, Planning the API, Fetching lists of posts, Endpoints creation, Server side validation, Storing posts, Static Images & Error Handling, Image names & windows, HTTP Methods, Signup validation, Logging in & Creating JSON Web Tokens (JWTs), Validating Tokens, Adding Auth Middleware to all routes, COnnecting Posts & Users, Authorization checks, Clearing relations.
+</details>
+
+<details>
+  <summary>14. Async/Await</summary>
+  Transforming Then/Catch into Async/Await, Top-level await
+</details>
+
+<details>
+  <summary>15. Websockets & Socket.io</summary>
+  Setting up socket.io on the sever, Establishing a connection from the client, Realtime potentials, Sharing the IO Instance across files, Syncrhonizing POST additions, Updating/deleting posts on all connected clients, Sorting correctly.
+</details>
+
+<details>
+  <summary>16. GraphQL</summary>
+  Setup & Queries, Mutation Schemas, Mutation resolvers, Input validation, Handling errors, Extracting data from auth token, Pagination, Uploading images, Managin user status, Using variables. 
+</details> 
+
+<details>
+  <summary>17. Deployment</summary>
+  Deploying different kinds of apps, Deployment preparatins, Environment variables, Production API Keys, Secure response headers with Helmet, Compressing assets, Request logging, Setting up a SSL erver, Hosting providers, Deploying APIs.
+</details>
+
+<details>
+  <summary>18. Testing Node.js applications</summary>
+  Why and how to test, Testing auth middleware, Organizing multiple tests, What not to test, Testing controllers, Testing asyncrhonous code, Using stubs, Testing code with an active database, Cleaning up, Hooks, Testing code that requires authentication.
+</details>
+
+<details>
+  <summary>19. Node.js as a Build tool & NPM</summary>
+  Npm & Nodejs, Versioning in package.json, Build tools, Using Node.js in build processes.
+</details>
+
+<details>
+  <summary>20. Modern Javascript & Nodejs</summary>
+  ES Modules, Core Modules & Promises
+</details>
+
+<details>
+  <summary>21. NodeJS & Typescript</summary>
+  Why Typescript, Typescript setup, Assigning types, Type inference & type casting, Union Types, Object & Array types, Type Aliases & Interfaces, Generics, Typescript with Express, REST Routes with Typescript, Testing the API, Improving project structure.
+</details>
+
+<details>
+  <summary>22. Deno</summary>
+
+  **22.1 Introduction**: Deno setup, Deno runtime (namespace) API, Deno Permissions, Deno vs Node, How deno features are organized, Deno standard library, Creating a webserver, Oak framework with Deno, Module URLs, Deno & Node REST APIs.
+  **22.2 Deno, CRUD & Databases (MongoDB)**: Handling CORS errors, Connecting Deno to Mongodb, Using MondoDB CLient Module, Deno MongoDB CRUD Operations.
+</details>
 
 ## **:computer: TECHNOLOGIES**
 
