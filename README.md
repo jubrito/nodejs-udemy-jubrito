@@ -17,12 +17,12 @@
 
 <div align="center">
   Node App Demo
-  <img alt="Node app (Root)" src="./studies/root-nodeapp.gif">
+  <img alt="Node app (Root)" src="./Studies/root-nodeapp.gif">
   <kbd>[package.json](./package.json)</kbd>
   </br></br>
   
   REST API + Graphql Demo
-  <img alt="REST API + Graphql (Studies folter > 28-Node_Graphql folder)" src="./studies/28-rest-api-graphql.gif">
+  <img alt="REST API + Graphql (Studies folter > 28-Node_Graphql folder)" src="./Studies/28-rest-api-graphql.gif">
   <kbd>[package.json (web)](./studies/28-node_GraphQL/server/package.json)</kbd>
   <kbd>[package.json (server)](./studies/28-node_GraphQL/web/package.json)</kbd>
 </div>
