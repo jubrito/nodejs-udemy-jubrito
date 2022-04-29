@@ -56,13 +56,13 @@ All the course content can be found at Studies folder
 <details>
   <summary>3. Node SQL & NoSQL</summary>
 
-    **3.1 SQL**: Choosing databases, SQL vs NoSQL, SQL for retrieving data & fetching products
+  **3.1 SQL**: Choosing databases, SQL vs NoSQL, SQL for retrieving data & fetching products
 
-    **3.2 Sequelize**: Synching JS Definitions to the database, inserting data, Model creation, One-To-Many relationships, Managing users and models.
+  **3.2 Sequelize**: Synching JS Definitions to the database, inserting data, Model creation, One-To-Many relationships, Managing users and models.
 
-    **3.3 NoSQL & MongoDB**: Relations in NoSQL, Database connections, MongoDB Compass, Storing users, Relational data.
+  **3.3 NoSQL & MongoDB**: Relations in NoSQL, Database connections, MongoDB Compass, Storing users, Relational data.
 
-    **3.4 Mongoose**: MongoDB Server connection with Mongoose, Schemas, Saving data though Mongoose, Fetching Relations, Clearing data.
+  **3.4 Mongoose**: MongoDB Server connection with Mongoose, Schemas, Saving data though Mongoose, Fetching Relations, Clearing data.
 </details>
 
 <details>
@@ -89,31 +89,38 @@ All the course content can be found at Studies folder
 
 <details>
   <summary>7. Validation</summary>
+
   Basic and custom validation, Validating Errors and Login, Checking for field equality, Async validation, Conditional CSS classes, Sanitazing Data, Validating product manipulation (adding/editing).
+
 </details>
 
 <details>
   <summary>8. Error Handling</summary>
+  
   Type of errors, Throwing errors, Returning error pages,Express.js Error handling middleware, Status Codes
 </details>
 
 <details>
   <summary>9. File Upload & Download</summary>
+
   File Picker, Handling multipart form data, Handling file uploads with multer, Adjusting filename & filepaths, Filtering files by mimetype, Storing file data in the database, Serving images statically, Downloading files with Authentication, Setting file Type headers, Restricting file access, Streaming Data vs Preloading Data, PDFKit for pdf generation, Deleting files.
 </details>
 
 <details>
   <summary>10. Pagination</summary>
+
   Retrieving chunk of data, Skip & Limit with SQL, Preparing pagination data on the server, Dynamic pagination buttons, Re-using pagination logic & controls.
 </details>
 
 <details>
   <summary>11. Async Requests</summary>
+
   Client Side JS Code, JSON Data Format, Sending & Handling background requests, Manipulating the DOM.
 </details>
 
 <details>
   <summary>12. Payments</summary>
+
   How payments work, checkout page, Using Stripe to enable payment.
 </details>
 
@@ -127,41 +134,49 @@ All the course content can be found at Studies folder
 
 <details>
   <summary>14. Async/Await</summary>
+  
   Transforming Then/Catch into Async/Await, Top-level await
 </details>
 
 <details>
   <summary>15. Websockets & Socket.io</summary>
+
   Setting up socket.io on the sever, Establishing a connection from the client, Realtime potentials, Sharing the IO Instance across files, Syncrhonizing POST additions, Updating/deleting posts on all connected clients, Sorting correctly.
 </details>
 
 <details>
   <summary>16. GraphQL</summary>
+
   Setup & Queries, Mutation Schemas, Mutation resolvers, Input validation, Handling errors, Extracting data from auth token, Pagination, Uploading images, Managin user status, Using variables. 
 </details> 
 
 <details>
   <summary>17. Deployment</summary>
+
   Deploying different kinds of apps, Deployment preparatins, Environment variables, Production API Keys, Secure response headers with Helmet, Compressing assets, Request logging, Setting up a SSL erver, Hosting providers, Deploying APIs.
 </details>
 
 <details>
   <summary>18. Testing Node.js applications</summary>
+
   Why and how to test, Testing auth middleware, Organizing multiple tests, What not to test, Testing controllers, Testing asyncrhonous code, Using stubs, Testing code with an active database, Cleaning up, Hooks, Testing code that requires authentication.
 </details>
 
 <details>
   <summary>19. Node.js as a Build tool & NPM</summary>
+
   Npm & Nodejs, Versioning in package.json, Build tools, Using Node.js in build processes.
 </details>
 
 <details>
   <summary>20. Modern Javascript & Nodejs</summary>
+
   ES Modules, Core Modules & Promises
 </details>
 
 <details>
   <summary>21. NodeJS & Typescript</summary>
+  
   Why Typescript, Typescript setup, Assigning types, Type inference & type casting, Union Types, Object & Array types, Type Aliases & Interfaces, Generics, Typescript with Express, REST Routes with Typescript, Testing the API, Improving project structure.
 </details>
 
